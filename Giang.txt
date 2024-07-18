@@ -1,6 +1,6 @@
--Use story: Là một người đặt sân, tôi muốn sử dụng hệ thống để đặt sân bóng và quản lý các lượt đặt sân của mình. Tôi là quản lý sân tôi muốn sử dụng hệ thống để quản lý sân bóng và tài chính của hệ thống sân.
+-Use story: Là một người đặt sân, tôi muốn sử dụng hệ thống để đặt sân bóng và quản lý các lượt đặt sân của mình
 -use case: Đăng ký tài khoản
-	+ actor: Người dùng
+	+ actor: Khách hàng
 	+ Điều kiện trước:
 	+ Đảm bảo tối thiểu: Hiển thị lại biểu mẫu đăng ký
 	+ Điều kiện sau: Các trường thông tin được nhập hợp lệ
@@ -16,7 +16,7 @@
 -Use story: Tôi muốn truy cập vào hệ thống để thực hiện các chức năng.
 -use case: Đăng nhập
 	+ actor: Người dùng
-	+ Điều kiện trước: Đã đăng ký tài khoản
+	+ Điều kiện trước: Đã có tài khoản
 	+ Đảm bảo tối thiểu: Hiển thị lại biểu mẫu đăng nhập
 	+ Điều kiện sau: Các trường thông tin được nhập hợp lệ
 	+ Các bước thực hiện:
@@ -34,10 +34,10 @@
 	+ Đảm bảo tối thiểu: Hiển thị thông tin người dùng
 	+ Điều kiện sau: Các trường thông tin được nhập hợp lệ
 	+ Các bước thực hiện:
-		Bước 1: Người dùng cập nhập thông tin
+		Bước 1: Người dùng chọn xem thông tin
 		Bước 2: Hệ thống hiển thị thông tin người dùng
 		Bước 3: Người dùng nhập thông tin thay đổi và xác nhận thay đổi
-		Bước 4: Hệ thống thông báo trạng thái thay đổi và trả về thông tin người dùng
+		Bước 4: Hệ thống thông báo trạng thái thay đổi
 	+ Các ngoại lệ:
 		1) Thông tin người dùng không hợp lệ
 		2) Thông tin người dùng đã tồn tại trên hệ thống
@@ -59,7 +59,7 @@
 -Use story: Tôi muốn xem chi tiết sân bóng để đưa ra quyết định lựa chọn hay không
 -use case: Hiển thị chi tiết sân bóng
 	+ actor: Người dùng
-	+ Điều kiện trước: Hệ thống hiển thị danh sách sân bóng
+	+ Điều kiện trước:
 	+ Đảm bảo tối thiểu: Hệ thống hiển thị danh sách sân bóng
 	+ Điều kiện sau: Sân bóng đã tồn tại trong hệ thống
 	+ Các bước thực hiện:
