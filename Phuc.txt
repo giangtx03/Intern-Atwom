@@ -75,3 +75,15 @@
 	+ Các ngoại lệ:
 		1) Hiện thị trạng thái bắt đối sai
 		2) Không gửi được thông báo đến người tìm đối
+
+- User story: sau khi sử dụng dịch vụ tôi muốn đánh giá chất lượng dịch vụ
+- Use case : đánh giá chất lượng dịch vụ
+	+ actor: user
+	+ Điều kiện trước: đã đặt sân
+	+ Đảm bảo tối thiểu: hiện thị danh sách đánh giá
+	+ Điều kiện sau:
+	+Các bước thực hiện:
+		Bước 1: vào hiển thị trạng thái sân, chọn đánh giá
+		Bước 2: hiển thị form đánh giá
+		Bước 3: xác nhận và gửi về hệ thống
+	+Các ngoại lệ
