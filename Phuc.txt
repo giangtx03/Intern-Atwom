@@ -65,7 +65,7 @@
 -use case: tìm đối cho người dùng
 	+ actor: người dùng
 	+ Điều kiện trước: đã đăng nhập và đặt sân
-	+ Đảm bảo tối thiểu: Hiển thị sân đã có đối chưa
+	+ Đảm bảo tối thiểu: Hiển thị sân trạng thái sân
 	+ Điều kiện sau: có user chấp nhận
 	+ Các bước thực hiện:
 		Bước 1: Sau khi chủ sân xác nhận yêu cầu đặt sân, hiển thị cho user trạng thái sân và trong đó có chức năng bật tìm đối
@@ -75,4 +75,3 @@
 	+ Các ngoại lệ:
 		1) Hiện thị trạng thái bắt đối sai
 		2) Không gửi được thông báo đến người tìm đối
-		
