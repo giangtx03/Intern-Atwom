@@ -75,7 +75,7 @@
 - User story: sau khi sử dụng dịch vụ tôi muốn đánh giá chất lượng dịch vụ
 - Use case : đánh giá chất lượng dịch vụ
 	+ actor: user
-	+ Điều kiện trước: đã đăng nhập
+	+ Điều kiện trước: đã đăng nhập và đã sử dụng dịch vụ
 	+ Đảm bảo tối thiểu: hiện thị danh sách đánh giá
 	+ Điều kiện sau:
 	+Các bước thực hiện:
