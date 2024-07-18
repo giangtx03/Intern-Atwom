@@ -34,7 +34,7 @@ Hệ thống quản lý sân bóng
 		- Khi khách hàng đặt sân, tôi cần phải xác nhận cho khách hàng rằng sân có đủ điều kiện để đặt hay không.
 	3.3 Thống kê doanh thu
 		- Tôi muốn thống kê doanh thu của sân bóng theo ngày, tháng, năm để quản lý tài chính.
-	3.4 Thống kê chi phí
+	3.4 Ghi chi phí
 		- Tôi muốn nắm bắt các chi phí bỏ ra cho sân bóng 
-	3.5 Quản lý người dùng
-		- Tôi muốn biết thông tin và quản lý những người có ý định thuê sân, hoặc đã thuê sân và uy tín của người dùng.
+	3.5 Xem hóa đơn, xác nhận thanh toán
+		- Tôi muốn xem hóa đơn của khách sử dụng là bao nhiêu, và thanh toán tiền sân.
