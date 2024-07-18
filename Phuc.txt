@@ -47,3 +47,32 @@
 		2) Không thấy sân muốn sửa
 		3) Thông tin muốn sửa không đúng format
 		4) không cập nhật được lại thông tin sân
+
+-use story: tôi muốn xem danh sách các sân mà tôi đã đặt 
+-use case: Hiển thị lịch sử đặt sân
+	+ actor : người đặt sân
+	+ Điều kiện trước: đã đăng nhập
+	+ Đảm bảo tối thiểu: hiển thi danh sách đặt sân
+	+ Điều kiện sau:
+	+ Các Bước thực hiện: 
+		Bước 1: Đăng Nhập
+		Bước 2: chọn chức năng lịch sử đặt sân
+		Bước 3: Hiển thị lịch sử đặt sân
+	+Các Ngoại lệ:
+		1) hiển thị thiếu sân đã Đặt
+
+-Use story: tôi muốn giao lưu bóng đá với các đội khách
+-use case: tìm đối cho người dùng
+	+ actor: người dùng
+	+ Điều kiện trước: đã đăng nhập và đặt sân
+	+ Đảm bảo tối thiểu: Hiển thị sân đã có đối chưa
+	+ Điều kiện sau: có user chấp nhận
+	+ Các bước thực hiện:
+		Bước 1: Sau khi chủ sân xác nhận yêu cầu đặt sân, hiển thị cho user trạng thái sân và trong đó có chức năng bật tìm đối
+		Bước 2: Thay đổi trạng thái tìm đối của sân
+		Bước 3: Nếu có user khác bắt đối thì gửi thông báo về user, user xác nhận có bắt đối này không
+		Bước 4: Gửi thông báo về người bắt đối
+	+ Các ngoại lệ:
+		1) Hiện thị trạng thái bắt đối sai
+		2) Không gửi được thông báo đến người tìm đối
+		
