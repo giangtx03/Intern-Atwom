@@ -34,7 +34,7 @@ Các bước:	B1: Vào trang quản lý sân
 Ngoại lệ:	
 
 ----------------------------------------------------------------------------
-Use case:	Chủ sân ghi chi phí (nước, tiền điện, bảo trì sân)
+Use case:	Chủ sân quản lý chi phí (nước, tiền điện, bảo trì sân)
 Actor:		Chủ sân
 Đk trc:		Tài khoản admin
 Đk đảm bảo:	Form điền sẽ được làm mới
