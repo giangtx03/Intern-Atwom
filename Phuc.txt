@@ -3,7 +3,7 @@
 	+ actor: người đặt sân
 	+ điều kiện trước: đăng nhập
 	+ đảm bảo tối thiểu: gợi ý thời gian khác và sân khác
-	+ điều kiện sau: sân trống và sân phù hợp trong khoảng thời gian và số lượng người cụ thể
+	+ điều kiện sau: Sân trống và sân phù hợp trong khoảng thời gian và số lượng người cụ thể
 	+ các bước thực hiện
 		Bước 1: Tìm kiếm các sân trống phù hợp với thời gian, địa điểm
 		Bước 2: chọn sân và hiện thông tin sân
