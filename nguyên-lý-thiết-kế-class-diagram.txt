@@ -27,7 +27,6 @@ Nguyên lý thiết kế hướng đối tượng SOLID
 	
 	1. Single responsibility principle - Nguyên lý đơn chức năng (S)
 		- Mỗi class chỉ nên chịu trách nhiệm về một nhiệm vụ duy nhất, chỉ có thể sửa đổi class với 1 lý do duy nhất.
-		
 		- Giảm sự ảnh hưởng lên chương trình khi thay đổi class 
 		- Dễ dàng tái sử dụng
 		- Dễ dàng tìm bug
