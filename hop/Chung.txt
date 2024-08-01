@@ -23,10 +23,8 @@ Hệ thống quản lý sân bóng
 		- Tôi muốn xem danh sách các sân đã đặt trước đó.
 	2.3 Hủy sân
 		- Tôi muốn hủy sân khi có sự cố hay trường hợp nào đó.
-	2.4 Đánh giá sân bóng, dịch vụ
+	2.4 Đánh giá sân bóng
 		- Tôi muốn chia sẽ cảm nhận của mình sau khi sử dụng dịch vụ và sân bóng của tôi cho những người muốn đặt sân như tôi có thể đưa ra quyết định đúng đắn hơn.
-	2.5 Bắt đối
-		- Khi chưa có đối, tôi muốn tìm đối cho đội mình.
 3. Các chức năng của người quản lý
 	3.1 Thêm sửa xóa thông tin sân bóng 
 		- Tôi muốn thêm sân, sửa thông tin hoặc xóa sân của mình trên hệ thống.
@@ -34,9 +32,7 @@ Hệ thống quản lý sân bóng
 		- Khi khách hàng đặt sân, tôi cần phải xác nhận cho khách hàng rằng sân có đủ điều kiện để đặt hay không.
 	3.3 Thống kê doanh thu
 		- Tôi muốn thống kê doanh thu của sân bóng theo ngày, tháng, năm để quản lý tài chính.
-	3.4 Quản lý chi phí
-		- Tôi muốn nắm bắt các chi phí bỏ ra cho sân bóng 
-	3.5 Xem hóa đơn, xác nhận thanh toán
+	3.4 Xem hóa đơn, xác nhận thanh toán
 		- Tôi muốn xem hóa đơn của khách sử dụng là bao nhiêu, và thanh toán tiền sân.
 
 Mục tiêu: cung cấp và cho thuê dịch vụ đặt sân bóng 
