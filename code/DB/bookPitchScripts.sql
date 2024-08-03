@@ -22,7 +22,7 @@ USE `book_pitch_db` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `book_pitch_db`.`pitch_type` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` INT NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -43,9 +43,7 @@ CREATE TABLE IF NOT EXISTS `book_pitch_db`.`pitch` (
   INDEX `fk_pitch_pitch_type_idx` (`pitch_type_id` ASC) VISIBLE,
   CONSTRAINT `fk_pitch_pitch_type`
     FOREIGN KEY (`pitch_type_id`)
-    REFERENCES `book_pitch_db`.`pitch_type` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `book_pitch_db`.`pitch_type` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -76,14 +74,10 @@ CREATE TABLE IF NOT EXISTS `book_pitch_db`.`pitch_time` (
   INDEX `fk_pitch_time_time_slot1_idx` (`time_slot_id` ASC) VISIBLE,
   CONSTRAINT `fk_pitch_time_pitch1`
     FOREIGN KEY (`pitch_id`)
-    REFERENCES `book_pitch_db`.`pitch` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `book_pitch_db`.`pitch` (`id`),
   CONSTRAINT `fk_pitch_time_time_slot1`
     FOREIGN KEY (`time_slot_id`)
-    REFERENCES `book_pitch_db`.`time_slot` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `book_pitch_db`.`time_slot` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -125,14 +119,10 @@ CREATE TABLE IF NOT EXISTS `book_pitch_db`.`pitch_booking` (
   INDEX `fk_pitch_booking_user1_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `fk_pitch_booking_pitch_time1`
     FOREIGN KEY (`pitch_time_pitch_id` , `pitch_time_time_slot_id`)
-    REFERENCES `book_pitch_db`.`pitch_time` (`pitch_id` , `time_slot_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `book_pitch_db`.`pitch_time` (`pitch_id` , `time_slot_id`),
   CONSTRAINT `fk_pitch_booking_user1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `book_pitch_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `book_pitch_db`.`user` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -142,15 +132,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `book_pitch_db`.`bill`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `book_pitch_db`.`bill` (
+  `id` INT NOT NULL,
   `create_at` TIMESTAMP NULL DEFAULT NULL,
   `note` VARCHAR(255) NULL DEFAULT NULL,
   `pitch_booking_id` INT NOT NULL,
-  PRIMARY KEY (`pitch_booking_id`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_bill_pitch_booking1`
     FOREIGN KEY (`pitch_booking_id`)
-    REFERENCES `book_pitch_db`.`pitch_booking` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `book_pitch_db`.`pitch_booking` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -170,16 +159,12 @@ CREATE TABLE IF NOT EXISTS `book_pitch_db`.`comment` (
   PRIMARY KEY (`id`),
   INDEX `fk_comment_user1_idx` (`user_id` ASC) VISIBLE,
   INDEX `fk_comment_pitch1_idx` (`pitch_id` ASC) VISIBLE,
-  CONSTRAINT `fk_comment_user1`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `book_pitch_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_pitch1`
     FOREIGN KEY (`pitch_id`)
-    REFERENCES `book_pitch_db`.`pitch` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `book_pitch_db`.`pitch` (`id`),
+  CONSTRAINT `fk_comment_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `book_pitch_db`.`user` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -190,15 +175,13 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `book_pitch_db`.`image` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` TEXT NULL DEFAULT NULL,
+  `name` VARCHAR(255) NULL DEFAULT NULL,
   `pitch_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_image_pitch1_idx` (`pitch_id` ASC) VISIBLE,
   CONSTRAINT `fk_image_pitch1`
     FOREIGN KEY (`pitch_id`)
-    REFERENCES `book_pitch_db`.`pitch` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `book_pitch_db`.`pitch` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
