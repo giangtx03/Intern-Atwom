@@ -132,11 +132,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `book_pitch_db`.`bill`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `book_pitch_db`.`bill` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `create_at` TIMESTAMP NULL DEFAULT NULL,
   `note` VARCHAR(255) NULL DEFAULT NULL,
   `pitch_booking_id` INT NOT NULL,
   PRIMARY KEY (`id`),
+  INDEX `fk_bill_pitch_booking1` (`pitch_booking_id` ASC) VISIBLE,
   CONSTRAINT `fk_bill_pitch_booking1`
     FOREIGN KEY (`pitch_booking_id`)
     REFERENCES `book_pitch_db`.`pitch_booking` (`id`))
