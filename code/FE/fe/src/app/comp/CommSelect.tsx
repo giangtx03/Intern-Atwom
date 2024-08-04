@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class CommSelect extends Component {
-  render() {
-    return (
-      <div>CommSelect</div>
-    )
-  }
+export default function CommSelect() {
+  return (
+    <div>CommSelect</div>
+  )
 }

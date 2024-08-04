@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Translation extends Component {
-  render() {
-    return (
-      <div>Translation</div>
-    )
-  }
+export default function Translation() {
+  return (
+    <div>Translation</div>
+  )
 }
