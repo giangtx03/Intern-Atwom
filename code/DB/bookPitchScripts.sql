@@ -54,8 +54,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `book_pitch_db`.`time_slot` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `start_time` INT NULL DEFAULT NULL,
-  `end_time` INT NULL DEFAULT NULL,
+  `start_time` TIMESTAMP NULL DEFAULT NULL,
+  `end_time` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
