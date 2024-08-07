@@ -1,4 +1,4 @@
-package com.pitchmanagement.model;
+package com.pitchmanagement.dto;
 
 import java.sql.Date;
 
@@ -13,13 +13,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class BillDTO {
     private Integer id;
-    private String email;
-    private String password;
-    private String fullname;
-    private String phone_number;
-    private String avatar;
     private Date create_at;
-    private Date update_at;
+    private String note;
+    private Integer pitch_booking_id;
 }

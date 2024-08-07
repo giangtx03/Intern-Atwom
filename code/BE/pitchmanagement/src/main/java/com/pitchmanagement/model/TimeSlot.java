@@ -1,6 +1,7 @@
 package com.pitchmanagement.model;
 
 import java.sql.Date;
+import java.sql.Time;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,13 +14,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class TimeSlot{
     private Integer id;
-    private String email;
-    private String password;
-    private String fullname;
-    private String phone_number;
-    private String avatar;
-    private Date create_at;
-    private Date update_at;
+    private Time start_time;
+    private Time end_time;
 }

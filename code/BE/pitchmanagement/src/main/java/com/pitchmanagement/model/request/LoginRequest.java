@@ -1,2 +1,4 @@
-package com.pitchmanagement.model.request;public class LoginRequest {
+package com.pitchmanagement.model.request;
+
+public class LoginRequest {
 }

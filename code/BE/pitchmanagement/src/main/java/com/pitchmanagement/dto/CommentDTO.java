@@ -1,6 +1,7 @@
-package com.pitchmanagement.model;
+package com.pitchmanagement.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,13 +14,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class CommentDTO {
     private Integer id;
-    private String email;
-    private String password;
+    private Integer star;
+    private String content;
+    private LocalDateTime create_at;
+    private LocalDateTime update_at;
+    private Integer user_id;
+    private Integer pitch_id;
     private String fullname;
-    private String phone_number;
     private String avatar;
-    private Date create_at;
-    private Date update_at;
 }
