@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Layout extends Component {
-  render() {
-    return (
-      <div>Layout</div>
-    )
-  }
+export default function Layout() {
+  return (
+    <div>Layout</div>
+  )
 }

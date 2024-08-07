@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class interceptors extends Component {
-  render() {
-    return (
-      <div>interceptors</div>
-    )
-  }
+export default function interceptors() {
+  return (
+    <div>interceptors</div>
+  )
 }
