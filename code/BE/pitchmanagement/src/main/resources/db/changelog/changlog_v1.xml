@@ -6,5 +6,82 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
 
+    <changeSet id="1" author="Truong Xuan Giang">
+        <createTable tableName="user">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fullname" type="varchar(125)"/>
+            <column name="email" type="varchar(125)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)"/>
+            <column name="phone_number" type="varchar(15)"/>
+            <column name="address" type="varchar(255)"/>
+            <column name="role" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_at" type="date"/>
+            <column name="update_at" type="date"/>
+        </createTable>
+    </changeSet>
 
+    <changeSet id="2" author="Truong Xuan Giang">
+        <createTable tableName="pitch_type">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(125)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Truong Xuan Giang">
+        <createTable tableName="pitch">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(125)"/>
+            <column name="address" type="varchar(255)"/>
+            <column name="create_at" type="date"/>
+            <column name="update_at" type="date"/>
+            <column name="pitch_type_id" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="pitch"
+                baseColumnNames="pitch_type_id"
+                constraintName="fk_pitch_type_pitch"
+                referencedTableName="pitch_type"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="4" author="Truong Xuan Giang">
+        <createTable tableName="image">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(125)"/>
+            <column name="pitch_id" type="bigint" />
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="image"
+                baseColumnNames="pitch_id"
+                constraintName="fk_pitch_image"
+                referencedTableName="pitch"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+
+    <changeSet id="5" author="Truong Xuan Giang">
+        <createTable tableName="time_slot">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_time" type="date"/>
+            <column name="end_time" type="date"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
