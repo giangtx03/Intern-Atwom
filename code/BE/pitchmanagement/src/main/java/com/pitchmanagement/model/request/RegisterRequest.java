@@ -26,7 +26,4 @@ public class RegisterRequest {
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("address")
-    private String address;
-
 }

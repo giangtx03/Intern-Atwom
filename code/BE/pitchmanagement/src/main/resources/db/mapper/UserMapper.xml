@@ -2,8 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pitchmanagement.dao.UserDao">
-    <insert id="insert" parameterType="com.pitchmanagement.model.User" >
-
+    <insert id="insert" parameterType="com.pitchmanagement.dto.UserDto" keyProperty="id">
+        INSERT INTO user(email, fullname, phone_number, password,role)
+        VALUES( #{email},#{fullname},#{phoneNumber},#{password},#{role} );
     </insert>
 
+    <select id="getUserByEmail" parameterType="String" resultType="map">
+        SELECT
+            id,
+            email
+            fullname
+            address
+            avatar
+            phone_number AS phoneNumber,
+            create_at AS createAt,
+            update_at AS updateAt,
+            role
+        FROM user WHERE email = #{email};
+    </select>
+
+    <select id="existingByEmail" parameterType="String" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM users
+        WHERE email = #{email}
+    </select>
 </mapper>

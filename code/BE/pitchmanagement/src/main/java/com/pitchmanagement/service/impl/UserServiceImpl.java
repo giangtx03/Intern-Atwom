@@ -74,12 +74,11 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = UserDto.builder()
                 .email(request.getEmail())
                 .fullname(request.getFullname())
-                .address(request.getAddress())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("USER")
                 .build();
-        userDao.save(userDto);
+        userDao.insert(userDto);
 
         return RegisterResponse.builder()
                 .id(userDto.getId())
