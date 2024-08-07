@@ -12,7 +12,6 @@ import com.pitchmanagement.dao.PitchTimeDAO;
 import com.pitchmanagement.dto.PitchBookingDTO;
 import com.pitchmanagement.dto.PitchTimeDTO;
 import com.github.pagehelper.PageHelper;
-import com.pitchmanagement.model.TimeSlot;
 import com.pitchmanagement.model.request.BookingRequest;
 import com.pitchmanagement.service.BookingService;
 
