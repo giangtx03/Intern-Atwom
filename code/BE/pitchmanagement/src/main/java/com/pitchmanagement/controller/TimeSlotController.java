@@ -26,14 +26,14 @@ public class TimeSlotController {
         try {
             List<PitchTimeDTO> lst = pitchTimeService.FilterPitchByPitchId(id);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.CREATED)
+                    .status(HttpStatus.OK)
                     .message("success")
                     .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.CREATED)
+                    .status(HttpStatus.BAD_REQUEST)
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);

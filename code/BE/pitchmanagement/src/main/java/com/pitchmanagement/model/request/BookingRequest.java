@@ -19,12 +19,13 @@ import lombok.experimental.SuperBuilder;
 public class BookingRequest {
     private Integer id ;
     private String note;
+    @NotBlank(message = "status not blank")
     private String status;
-    @NotNull
+    @NotNull(message = "pitch id not null")
     private Integer pitch_id;
-    @NotNull
+    @NotNull(message = "time slot id not null")
     private Integer time_slot_id;
-    @NotNull
+    @NotNull(message = "user id not null")
     private Integer user_id;
     private LocalDateTime create_at = LocalDateTime.now();
     private LocalDateTime update_at = LocalDateTime.now();

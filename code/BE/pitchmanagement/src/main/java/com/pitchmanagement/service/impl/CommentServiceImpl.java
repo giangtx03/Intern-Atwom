@@ -12,6 +12,9 @@ import com.pitchmanagement.dto.CommentDTO;
 import com.pitchmanagement.model.request.CommentRequest;
 import com.pitchmanagement.service.CommentService;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Service
 public class CommentServiceImpl implements CommentService{
 

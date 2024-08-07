@@ -15,6 +15,9 @@ import com.github.pagehelper.PageHelper;
 import com.pitchmanagement.model.request.BookingRequest;
 import com.pitchmanagement.service.BookingService;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Service
 public class BookingServiceImpl implements BookingService {
     @Autowired

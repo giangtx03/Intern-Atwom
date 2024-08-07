@@ -9,6 +9,9 @@ import com.pitchmanagement.dao.PitchTimeDAO;
 import com.pitchmanagement.dto.PitchTimeDTO;
 import com.pitchmanagement.service.PitchTimeService;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Service
 public class PitchTimeServiceImpl implements PitchTimeService {
 

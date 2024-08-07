@@ -20,8 +20,8 @@
     join time_slot t
     join pitch p
     join pitch_type pt1
-    where pitch_id = 1 and start_time >now() and status = 'ranh';
-        </select>
+    where pitch_id = 1 and start_time >=now() and status = 'ranh';
+    </select>
 
     <update id = "ChangeStatus" parameterType = "map">
        UPDATE pitch_time
