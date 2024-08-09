@@ -1,17 +1,13 @@
 package com.pitchmanagement.model.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.http.HttpStatus;
+import lombok.*;
 
-@Builder
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class BaseResponse {
-    private HttpStatus status;
+    private int status;
     private Object data;
     private String message;
 }

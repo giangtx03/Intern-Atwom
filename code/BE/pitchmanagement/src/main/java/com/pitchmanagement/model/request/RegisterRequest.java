@@ -11,11 +11,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LoginRequest {
+public class RegisterRequest {
 
     @JsonProperty("email")
     @Email
     private String email;
+
+    @JsonProperty("fullname")
+    private String fullname;
+
+    @JsonProperty("phone_number")
+    private String phoneNumber;
 
     @JsonProperty("password")
     private String password;
