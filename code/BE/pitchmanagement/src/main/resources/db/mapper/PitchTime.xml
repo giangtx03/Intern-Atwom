@@ -1,0 +1,44 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pitchmanagement.dao.PitchTimeDAO">
+    <select id="selectbyPitchAndTime" parameterType="map" resultType="com.pitchmanagement.dto.PitchTimeDTO">
+        select 
+            pt.status,
+            pt.pitch_id as pitchId,
+            pt.time_slot_id as timeSlotId,
+            t.start_time as startTime,
+            t.end_time as endTime,
+            p.name,
+            p.address,
+            pt1.name as namePitch
+            FROM pitch_time pt
+            join time_slot t
+            join pitch p
+        join pitch_type pt1 where ( #{pitch_id} IS NULL or pt.pitch_id = #{pitch_id} ) and (#{time_id} IS NULL or pt.time_slot_id = #{time_id})
+    </select>
+
+    <select id="FilterPitchByPitchId" parameterType="map" resultType="com.pitchmanagement.dto.PitchTimeDTO">
+    SELECT pt.price,
+        pt.status,
+        pt.pitch_id as pitchId,
+        pt.time_slot_id as timeSlotId,
+        t.start_time as startTime,
+        t.end_time as endTime,
+        p.name,
+        p.address,
+        pt1.name as name_pitch
+        FROM pitch_time pt
+        join time_slot t
+        join pitch p
+        join pitch_type pt1
+    where pitch_id = 1 and start_time >=now() and status = 'ranh';
+    </select>
+
+    <update id = "ChangeStatus" parameterType = "map">
+       UPDATE pitch_time
+        SET
+        status = #{status}
+        WHERE pitch_id = #{pitch_id} AND time_slot_id = #{time_slot_id}
+    </update>
+</mapper>
