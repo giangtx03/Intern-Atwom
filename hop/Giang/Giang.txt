@@ -1,0 +1,69 @@
+-Use story: Là một người đặt sân, tôi muốn sử dụng hệ thống để đặt sân bóng và quản lý các lượt đặt sân của mình
+-use case: Đăng ký tài khoản
+	+ actor: Khách hàng
+	+ Điều kiện trước:
+	+ Đảm bảo tối thiểu: Hiển thị lại biểu mẫu đăng ký
+	+ Điều kiện sau: Các trường thông tin được nhập hợp lệ
+	+ Các bước thực hiện:
+		Bước 1: Người dùng chọn đăng ký tài khoản
+		Bước 2: Hệ thống hiển thị biểu mẫu đăng ký
+		Bước 3: Người dùng nhập thông tin vào biểu mẫu và xác nhận đăng ký
+		Bước 4: Hệ thống thông báo trạng thái đăng ký
+	+ Các ngoại lệ:
+		1) Thông tin nhập không đúng yêu cầu
+		2) Thông tin đăng ký đã tồn tại
+	
+-Use story: Tôi muốn truy cập vào hệ thống để thực hiện các chức năng.
+-use case: Đăng nhập
+	+ actor: Người dùng
+	+ Điều kiện trước: Đã có tài khoản
+	+ Đảm bảo tối thiểu: Hiển thị lại biểu mẫu đăng nhập
+	+ Điều kiện sau: Các trường thông tin được nhập hợp lệ
+	+ Các bước thực hiện:
+		Bước 1: Người dùng chọn đăng nhập
+		Bước 2: Hệ thống hiển thị biểu mẫu đăng nhập
+		Bước 3: Người dùng nhập thông tin vào biểu mẫu và gửi yêu cầu đăng nhập
+		Bước 4: Hệ thống thông báo trạng thái đăng nhập
+	+ Các ngoại lệ:
+		1) Sai thông tin đăng nhập
+
+-Use story: Tôi muốn cập nhật thông tin của mình trong hệ thống khi thông tin của tôi thay đổi.
+-use case: Quản lý thông tin
+	+ actor: Người dùng
+	+ Điều kiện trước: Đã đăng nhập
+	+ Đảm bảo tối thiểu: Hiển thị thông tin người dùng
+	+ Điều kiện sau: Các trường thông tin được nhập hợp lệ
+	+ Các bước thực hiện:
+		Bước 1: Người dùng chọn xem thông tin
+		Bước 2: Hệ thống hiển thị thông tin người dùng
+		Bước 3: Người dùng nhập thông tin thay đổi và xác nhận thay đổi
+		Bước 4: Hệ thống thông báo trạng thái thay đổi
+	+ Các ngoại lệ:
+		1) Thông tin người dùng không hợp lệ
+		2) Thông tin người dùng đã tồn tại trên hệ thống
+
+-Use story: Tôi muốn xem danh sách sân bóng của hệ thống để lựa chọn sân bóng phù hợp với nhu cầu
+-use case: Hiển thị danh sách sân bóng
+	+ actor: Người dùng
+	+ Điều kiện trước: 
+	+ Đảm bảo tối thiểu: Hiển thị danh sách sân bóng
+	+ Điều kiện sau: 
+	+ Các bước thực hiện:
+		Bước 1: Người dùng chọn xem danh sách sân bóng
+		Bước 2: Hệ thống hiển thị danh sách sân bóng và form tìm kiếm
+		Bước 3: Người dùng nhập thông tin tìm kiếm và xác nhận tìm kiếm
+		Bước 4: Hệ thống hiển thị danh sách sân bóng theo yêu cầu tìm kiếm
+	+ Các ngoại lệ:
+		1) Thông tin tìm kiếm không tồn tại
+
+-Use story: Tôi muốn xem chi tiết sân bóng để đưa ra quyết định lựa chọn hay không
+-use case: Hiển thị chi tiết sân bóng
+	+ actor: Người dùng
+	+ Điều kiện trước:
+	+ Đảm bảo tối thiểu: Hệ thống hiển thị danh sách sân bóng
+	+ Điều kiện sau: Sân bóng đã tồn tại trong hệ thống
+	+ Các bước thực hiện:
+		Bước 1: Người dùng chọn xem chi tiết sân bóng
+		Bước 2: Hệ thống hiển thị thông tin chi tiết sân bóng
+	+ Các ngoại lệ:
+		1) Sân bóng không tồn tại

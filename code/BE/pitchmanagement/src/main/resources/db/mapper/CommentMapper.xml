@@ -1,0 +1,46 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pitchmanagement.dao.CommentDAO">
+    <select id ="GetCommentByPitch" parameterType="int" resultType="com.pitchmanagement.dto.CommentDTO">
+        SELECT 
+            cm.id,
+            cm.star,
+            cm.content,
+            cm.create_at as createAt,
+            cm.update_at as updateAt,
+            cm.user_id as userId,
+            cm.pitch_id as pitchId,
+            u.fullname,
+            u.avatar
+        FROM comment cm
+        join user u
+        where cm.pitch_id = #{pitch_id}
+    </select>
+    <insert id= "insert" parameterType="com.pitchmanagement.model.request.CommentRequest">
+        INSERT INTO comment
+            (
+            star,
+            content,
+            user_id,
+            pitch_id)
+            VALUES
+                (#{star},
+                #{content},
+                #{userId},
+                #{pitchId});
+    </insert>
+
+    <update id= "update" parameterType="com.pitchmanagement.model.request.CommentRequest">
+        UPDATE comment
+            SET
+            star = #{star},
+            content = #{content},
+            update_at = #{updateAt}
+        WHERE id = #{id};
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM comment where id = #{id}
+    </delete>
+</mapper>

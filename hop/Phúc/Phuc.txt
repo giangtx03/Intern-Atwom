@@ -1,0 +1,85 @@
+- use story: là một người chơi bóng đá, tôi muốn đặt sân bóng để có thể tổ chức một trận bống đá với thời gian và số lượng người cụ thể
+- use case: đặt sân
+	+ actor: người đặt sân
+	+ điều kiện trước: đăng nhập
+	+ đảm bảo tối thiểu: gợi ý thời gian khác và sân khác
+	+ điều kiện sau: Sân trống và sân phù hợp trong khoảng thời gian và số lượng người cụ thể
+	+ các bước thực hiện
+		Bước 1: Tìm kiếm các sân trống phù hợp với thời gian, địa điểm
+		Bước 2: chọn sân và hiện thông tin sân
+		Bước 3: chọn thời gian, cỡ sân
+		Bước 4: Xác nhận đặt sân
+	+ Ngoại lệ: 
+		1) Hiện thị sai trạng thái sân
+		2) Hiện thị sai các sân phù hợp
+		3) Có sự tranh chấp khi các người dùng đặt cùng lúc
+		4) Gửi yêu cầu cho chủ sân nhưng chủ sân không nhận được yêu cầu
+
+-use story: là một người đã đặt sân, tôi có việc đột xuất khiến tôi không thể đi đến sân được, tôi muốn hủy sân đã đặt
+-use case: hủy sân
+	+actor: người đặt sân
+	+điều kiện trước: đã đặt sân, đăng nhập
+	+đảm bảo tối thiểu: hiện thị trạng thái sân
+	+điều kiện sau: chưa đến giới hạn hủy sân
+	+Các bước thực hiện: 
+		Bước 1: Chọn hiện thị sân đã đặt
+		Bước 2: Chọn chức năng hủy đặt sân và xác nhận hủy sân
+		Bước 3: Hoàn tiền lại tài khoản
+		Bước 4: Cập nhật lại trạng thái sân
+	+ Ngoại lệ:
+		1) Hiện thị sai sân đã đặt
+		2) Không cập nhật được trạng thái sân
+		3) tiền không hoàn lại
+	
+-use story: là một người chủ sân tôi muốn sửa thông tin sân trên ứng dụng cho người dùng được biết
+-use case: sửa thông tin sân
+	+ actor: chủ sân
+	+ điều kiện trước: role_admin
+	+ đảm bảo tối thiểu: Hiển thị thông tin sân
+	+ điều kiện sau: thông tin sửa đúng với fomat ,đã có sân tương ứng
+	+ Các Bước thực hiện:
+		Bước 1: Chọn sân muốn sửa thông tin
+		Bước 2:	Hiển thị thông tin sân
+		Bước 3: Nhập thông tin muốn sửa
+		Bước 4: Cập nhật lại thông tin sân 
+	+các ngoại lệ:
+		1) Hiển thị sai thông tin sân
+		2) Không thấy sân muốn sửa
+		3) Thông tin muốn sửa không đúng format
+		4) không cập nhật được lại thông tin sân
+
+-use story: tôi muốn xem danh sách các sân mà tôi đã đặt 
+-use case: Hiển thị lịch sử đặt sân
+	+ actor : người đặt sân
+	+ Điều kiện trước: đã đăng nhập
+	+ Đảm bảo tối thiểu: hiển thi danh sách đặt sân
+	+ Điều kiện sau:
+	+ Các Bước thực hiện:
+		Bước 1: chọn chức năng lịch sử đặt sân
+		Bước 2: Hiển thị lịch sử đặt sân
+	+Các Ngoại lệ:
+
+-Use story: tôi muốn giao lưu bóng đá với các đội khách
+-use case: tìm đối cho người dùng
+	+ actor: người dùng
+	+ Điều kiện trước: đã đăng nhập 
+	+ Đảm bảo tối thiểu: Hiển thị sân trạng thái sân
+	+ Điều kiện sau: 
+	+ Các bước thực hiện:
+		Bước 1: Đặt sân và bật trang thái tìm đối
+		Bước 2: gửi thông báo và xác nhận
+	+ Các ngoại lệ:
+		1) Hiện thị trạng thái bắt đối sai
+		2) Không gửi được thông báo đến người tìm đối
+
+- User story: sau khi sử dụng dịch vụ tôi muốn đánh giá chất lượng dịch vụ
+- Use case : đánh giá chất lượng dịch vụ
+	+ actor: user
+	+ Điều kiện trước: đã đăng nhập và đã sử dụng dịch vụ
+	+ Đảm bảo tối thiểu: hiện thị danh sách đánh giá
+	+ Điều kiện sau:
+	+Các bước thực hiện:
+		Bước 1: vào hiển thị trạng thái sân, chọn đánh giá
+		Bước 2: hiển thị form đánh giá
+		Bước 3: xác nhận và gửi về hệ thống
+	+Các ngoại lệ

@@ -1,0 +1,23 @@
+- yêu cầu, thiết kế, cài đặt, kiểm thử, triển khai
+- scope - time - cost
+- khách hàng : 
+	- ai sử dụng?
+	- có thể làm gì ?
+	- mục đích gì ?
+	
+=> user story -> use case :
+						- actor
+						- process 
+							- input
+							- output
+						- target 
+use case = flowchart 
+	- clear value : mục tiêu của người dùng 
+	- tín hiệu khởi động chức năng
+	- điểm bắt đầu, kết thúc 
+- xác nhận điểm dễ xảy ra ngoại lệ
+- WBS: 
+	- Sắp xếp độ ưu tiên
+	- Phân nhóm chức năng 
+	- Nhân lực
+	- Thời gian

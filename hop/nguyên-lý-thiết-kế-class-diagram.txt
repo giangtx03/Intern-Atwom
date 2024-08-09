@@ -1,0 +1,83 @@
+Nội dung: Nguyên lý thiết kế hướng đối tượng - Class Diagram
+
+Giới thiệu về hướng đối tượng:
+	- là một kỹ thuật lập trình cho phép lập trình viên tạo ra các đối tượng trong code trừu tượng hóa các đối tượng.
+	- Một đối tượng gồm 2 thông tin: thuộc tính và phương thức.
+		- Thuộc tính chính là những thông tin, đặc điểm của đối tượng. Ví dụ: con người có các đặc tính như mắt, mũi, tay, chân…
+		- Phương thức là những thao tác, hành động mà đối tượng đó có thể thực hiện. Ví dụ: một người sẽ có thể thực hiện hành động nói, đi, ăn, uống, ...
+	- Một lớp là một kiểu dữ liệu bao gồm các thuộc tính và các phương thức được định nghĩa từ trước. Đây là sự trừu tượng hóa của đối tượng. 
+	
+
+
+Nguyên lý thiết kế hướng đối tượng SOLID
+
+	- Mục tiêu: là các nguyên tắc cơ bản được sử dụng trong lập trình hướng đối tượng nhằm tạo ra các phần mềm dễ hiểu, linh hoạt và dễ bảo trì. Những nguyên lý này giúp thiết kế các hệ thống mạnh mẽ, linh hoạt và dễ dàng thay đổi mà không ảnh hưởng đến cấu trúc tổng thể.
+
+	- Lý do nên áp dụng các nguyên tắc SOLID
+		- Clean code : chuẩn hóa format code, dễ đọc
+		- Dễ bảo trì : 
+		- Tối ưu code: giảm bớt code thừa, tái sử dụng code
+		- Dễ phát triển các tính năng mới
+	- Gồm 5 nguyên lý 
+		1. Single responsibility principle - Nguyên lý đơn chức năng (S)
+		2. Open-Closed principle - Nguyên lý đóng mở (O)
+		3. Liskov substitution principle - Nguyên lý thay thế (L)
+		4. Interface segregation principle - Nguyên lý phân tách (I)
+		5. Dependency Inversion Principle - Nguyên lý đảo ngược phụ thuộc (D)
+	
+	1. Single responsibility principle - Nguyên lý đơn chức năng (S)
+		- Mỗi class chỉ nên chịu trách nhiệm về một nhiệm vụ duy nhất, chỉ có thể sửa đổi class với 1 lý do duy nhất.
+		- Giảm sự ảnh hưởng lên chương trình khi thay đổi class 
+		- Dễ dàng tái sử dụng
+		- Dễ dàng tìm bug
+		
+		ví dụ:
+			- Giả sử bạn đang phát triển một ứng dụng quản lý sách. Bạn có một lớp Book chứa thông tin về sách và các phương thức để in thông tin sách ra màn hình và lưu sách vào cơ sở dữ liệu. Điều này vi phạm nguyên lý đơn chức năng vì lớp Book có hai lý do để thay đổi: khi định dạng hiển thị thông tin sách thay đổi và khi cách thức lưu sách vào cơ sở dữ liệu thay đổi.
+			- Để tuân theo nguyên lý đơn chức năng, bạn nên tách lớp Book thành các lớp khác nhau, mỗi lớp chịu trách nhiệm cho một chức năng duy nhất. Với lớp Book chỉ chịu trách nhiệm chứa thông tin về sách, lớp BookDisplay chịu trách nhiệm hiển thị thông tin sách và lớp BookRepository chịu trách nhiệm lưu sách vào cơ sở dữ liệu. Mỗi lớp chỉ có một lý do để thay đổi, tuân thủ theo nguyên lý đơn chức năng.
+	2. Open-Closed principle - Nguyên lý đóng mở (O)
+		- Có thể thoải mái mở rộng 1 class, nhưng không được sửa đổi bên trong class đó.
+		- Trong đó:
+			- Mở rộng có nghĩa là thêm chức năng mới vào class hiện có.
+			- Sửa đổi có nghĩa là thay đổi code của một class hiện có.
+		- Nguyên nhân:
+			- do bất cứ khi nào ta sửa đổi code hiện có, luôn sẽ có nguy cơ tạo ra các lỗi tiềm ẩn.
+			- tránh chạm vào code đã được kiểm tra và đang chạy ổn.
+		
+		ví dụ:
+			- Ban đầu, bạn có thể có một lớp Book và một lớp DiscountCalculator để áp dụng các giảm giá khác nhau dựa trên loại sách.
+			- Nếu bạn muốn thêm loại giảm giá mới, bạn phải sửa đổi mã nguồn của lớp DiscountCalculator, điều này vi phạm Nguyên lý Đóng Mở.
+			- Bạn nên sử dụng lớp trừu tượng cho việc tính toán giảm giá và mở rộng nó cho các loại giảm giá mới mà không cần sửa đổi mã nguồn hiện có.
+	3. Liskov substitution principle - Nguyên lý thay thế (L)
+		- Trong một chương trình, các object của class con có thể thay thế class cha mà không làm thay đổi tính đúng đắn của chương trình.
+		- Nguyên tắc này có nghĩa là mọi class con (subclass) hoặc class dẫn xuất phải có khả năng thay thế cho class cơ sở hoặc class cha (superclass) của chúng mà không làm ảnh hưởng đến ứng dụng.
+		ví dụ:
+			- Giả sử bạn có một class hình chữ nhật để tính diện tích của một hình chữ nhật.
+			- Chúng ta đều biết rằng tất cả các hình vuông là hình chữ nhật nên bạn có thể kế thừa các thuộc tính của hình chữ nhật. Vì chiều rộng và chiều cao phải giống nhau, nên bạn chỉ cần nhập chiều dài sẽ cho chiều cao = chiều dài và ngược lại.
+			- Nếu bạn thay thế hình chữ nhật bằng hình vuông thì khi tính diện tích sẽ không cho kết quả chính xác vì khi bạn thay thế hình chữ nhật thành hình vuông thì khi nhập chiều dài hoặc chiều cao nó sẽ đặt lại giá trị của chiều còn lại. 
+			- Như vậy sẽ phá vỡ nguyên tắc Thay thế Liskov. Để khắc phục lỗi này, chúng ta cần có một class chung cho tất cả các hình dạng mà sẽ chứa tất cả các phương thức chung mà bạn muốn các đối tượng thuộc các class con truy cập được. Sau đó, đối với các phương thức riêng lẻ, bạn tạo một class riêng cho hình chữ nhật và hình vuông.
+		- Một số dấu hiệu điển hình có thể chỉ ra rằng LSP đã bị vi phạm:
+			- Các lớp dẫn xuất có các phương thức ghi đè phương thức của lớp cha nhưng với chức năng hoàn toàn khác.
+			- Các lớp dẫn xuất có phương thức ghi đè phương thức của lớp cha là một phương thức rỗng.
+			- Các phương thức bắt buộc kế thừa từ lớp cha ở lớp dẫn xuất nhưng không được sử dụng.
+			- Phát sinh ngoại lệ trong phương thức của lớp dẫn xuất.
+		- Lưu ý:
+			- Trong thực tế, A là B (hình vuông là hình chữ nhật) không có nghĩa là class A nên kế thừa class B. Chỉ cho class A kế thừa class B khi class A thay thế được cho class B.
+	4. Interface segregation principle - Nguyên lý phân tách (I)
+		- Thay vì dùng 1 interface lớn, ta nên tách thành nhiều interface nhỏ, với nhiều mục đích cụ thể.
+		- Hãy tưởng tượng chúng ta có 1 interface lớn, khoảng 100 methods. Việc implements sẽ khá cực khổ, ngoài ra còn có thể dư thừa vì 1 class không cần dùng hết 100 method. Khi tách interface ra thành nhiều interface nhỏ, gồm các method liên quan tới nhau, việc implement và quản lý sẽ dễ hơn.
+		
+		ví dụ:
+			- interface JpaRepository, class này bao gồm các rất nhiều phương thức: lấy danh sách, lấy theo id, insert, update, delete, lấy danh sách có phân trang, sắp xếp, … Việc implement tất cả các phương thức này hết sức cực khổ, đôi khi không cần thiết do chúng ta không sử dụng hết.
+			- interface JpaRepository tách ra các interface nhỏ như : PagingAndSortingRepository, CrudRepository 
+	5. Dependency Inversion Principle - Nguyên lý đảo ngược phụ thuộc (D)
+		- Các module cấp cao không nên phụ thuộc vào các modules cấp thấp. Cả 2 nên phụ thuộc vào abstraction.
+		- Interface (abstraction) không nên phụ thuộc vào thực thể, Các thực thể phải phụ thuộc vào abstraction, không phải class cụ thể hay chức năng cụ thể. ( Các class giao tiếp với nhau thông qua interface, không phải thông qua implementation.)
+		
+		- thay vì để các module cấp cao sử dụng các interface do các module cấp thấp định nghĩa và thực thi, thì nguyên lý này chỉ ra rằng các lớp module cấp cao sẽ định nghĩa ra các interface, sau đó các lớp module cấp sẽ thực thi các interface đó.
+		Lý do áp dụng:
+			- ta có thể dễ dàng thay thế, sửa đổi module cấp thấp mà không ảnh hưởng gì tới module cấp cao.
+		
+		ví dụ:
+			- lớp DatabaseService phụ thuộc trực tiếp vào lớp MySQLDatabase để kết nối với DB.
+			- Trong ví dụ này, lớp DatabaseService phụ thuộc trực tiếp vào lớp MySQLDatabase, vi phạm DIP. Nếu muốn thay đổi DB từ MySQL sang PostgreSQL, bạn phải thay đổi mã nguồn của DatabaseService.
+			- Để tuân theo DIP, chúng ta sẽ sử dụng một giao diện Database để định nghĩa các phương thức kết nối và ngắt kết nối. Sau đó, chúng ta sẽ triển khai giao diện này bằng các lớp cụ thể như MySQLDatabase và PostgreSQLDatabase.

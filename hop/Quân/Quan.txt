@@ -1,0 +1,61 @@
+----------------------------------------------------------------------------
+Use case:	Chủ sân muốn thêm, sửa, xóa thông tin sân
+Actor:		Chủ sân
+Đk trc:		Tài khoản admin
+Đk đảm bảo:	Thông tin sân được giữ nguyên
+Đk sau:		
+Các bước:	B1: Vào trang quản lý sân 
+			B2: Thực hiện các chức năng thêm sửa xóa thông tin sân
+			B3: Xác nhận
+Ngoại lệ:	- Lỗi mạng
+
+----------------------------------------------------------------------------
+Use case: 	Chủ sân xác nhận đặt sân
+Actor:		Chủ sân
+Đk trc:		Tài khoản admin
+Đk đảm bảo:	Hiện thị thông tin sân
+Đk sau:		Đã có yêu cầu đặt sân
+Các bước:	B1: Xem yêu cầu 
+			B2: Kiểm tra tình trạng sân vào thời điểm đặt
+			B3: Chấp nhận đặt sân hoặc từ chối
+			B4: Phản hồi cho người đặt
+Ngoại lệ	- Bất đồng bộ trạng thái sân
+			- Không nhận được yêu cầu đặt sân
+			- Không phản hồi cho người đặt
+			
+----------------------------------------------------------------------------
+Use case:	Chủ sân xem thống kê doanh thu
+Actor:		Chủ sân
+Đk trc:		Tài khoản admin
+Đk đảm bảo:	
+Đk sau:	
+Các bước:	B1: Vào trang quản lý sân 
+			B2: Xem doanh thu (có thể xem theo tuần, tháng hoặc năm)
+Ngoại lệ:	
+
+----------------------------------------------------------------------------
+Use case:	Chủ sân quản lý chi phí (nước, tiền điện, bảo trì sân)
+Actor:		Chủ sân
+Đk trc:		Tài khoản admin
+Đk đảm bảo:	Form điền sẽ được làm mới
+Đk sau:	
+Các bước:	B1: Vào trang chi phí
+			B2: Điền các khoản đã bỏ chi phí
+			B3: Xác nhận
+Ngoại lệ:	- Lỗi mạng
+
+----------------------------------------------------------------------------
+Use case:	Khách thanh toán cho chủ sân sau khi đã đá xong
+Actor:		Người đặt sân, và Admin
+Đk trc:		Tài khoản Admin
+Đk đảm bảo:	Hiển thị trạng thái thanh toán
+Đk sau:		Thanh toán đủ số tiền
+Các bước	B1: Vào trang quản lý sân 
+			B2: Xem số sân, h đặt, người đặt
+			B3: Thông báo số tiền cần thanh toán cho khách
+			B4: Lựa chọn hình thức thanh toán
+			B4: Xác nhận thanh toán thành công
+Ngoại lệ	- Thanh toán không thành công
+			- Thanh toán nhầm sân
+
+----------------------------------------------------------------------------
