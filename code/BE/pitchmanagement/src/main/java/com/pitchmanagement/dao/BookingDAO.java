@@ -25,7 +25,7 @@ public interface BookingDAO {
 
     BookingDto selectPitchBookingById(int id);
 
-    ConfirmPitchBookingDto selectConfirmPitchBookingById(Integer id);
+    ConfirmPitchBookingDto selectConfirmPitchBookingById(int id);
 
     void updateStatusPitchBooking(Map<String, Object> params);
 

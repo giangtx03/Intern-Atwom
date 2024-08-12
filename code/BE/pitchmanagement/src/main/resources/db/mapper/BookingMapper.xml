@@ -100,7 +100,7 @@
         ORDER BY pb.status ASC
     </select>
 
-    <select id="selectConfirmPitchBookingById" parameterType="java.lang.Integer" resultMap="adminResult">
+    <select id="selectConfirmPitchBookingById" parameterType="int" resultMap="adminResult">
         SELECT pb.id, pb.create_at, pb.`status` AS status_book,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
