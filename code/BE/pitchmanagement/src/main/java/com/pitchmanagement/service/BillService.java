@@ -1,8 +1,8 @@
 package com.pitchmanagement.service;
 
-import com.pitchmanagement.model.Bill;
+import com.pitchmanagement.model.request.BillRequest;
 
 public interface BillService {
 
-    Bill addBill(Bill bill);
+    BillRequest addBill(BillRequest bill);
 }

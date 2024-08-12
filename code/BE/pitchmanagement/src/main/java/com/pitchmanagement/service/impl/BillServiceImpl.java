@@ -1,22 +1,15 @@
 package com.pitchmanagement.service.impl;
 
 import com.pitchmanagement.dao.BillDao;
-import com.pitchmanagement.dao.PitchBookingDao;
-import com.pitchmanagement.dao.PitchTimeDao;
+import com.pitchmanagement.dao.BookingDAO;
+import com.pitchmanagement.dao.PitchTimeDAO;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
-import com.pitchmanagement.model.Bill;
-import com.pitchmanagement.model.PitchTime;
+import com.pitchmanagement.model.request.BillRequest;
 import com.pitchmanagement.service.BillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,13 +21,13 @@ public class BillServiceImpl implements BillService {
     private final BillDao billDao;
 
     @Autowired
-    private final PitchBookingDao pitchBookingDao;
+    private final BookingDAO pitchBookingDao;
 
     @Autowired
-    private final PitchTimeDao pitchTimeDao;
+    private final PitchTimeDAO pitchTimeDao;
 
     @Override
-    public Bill addBill(Bill bill) {
+    public BillRequest addBill(BillRequest bill) {
 
         ConfirmPitchBookingDto confirmPitchBookingDto = pitchBookingDao.selectConfirmPitchBookingById(bill.getPitchBookingId());
 
@@ -44,7 +37,6 @@ public class BillServiceImpl implements BillService {
         PitchBookingMap.put("status", "Đã thanh toán");
 
         pitchBookingDao.updateStatusPitchBooking(PitchBookingMap);
-
 
         billDao.insertBill(bill);
 

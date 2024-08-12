@@ -41,4 +41,26 @@
         status = #{status}
         WHERE pitch_id = #{pitch_id} AND time_slot_id = #{time_slot_id}
     </update>
+
+    <!-- ........................................................... -->
+    <update id="updateStatusPitchTimeByIds" parameterType="com.pitchmanagement.model.request.PitchTimeRequest">
+        UPDATE pitch_time
+        SET `status` = #{status}
+        WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}
+    </update>
+
+    <select id="selectPitchTimeByIds" parameterType="map" resultMap="result">
+        SELECT *
+        FROM pitch_time
+        WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}
+    </select>
+
+    <resultMap id="result" type="com.pitchmanagement.model.request.PitchTimeRequest">
+        <result property="id" column="id"/>
+        <result property="status" column="status"/>
+        <result property="pitch_id" column="pitchId"/>
+        <result property="time_slot_id" column="timeSlotId"/>
+    </resultMap>
+
+    <!-- ........................................................... -->
 </mapper>

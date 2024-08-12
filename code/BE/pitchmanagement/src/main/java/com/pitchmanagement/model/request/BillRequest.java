@@ -1,11 +1,11 @@
-package com.pitchmanagement.model;
+package com.pitchmanagement.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Bill {
+public class BillRequest {
 
     private int id;
     private String createAt;

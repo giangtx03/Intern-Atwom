@@ -1,13 +1,13 @@
-package com.pitchmanagement.model;
+package com.pitchmanagement.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PitchTime {
-    private int price;
+public class PitchTimeRequest {
+    private Integer price;
     private String status;
-    private int pitchId;
-    private int timeSlotId;
+    private Integer pitchId;
+    private Integer timeSlotId;
 }

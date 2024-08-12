@@ -2,6 +2,7 @@ package com.pitchmanagement.dao;
 
 import java.util.*;
 
+import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
@@ -19,4 +20,15 @@ public interface BookingDAO {
     void insert(BookingRequest pitchBooking);
 
     void update(BookingRequest pitchBooking);
+
+    //------------------------------------------------------------------
+    List<ConfirmPitchBookingDto> selectConfirmPitchBookingByStatus(@Param("statuses") List<String> statuses);
+
+    BookingRequest selectPitchBookingById(int id);
+
+    ConfirmPitchBookingDto selectConfirmPitchBookingById(int id);
+
+    void updateStatusPitchBooking(Map<String, Object> params);
+
+    //------------------------------------------------------------------
 }

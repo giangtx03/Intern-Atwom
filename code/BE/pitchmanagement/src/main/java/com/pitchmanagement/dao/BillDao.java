@@ -1,11 +1,9 @@
 package com.pitchmanagement.dao;
 
-import com.pitchmanagement.model.Bill;
+import com.pitchmanagement.model.request.BillRequest;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.Map;
 
 @Mapper
 public interface BillDao {
-    void insertBill(Bill bill);
+    void insertBill(BillRequest bill);
 }
