@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -18,12 +20,14 @@ public class RegisterResponse {
     private String fullname;
     @JsonProperty("email")
     private String email;
-    @JsonProperty("address")
-    private String address;
     @JsonProperty("phone_number")
     private String phoneNumber;
     @JsonProperty("role")
     private String role;
+    @JsonProperty("create_at")
+    private LocalDateTime createAt;
+    @JsonProperty("update_at")
+    private LocalDateTime updateAt;
 
 
 }

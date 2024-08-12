@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -48,13 +49,13 @@ public class UserServiceImpl implements UserService {
 
         CustomUserDetails customUserDetails = CustomUserDetails.toCustomUser(user);
 
-        String token = jwtUtil.generateToken(customUserDetails);
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(), loginRequest.getPassword(), customUserDetails.getAuthorities()
         );
 
         authenticationManager.authenticate(authenticationToken);
+
+        String token = jwtUtil.generateToken(customUserDetails);
 
         return LoginResponse.builder()
                 .email(user.getEmail())
@@ -76,6 +77,8 @@ public class UserServiceImpl implements UserService {
                 .fullname(request.getFullname())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .createAt(LocalDateTime.now())
+                .updateAt(LocalDateTime.now())
                 .role("USER")
                 .build();
         userDao.insert(userDto);
@@ -85,8 +88,9 @@ public class UserServiceImpl implements UserService {
                 .fullname(userDto.getFullname())
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
-                .address(userDto.getAddress())
                 .role(userDto.getRole())
+                .createAt(userDto.getCreateAt())
+                .updateAt(userDto.getUpdateAt())
                 .build();
     }
 
