@@ -1,9 +1,15 @@
-import React, { Component } from 'react'
+import React, { Suspense } from 'react'
+import { Navigate, useRoutes } from 'react-router-dom';
+import { PrimeReactProvider } from 'primereact/api'
+import Layout from '../comp/Layout/Layout';
 
-export default class routers extends Component {
-  render() {
-    return (
-      <div>routers</div>
-    )
-  }
-}
+
+export const RoutersHook: any = {
+  path: '/',
+    element: (
+        <Layout />
+    ),
+    children: [
+      { path: '/dashboard'},
+    ],
+};

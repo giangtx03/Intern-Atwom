@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class guard extends Component {
-  render() {
-    return (
-      <div>guard</div>
-    )
-  }
+export default function guard() {
+  return (
+    <div>guard</div>
+  )
 }

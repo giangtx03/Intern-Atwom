@@ -1,5 +1,6 @@
 package com.pitchmanagement.security;
 
+<<<<<<< HEAD
 import com.pitchmanagement.dao.UserDao;
 import com.pitchmanagement.model.User;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +18,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return CustomUserDetails.toCustomUser(User.toUser(userDao.getUserByEmail(username)));
     }
+=======
+public class CustomUserDetailsServiceImpl {
+>>>>>>> 3392bdb00c301f4c71ae0eb16cd66461eb9e44b9
 }

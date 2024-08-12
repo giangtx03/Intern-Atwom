@@ -1,9 +1,16 @@
-import React, { Component } from 'react'
+import { configureStore } from '@reduxjs/toolkit';
 
-export default class store extends Component {
-  render() {
-    return (
-      <div>store</div>
-    )
-  }
-}
+import counterReducer from '../reduces/counterSilde'
+
+const store = configureStore({
+    reducer: {
+        counter: counterReducer,
+    },
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware({ serializableCheck: false });
+    },
+});
+
+export default store;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
