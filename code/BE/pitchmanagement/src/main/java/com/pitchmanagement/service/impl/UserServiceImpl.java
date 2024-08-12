@@ -56,11 +56,12 @@ public class UserServiceImpl implements UserService {
         authenticationManager.authenticate(authenticationToken);
 
         String token = jwtUtil.generateToken(customUserDetails);
-
         return LoginResponse.builder()
                 .email(user.getEmail())
                 .fullname(user.getFullname())
                 .token(token)
+                .createAt(user.getCreateAt())
+                .updateAt(user.getUpdateAt())
                 .build();
     }
 

@@ -11,8 +11,8 @@
         SELECT
             id,
             email,
-            fullname,
             password,
+            fullname,
             address,
             avatar,
             phone_number AS phoneNumber,

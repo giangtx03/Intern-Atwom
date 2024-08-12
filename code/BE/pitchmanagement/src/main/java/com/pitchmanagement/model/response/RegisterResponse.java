@@ -29,5 +29,4 @@ public class RegisterResponse {
     @JsonProperty("update_at")
     private LocalDateTime updateAt;
 
-
 }
