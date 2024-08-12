@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pitchmanagement.dto.admin.BookingDto;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +92,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) {
 
-        String status = (String) statusMap.get("status");
         int id = (int) statusMap.get("id");
+        String status = (String) statusMap.get("status");
 
         bookingDAO.updateStatusPitchBooking(statusMap);
 
@@ -100,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
         tempConfirmPitchBookingDto.setStatusBook(status);
 
         // Truy vấn bảng pitch_time
-        BookingRequest pitchBooking = bookingDAO.selectPitchBookingById(id);
+        BookingDto pitchBooking = bookingDAO.selectPitchBookingById(id);
 
         if (pitchBooking == null) {
             throw new RuntimeException("PitchBooking not found for id: " + id);
@@ -108,15 +109,16 @@ public class BookingServiceImpl implements BookingService {
 
         // tạo map để xác nhận sân đã đặt
         Map<String, Object> pitchTimeMap = new HashMap<>();
-        pitchTimeMap.put("pitchId", pitchBooking.getPitchId());
-        pitchTimeMap.put("timeSlotId", pitchBooking.getTimeSlotId());
+        pitchTimeMap.put("pitchId", pitchBooking.getPitchTimePitchId());
+        pitchTimeMap.put("timeSlotId", pitchBooking.getPitchTimeTimeSlotId());
 
         PitchTimeRequest pitchTime = pitchTimeDAO.selectPitchTimeByIds(pitchTimeMap);
 
+        System.out.println(" Pitch Booking: " + pitchBooking);
         if (pitchTime == null) {
-            throw new RuntimeException("PitchTime not found for pitchId: " + pitchBooking.getPitchId()
-                    + " and timeSlotId: " + pitchBooking.getTimeSlotId()
-                    + "Pitch Booking: " + statusMap);
+            throw new RuntimeException("PitchTime not found for pitchId: " + pitchBooking.getPitchTimePitchId()
+                    + " and timeSlotId: " + pitchBooking.getPitchTimeTimeSlotId()
+                    + " Pitch Booking: " + pitchBooking);
         }
 
         // Nếu admin chấp nhận thì chuyển status thành "bận"

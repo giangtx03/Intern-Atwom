@@ -100,7 +100,7 @@
         ORDER BY pb.status ASC
     </select>
 
-    <select id="selectConfirmPitchBookingById" parameterType="int" resultMap="adminResult">
+    <select id="selectConfirmPitchBookingById" parameterType="java.lang.Integer" resultMap="adminResult">
         SELECT pb.id, pb.create_at, pb.`status` AS status_book,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
@@ -124,19 +124,19 @@
         <result property="fullname" column="fullname"/>
         <result property="phone_number" column="phoneNumber"/>
         <result property="start_time" column="startTime"/>
-        <result property="end_time" column="phoneNumber"/>
+        <result property="end_time" column="endTime"/>
         <result property="price" column="price"/>
     </resultMap>
 
-    <resultMap id="result" type="com.pitchmanagement.model.request.BookingRequest">
+    <resultMap id="result" type="com.pitchmanagement.dto.admin.BookingDto">
         <result property="id" column="id"/>
-        <result property="create_at" column="createAt"/>
-        <result property="update_at" column="updateAt"/>
-        <result property="status" column="status"/>
         <result property="note" column="note"/>
+        <result property="status" column="status"/>
         <result property="pitch_time_pitch_id" column="pitchId"/>
         <result property="pitch_time_time_slot_id" column="timeSlotId"/>
         <result property="user_id" column="userId"/>
+        <result property="create_at" column="createAt"/>
+        <result property="update_at" column="updateAt"/>
     </resultMap>
 
     <!-- ........................................................... -->
