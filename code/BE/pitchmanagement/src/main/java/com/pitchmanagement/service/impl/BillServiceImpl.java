@@ -49,7 +49,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<BillDayResponse> getBillDayByMonth(String yearMonth) {
+    public List<BillDayResponse> getBillDayByMonth(int month, int year) {
+
+        Map<String, Object> yearMonth = new HashMap<>();
+        yearMonth.put("month", month);
+        yearMonth.put("year", year);
 
         if (billDao.selectBillDayByMonth(yearMonth) == null) {
             throw new RuntimeException("Not billDAO " +  billDao.selectBillDayByMonth(yearMonth));
@@ -59,7 +63,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<BillPitchResponse> getBillPitchByMonth(String yearMonth) {
+    public List<BillPitchResponse> getBillPitchByMonth(int month, int year) {
+
+        Map<String, Object> yearMonth = new HashMap<>();
+        yearMonth.put("month", month);
+        yearMonth.put("year", year);
 
         if (billDao.selectBillPitchByMonth(yearMonth) == null) {
             throw new RuntimeException("Not billDAO " +  billDao.selectBillPitchByMonth(yearMonth));

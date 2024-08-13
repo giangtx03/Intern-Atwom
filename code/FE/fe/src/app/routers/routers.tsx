@@ -4,16 +4,18 @@ import { PrimeReactProvider } from 'primereact/api'
 import Layout from '../comp/Layout/Layout';
 import History from '../pages/History';
 import CommentDisplay from '../pages/comment';
+import { AdminRouter } from './admin/AdminRouter';
 
 
 export const RoutersHook: any = {
   path: '/',
-    element: (
-        <Layout />
-    ),
-    children: [
-      { path: '/dashboard'},
-      {path: 'history' , element: <History/>},
-      {path:"comment", element: <CommentDisplay/>}
-    ],
+  element: (
+    <Layout />
+  ),
+  children: [
+    { path: '/dashboard' },
+    { path: 'history', element: <History /> },
+    { path: "comment", element: <CommentDisplay /> },
+    { ...AdminRouter }
+  ],
 };

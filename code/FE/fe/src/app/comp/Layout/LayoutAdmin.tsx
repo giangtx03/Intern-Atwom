@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import Header from './comp/Header';
 
@@ -12,9 +12,15 @@ export default function LayoutAdmin() {
     navigate(url);
   };
 
+  const location = useLocation();
+
+  // Nếu đường dẫn không phải admin thì điều hướng về trang khác (ví dụ '/')
+  if (!location.pathname.startsWith('/admin')) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className='d-flex flex-column min-vh-100'>
-      <Header />
       <div className='flex-grow-1 container-fluid'>
         <div className="row" style={{ height: "670px" }}>
           <div className="col-2 bg-body-secondary">
@@ -29,9 +35,9 @@ export default function LayoutAdmin() {
               onClick={() => redirect("payments")}
             />
             <Button
-              className={`w-100 rounded-2 my-2 text-start ${activeButton !== "dashboard" ? 'p-button-text' : ''}`}
-              label="Dashboard"
-              onClick={() => redirect("dashboard")}
+              className={`w-100 rounded-2 my-2 text-start ${activeButton !== "revenue" ? 'p-button-text' : ''}`}
+              label="Revenue"
+              onClick={() => redirect("revenue")}
             />
             <Button
               className={`w-100 rounded-2 my-2 text-start ${activeButton !== "editPitch" ? 'p-button-text' : ''}`}

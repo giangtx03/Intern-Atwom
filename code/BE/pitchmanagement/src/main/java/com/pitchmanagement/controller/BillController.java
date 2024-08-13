@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -36,8 +37,8 @@ public class BillController {
     }
 
     @GetMapping("/admin/billday")
-    public ResponseEntity<BaseResponse> getBillDayByMonth(@RequestParam String yearMonth) {
-        List<BillDayResponse> myBill = billService.getBillDayByMonth(yearMonth);
+    public ResponseEntity<BaseResponse> getBillDayByMonth(@RequestParam  int month, @RequestParam int year) {
+        List<BillDayResponse> myBill = billService.getBillDayByMonth(month, year);
         BaseResponse response = BaseResponse
                 .builder()
                 .status(HttpStatus.ACCEPTED)
@@ -49,8 +50,8 @@ public class BillController {
     }
 
     @GetMapping("/admin/billpitch")
-    public ResponseEntity<BaseResponse> getBillPitchByMonth(@RequestParam String yearMonth) {
-        List<BillPitchResponse> myBill = billService.getBillPitchByMonth(yearMonth);
+    public ResponseEntity<BaseResponse> getBillPitchByMonth(@RequestParam  int month, @RequestParam int year) {
+        List<BillPitchResponse> myBill = billService.getBillPitchByMonth(month, year);
         BaseResponse response = BaseResponse
                 .builder()
                 .status(HttpStatus.ACCEPTED)

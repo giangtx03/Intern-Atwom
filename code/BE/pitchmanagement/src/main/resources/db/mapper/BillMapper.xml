@@ -7,7 +7,7 @@
         VALUES (#{createAt}, #{note}, #{pitchBookingId});
     </insert>
 
-    <select id="selectBillDayByMonth" parameterType="string" resultType="com.pitchmanagement.model.response.BillDayResponse">
+    <select id="selectBillDayByMonth" parameterType="map" resultType="com.pitchmanagement.model.response.BillDayResponse">
         SELECT
         DAY(b.create_at) AS day_of_month,
         SUM(pt.price) AS total_price
@@ -17,12 +17,12 @@
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
         INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
-        WHERE DATE_FORMAT(b.create_at, '%Y-%m') = #{yearMonth}
+        WHERE MONTH(b.create_at) = #{month} AND YEAR(b.create_at) = #{year}
         GROUP BY DAY(b.create_at)
         ORDER BY DAY(b.create_at);
     </select>
     
-    <select id="selectBillPitchByMonth" parameterType="string" resultType="com.pitchmanagement.model.response.BillPitchResponse">
+    <select id="selectBillPitchByMonth" parameterType="map" resultType="com.pitchmanagement.model.response.BillPitchResponse">
         SELECT
         p.id,
         p.name AS name_pitch,
@@ -33,7 +33,7 @@
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
         INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
-        WHERE DATE_FORMAT(b.create_at, '%Y-%m') = #{yearMonth}
+        WHERE MONTH(b.create_at) = 8 AND YEAR(b.create_at) = 2024
         GROUP BY p.id,p.name
         ORDER BY p.id, p.name;
     </select>

@@ -1,31 +1,46 @@
-
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
+import { RevenueDay } from '../../../model/RevenueDay';
 
-export default function RevenueBar() {
+type Props = {
+    billDays: RevenueDay[];
+    month: number;
+    year: number
+};
+
+export default function RevenueBar(props: Props) {
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
 
     useEffect(() => {
+        const days: number[] = [];
+        const values: number[] = [];
+
+        const getDaysInMonth = (month: number, year: number) => {
+
+            return new Date(year, month + 1, 0).getDate();
+        };
+
+        const daysInMonth = getDaysInMonth(props.month, props.year);
+        for (let i = 0; i < daysInMonth; i++) {
+            days.push(i + 1);
+            const bill = props.billDays.find(bill => bill.dayOfMonth === (i + 1));
+            values.push(bill ? bill.totalPrice! : 0);
+        }
+
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
         const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
         const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
         const data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            labels: days,
             datasets: [
                 {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
+                    label: 'Doanh thu tháng 8',
+                    data: values,
                     fill: false,
                     borderColor: documentStyle.getPropertyValue('--blue-500'),
-                    tension: 0.4
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    borderColor: documentStyle.getPropertyValue('--pink-500'),
                     tension: 0.4
                 }
             ]
@@ -62,11 +77,11 @@ export default function RevenueBar() {
 
         setChartData(data);
         setChartOptions(options);
-    }, []);
+    }, [props.billDays, props.month, props.year]);
 
     return (
         <div className="card">
             <Chart type="line" data={chartData} options={chartOptions} />
         </div>
-    )
+    );
 }

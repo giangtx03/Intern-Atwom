@@ -20,7 +20,6 @@ function App() {
     { path: 'not-permission' }, //403
     { path: '/', element: <Navigate to="/dashboard" replace /> },
     RoutersHook,
-    AdminRouter,
     { path: 'err-network' }, //500
     { path: '*' }, //404
   ]);

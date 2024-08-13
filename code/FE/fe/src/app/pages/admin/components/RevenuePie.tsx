@@ -1,18 +1,29 @@
 
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
+import { RevenuePitch } from '../../../model/RevenuePitch';
 
-export default function RevenuePie() {
+type Props = {
+    billPitches: RevenuePitch[];
+    month: number;
+    year: number
+};
+
+export default function RevenuePie(props: Props) {
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
 
     useEffect(() => {
         const documentStyle = getComputedStyle(document.documentElement);
+
+        const labelValues = props.billPitches.map(bill => bill.namePitch);
+        const dataValues = props.billPitches.map(bill => bill.totalPrice);
+
         const data = {
-            labels: ['A', 'B', 'C'],
+            labels: labelValues,
             datasets: [
                 {
-                    data: [540, 325, 702],
+                    data: dataValues,
                     backgroundColor: [
                         documentStyle.getPropertyValue('--blue-500'),
                         documentStyle.getPropertyValue('--yellow-500'),

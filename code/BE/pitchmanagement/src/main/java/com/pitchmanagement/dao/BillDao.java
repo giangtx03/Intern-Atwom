@@ -6,12 +6,13 @@ import com.pitchmanagement.model.response.BillPitchResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface BillDao {
     void insertBill(BillRequest bill);
 
-    List<BillDayResponse> selectBillDayByMonth(String yearMonth);
+    List<BillDayResponse> selectBillDayByMonth(Map<String, Object> params);
 
-    List<BillPitchResponse> selectBillPitchByMonth(String yearMonth);
+    List<BillPitchResponse> selectBillPitchByMonth(Map<String, Object> params);
 }

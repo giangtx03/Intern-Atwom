@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { MessageModel } from "../model/MessageModel";
 import { BillModel } from "../model/BillModel";
+import { RevenueDay } from "../model/RevenueDay";
+import { RevenuePitch } from "../model/RevenuePitch";
 
 // Cấu hình axios
 const api = axios.create({
@@ -48,6 +50,34 @@ export const createBill = async (bill: BillModel) => {
         throw error;
     }
 }
+
+// Lấy danh sách bill
+export const getBillDay = async (month: number, year: number) => {
+    try {
+
+        const url = `http://localhost:8080/bill/admin/billday?month=${month}&year=${year}`
+
+        const response: AxiosResponse<{ data: RevenueDay[] }> = await api.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách bill
+export const getBillPitch = async (month: number, year: number) => {
+    try {
+
+        const url = `http://localhost:8080/bill/admin/billpitch?month=${month}&year=${year}`
+
+        const response: AxiosResponse<{ data: RevenuePitch[] }> = await api.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
 
 
 

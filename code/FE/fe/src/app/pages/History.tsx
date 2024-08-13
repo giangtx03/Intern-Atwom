@@ -154,11 +154,10 @@ export default function History() {
                 <td>
                   <button
                     type="button"
-                    className={`btn btn-danger ${
-                      item.status == "success" || item.status == "wait"
+                    className={`btn btn-danger ${item.status == "success" || item.status == "wait"
                         ? ""
                         : "hide"
-                    } `}
+                      } `}
                     onClick={(e) => {
                       ChoseCancelBooking(item);
                     }}
@@ -167,11 +166,10 @@ export default function History() {
                   </button>
                   <button
                     type="button"
-                    className={`btn btn-success ${
-                      item.status == "cancel" || item.status == "finished"
+                    className={`btn btn-success ${item.status == "cancel" || item.status == "finished"
                         ? ""
                         : "hide"
-                    } `}
+                      } `}
                     onClick={(e) => {
                       setVisible(true);
                       setChoseBookingID(item.pitchId);
