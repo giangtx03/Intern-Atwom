@@ -69,7 +69,7 @@ export default function Payment(props: Props) {
 
     const subtitle = (
         <div className={props.message.statusBook === "Chưa thanh toán" ? "text-danger" : "text-success"}>
-            {props.message.statusBook} ({props.message.statusBook === "Chưa thanh toán" ? "" : handleDate(handleDateTime)})
+            {props.message.statusBook} {props.message.statusBook === "Chưa thanh toán" ? "" : `(${handleDate(handleDateTime)})`}
             <hr />
         </div>
     )

@@ -92,7 +92,7 @@ export default function MessageBook(props: Props) {
             </Card>
 
             <Dialog header="Xác nhận" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent}>
-                <p className="m-0">Bạn có chắc chắn muốn {currentAction} đơn này?</p>
+                <p className="m-0">Bạn có chắc chắn muốn <b>{currentAction === "Chưa thanh toán" ? "chấp nhận" : "từ chối"}</b> đơn này?</p>
             </Dialog>
         </div>
     )
