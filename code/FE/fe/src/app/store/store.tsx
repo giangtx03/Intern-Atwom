@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import counterReducer from '../reduces/counterSilde'
+import counterReducer from '../reduces/counterSilce'
+import SpinnerSlide from '../reduces/SpinnerSlice';
 
 const store = configureStore({
     reducer: {
         counter: counterReducer,
+        spinner: SpinnerSlide
     },
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({ serializableCheck: false });

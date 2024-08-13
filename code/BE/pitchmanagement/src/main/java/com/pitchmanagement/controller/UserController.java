@@ -1,5 +1,6 @@
 package com.pitchmanagement.controller;
 
+import com.pitchmanagement.model.request.ChangePasswordRequest;
 import com.pitchmanagement.model.request.UpdateUserRequest;
 import com.pitchmanagement.model.response.BaseResponse;
 import com.pitchmanagement.model.response.RegisterResponse;
@@ -74,6 +75,43 @@ public class UserController {
                     .status(HttpStatus.OK.value())
                     .data(userResponse)
                     .message("Thông tin người dùng !")
+                    .build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(BaseResponse.builder()
+                            .status(HttpStatus.BAD_REQUEST.value())
+                            .message(e.getMessage())
+                            .build());
+        }
+    }
+
+    @PreAuthorize("ROLE_USER")
+    @PutMapping("/change_password")
+    public ResponseEntity<?> changePassword(
+            @RequestBody @Valid ChangePasswordRequest changePasswordRequest,
+            BindingResult result
+    ){
+        try {
+            if (result.hasErrors()) {
+                // lấy ra danh sách lỗi
+                List<String> errorMessages = result.getFieldErrors()
+                        .stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                // trả về danh sách lỗi
+                BaseResponse response = BaseResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message("Lỗi thông tin đầu vào!!!")
+                        .data(errorMessages)
+                        .build();
+                return ResponseEntity.badRequest().body(response);
+            }
+            userService.changePassword(changePasswordRequest);
+
+            BaseResponse response = BaseResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Thay đổi mật khẩu thành công !")
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {

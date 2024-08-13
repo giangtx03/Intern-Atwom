@@ -46,10 +46,16 @@
     <update id="update" parameterType="com.pitchmanagement.dto.UserDto">
         UPDATE user SET
             fullname = #{fullname},
-            password = #{password},
             address = #{address},
             avatar = #{avatar},
             phone_number = #{phoneNumber},
+            update_at = #{updateAt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="changePassword" parameterType="com.pitchmanagement.dto.UserDto">
+        UPDATE user SET
+            password = #{password},
             update_at = #{updateAt}
         WHERE id = #{id}
     </update>

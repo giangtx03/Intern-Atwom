@@ -12,6 +12,7 @@ import java.util.Map;
 public interface UserDao {
     void insert(UserDto userDto);
     void update(UserDto userDto);
+    void changePassword(UserDto userDto);
 
     Map<String,Object> getUserByEmail(@Param("email") String email);
 
