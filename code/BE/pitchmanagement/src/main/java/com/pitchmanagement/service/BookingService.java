@@ -1,7 +1,9 @@
 package com.pitchmanagement.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import org.springframework.stereotype.Service;
 
 import com.pitchmanagement.dto.PitchBookingDTO;
@@ -15,4 +17,9 @@ public interface BookingService {
     void insert(BookingRequest bookingRequest);
 
     void update(BookingRequest bookingRequest);
+
+    //------------------------------------------------------------------
+    List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(List<String> statuses);
+
+    ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params);
 }

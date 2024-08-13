@@ -6,12 +6,19 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Router } from 'react-router-dom';
 import { RoutersHook } from './app/routers/routers';
 
+// import library
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import 'primeicons/primeicons.css';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <BrowserRouter>
-  <App/>
+    <App />
   </BrowserRouter>
 );
 

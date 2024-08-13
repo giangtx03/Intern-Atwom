@@ -1,7 +1,9 @@
 package com.pitchmanagement.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import com.pitchmanagement.model.request.PitchTimeRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +17,11 @@ public interface PitchTimeDAO {
 
     void ChangeStatus(@Param("status") String status, @Param("pitch_id") Integer pitch_id,
             @Param("time_slot_id") Integer time_slot_id);
+
+    //------------------------------------------------------------------
+    void updateStatusPitchTimeByIds(PitchTimeRequest pitchTime);
+
+    PitchTimeRequest selectPitchTimeByIds(Map<String, Object> params);
+
+    //------------------------------------------------------------------
 }
