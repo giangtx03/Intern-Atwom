@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 public class LoginResponse {
 
+    @JsonProperty("id")
+    private Long id;
     @JsonProperty("email")
     private String email;
     @JsonProperty("fullname")
