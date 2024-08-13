@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LoginRequest } from "../../model/User";
 import { useForm } from "react-hook-form";
+import { UserService } from "../../service/UserService";
+import { useAppDispatch } from "../../store/hooks";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
+  const dispatch = useAppDispatch();
+
+
   const {
     register,
     handleSubmit,
@@ -10,7 +16,23 @@ export default function LoginPage() {
     formState: { errors, touchedFields },
   } = useForm<LoginRequest>({ mode: "onTouched" });
 
-  const onSubmit = (data: any) => console.log(data);
+
+  const onSubmit = (data: any) => {
+    UserService.getInstance()
+      .login({ email: data.email, password: data.password })
+      .then(response => {
+        console.log(response.data);
+        if (response.data.status === 202) {
+          toast.success("Cập nhật thành công!", {
+            position: "top-right",
+          });
+          // dispatch(showOrHindSpinner(false));
+        }
+      })
+      .catch(error =>{
+        console.error(error);
+      });
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="text-center mb-3">
@@ -29,7 +51,7 @@ export default function LoginPage() {
             pattern: {
               value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
               message: "Email không đúng định dạng",
-            }
+            },
           })}
           className="form-control"
         />

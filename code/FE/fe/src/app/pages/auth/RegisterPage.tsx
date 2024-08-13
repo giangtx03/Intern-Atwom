@@ -1,6 +1,8 @@
 import React from "react";
 import { RegisterRequest } from "../../model/User";
 import { useForm } from "react-hook-form";
+import { UserService } from "../../service/UserService";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const {
@@ -15,7 +17,22 @@ export default function RegisterPage() {
     event.target.value = event.target.value.replace(/[^0-9]/g, '');
   };
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    UserService.getInstance()
+      .register({ email: data.email, password: data.password, fullname: data.fullname, phone_number: data.phoneNumber})
+      .then(response => {
+        console.log(response.data);
+        if (response.data.status === 201) {
+          toast.success("Cập nhật thành công!", {
+            position: "top-right",
+          });
+          // dispatch(showOrHindSpinner(false));
+        }
+      })
+      .catch(error =>{
+        console.error(error);
+      });
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="text-center mb-3">
