@@ -27,10 +27,14 @@ public class BookingServiceImpl implements BookingService {
     PitchTimeDAO pitchTimeDAO;
 
     @Override
-    public List<PitchBookingDTO> SelectByUser(Integer user_id, Integer offset, Integer limit) {
+    public List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit) {
         PageHelper.startPage(offset, limit);
-        List<PitchBookingDTO> pitchBookings = bookingDAO.SelectByUser(user_id);
+        List<PitchBookingDTO> pitchBookings = bookingDAO.SelectByUser(user_id, "%" +status +"%");
         return pitchBookings;
+    }
+
+    public Integer total( Integer user_id,  String status){
+        return bookingDAO.total(user_id,"%" +status +"%");
     }
 
     @Override
@@ -41,6 +45,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void update(BookingRequest bookingRequest) {
         bookingDAO.update(bookingRequest);
-        pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());
+        if (bookingRequest.getStatus() == "success") {
+            pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());            
+        }
     }
 }

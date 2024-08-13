@@ -44,3 +44,15 @@
     transform: rotate(360deg);
   }
 }
+
+input[type="radio"] {
+  display: none;
+}
+
+.star{
+  cursor: pointer;
+}
+
+button{
+  border-radius: 10px;
+}

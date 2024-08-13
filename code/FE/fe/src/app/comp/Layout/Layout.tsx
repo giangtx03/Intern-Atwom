@@ -6,10 +6,10 @@ import Header from './comp/Header'
 export default function Layout() {
     return (
         <div className='d-flex'>
-            <div className='col-2'>
-                <Sidebar/>
+            <div className={false ? "col-2" : ""}>
+                {false && <Sidebar/>}
             </div>
-            <div className='col-10'>
+            <div className={false ? 'col-10' : "col-12"}>
                 <Header/>
                 <Outlet/>
             </div>

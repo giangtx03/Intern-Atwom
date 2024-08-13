@@ -15,7 +15,7 @@
             FROM pitch_time pt
             join time_slot t
             join pitch p
-        join pitch_type pt1 where ( #{pitch_id} IS NULL or pt.pitch_id = #{pitch_id} ) and (#{time_id} IS NULL or pt.time_slot_id = #{time_id})
+        join pitch_type pt1 where ( pt.pitch_id = #{pitch_id} ) and (pt.time_slot_id = #{time_id})
     </select>
 
     <select id="FilterPitchByPitchId" parameterType="map" resultType="com.pitchmanagement.dto.PitchTimeDTO">
@@ -27,12 +27,12 @@
         t.end_time as endTime,
         p.name,
         p.address,
-        pt1.name as name_pitch
+        pt1.name as name_pitch 
         FROM pitch_time pt
-        join time_slot t
-        join pitch p
-        join pitch_type pt1
-    where pitch_id = 1 and start_time >=now() and status = 'ranh';
+        join time_slot t on t.id = pt.time_slot_id
+        join pitch p on p.id = pt.pitch_id
+        join pitch_type pt1 on p.pitch_type_id = pt1.id
+    where pitch_id = #{pitch_id} and start_time >=now() and status = 'ranh';
     </select>
 
     <update id = "ChangeStatus" parameterType = "map">

@@ -1,55 +1,98 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BookingService } from "../service/BookingService";
 import Search from "../model/SearchModel";
 import dayjs from "dayjs";
 import "../../App.css";
 import Booking from "../model/Booking";
-import pages from "./pages";
+import { Dialog } from "primereact/dialog";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+import BookingDialog from "./BookingDialog";
+import { Toast } from "primereact/toast";
+import swal from "sweetalert";
 
 export default function History() {
   const [booking, setBooking] = useState([]);
   const [search, setSearch] = useState(new Search("", 5, 1, 1, 100));
   const [total, setTotal] = useState<number>(10);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [choseBookingId, setChoseBookingID] = useState<number | undefined>(
+    undefined
+  );
+  const toast = useRef<Toast>(null);
+
+  const show = () => {
+    toast.current?.show({
+      severity: "info",
+      summary: "Info",
+      detail: "Message Content",
+    });
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await BookingService.getInstance().getLstBooking(
+        search,
+        1
+      );
+      const responseTotal = await BookingService.getInstance().total(search, 1);
+      setTotal(responseTotal.data.data);
+      setBooking(response.data.data);
+    } catch (error: any) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Lỗi: ", error.message);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await BookingService.getInstance().getLstBooking(
-          search,
-          1
-        );
-        const responseTotal = await BookingService.getInstance().total(
-          search,
-          1
-        );
-        setTotal(responseTotal.data.data);
-        setBooking(response.data.data);
-      } catch (error: any) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Lỗi: ", error.message);
-        }
-      }
-    };
     fetchData();
-  }, [search.timer]);
+  }, [search.timer, choseBookingId, visible]);
 
   type StatusType = {
     [key: string]: string;
   };
 
-  const ChoseCancelBooking = (booking: Booking) => {
-    booking.status = "huy";
-    BookingService.getInstance().CancelBooking(booking);
-    setSearch({
-      ...search,
-      timer: new Date().getTime(),
-      page: 1,
+  const ChoseCancelBooking = (bookChose: Booking) => {
+    swal("Bạn muốn cập nhật tượng này chứ?", {
+      buttons: ["Quay lại", "Đồng ý"],
+      icon: "warning",
+      dangerMode: true,
+    }).then(async (value) => {
+      if (value) {
+        bookChose.status = "cancel";
+        await BookingService.getInstance()
+          .CancelBooking(bookChose)
+          .then((response) => {
+            setSearch({
+              ...search,
+              timer: new Date().getTime(),
+              page: 1,
+            });
+            swal("Cancel success", {
+              icon: "success",
+            });
+          })
+          .catch((response) => {
+            swal("Cancel false", {
+              icon: "warning",
+            });
+          });
+      } else {
+        setSearch({
+          ...search,
+          timer: new Date().getTime(),
+          page: 1,
+        });
+        swal("Cancel false", {
+          icon: "warning",
+        });
+      }
     });
   };
 
@@ -75,6 +118,7 @@ export default function History() {
           });
         }}
       >
+        <Toast ref={toast} />
         <option selected value="">
           Status
         </option>
@@ -97,7 +141,7 @@ export default function History() {
           </tr>
         </thead>
         <tbody>
-          {booking.map((item: Booking, index: number) => {
+          {booking.map((item: any, index: number) => {
             return (
               <tr className={status[`${item.status}`]}>
                 <th scope="row">{index + 1}</th>
@@ -111,7 +155,9 @@ export default function History() {
                   <button
                     type="button"
                     className={`btn btn-danger ${
-                      item.status == "thanh cong" ? "" : "hide"
+                      item.status == "success" || item.status == "wait"
+                        ? ""
+                        : "hide"
                     } `}
                     onClick={(e) => {
                       ChoseCancelBooking(item);
@@ -122,10 +168,16 @@ export default function History() {
                   <button
                     type="button"
                     className={`btn btn-success ${
-                      item.status != "thanh cong" ? "" : "hide"
+                      item.status == "cancel" || item.status == "finished"
+                        ? ""
+                        : "hide"
                     } `}
+                    onClick={(e) => {
+                      setVisible(true);
+                      setChoseBookingID(item.pitchId);
+                    }}
                   >
-                    View Pitch{" "}
+                    Order
                   </button>
                 </td>
               </tr>
@@ -152,18 +204,25 @@ export default function History() {
         <button
           className="btn btn-dark"
           onClick={() => {
-            if(search.page <= total/search.limit){
-                setSearch({
-                  ...search,
-                  page: search.page + 1,
-                  timer: new Date().getTime(),
-                });
-              }}
+            if (search.page <= total / search.limit) {
+              setSearch({
+                ...search,
+                page: search.page + 1,
+                timer: new Date().getTime(),
+              });
             }
+          }}
         >
           Next
         </button>
       </div>
+      <BookingDialog
+        visible={visible}
+        setVisible={setVisible}
+        choseBookingId={choseBookingId}
+        setChoseBookingID={setChoseBookingID}
+        show={show}
+      ></BookingDialog>
     </div>
   );
 }

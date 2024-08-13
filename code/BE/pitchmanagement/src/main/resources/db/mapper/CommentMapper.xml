@@ -14,9 +14,14 @@
             u.fullname,
             u.avatar
         FROM comment cm
-        join user u
-        where cm.pitch_id = #{pitch_id}
+        join user u on u.id = cm.user_id
+        where cm.pitch_id = #{pitch_id} and (#{user_id} is null or user_id = #{user_id}) Order By cm.update_at and cm.star DESC
     </select>
+
+    <select id="total" parameterType="map" resultType="int">
+        Select COUNT(id) from comment where pitch_id = #{pitch_id} group by pitch_id
+    </select>
+
     <insert id= "insert" parameterType="com.pitchmanagement.model.request.CommentRequest">
         INSERT INTO comment
             (

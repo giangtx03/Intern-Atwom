@@ -23,10 +23,10 @@
                     Join pitch p on p.id = pb.pitch_time_pitch_id
                     join pitch_type pt1 on p.pitch_type_id = pt1.id
                     join time_slot ts on pt.time_slot_id = ts.id
-        where pb.id  = #{id}
+        where pb.id  = #{id} 
     </select>
 
-    <select id ="SelectByUser" parameterType="int" resultType="com.pitchmanagement.dto.PitchBookingDTO">
+    <select id ="SelectByUser" parameterType="map" resultType="com.pitchmanagement.dto.PitchBookingDTO">
         SELECT  pb.id,
         pb.create_at as createAt,
         pb.update_at as updateAt,
@@ -46,7 +46,12 @@
                 Join pitch p on p.id = pb.pitch_time_pitch_id
                 join pitch_type pt1 on p.pitch_type_id = pt1.id
                 join time_slot ts on pt.time_slot_id = ts.id
-            where pb.user_id = #{user_id}
+            where pb.user_id = #{user_id} and pb.status like #{status}
+            ORDER by pb.create_at DESC
+    </select>
+
+    <select id="total" parameterType="map" resultType="int">
+        Select COUNT(id) from pitch_booking where user_id = #{user_id} and status like #{status} group by user_id
     </select>
 
     <insert id = "insert" useGeneratedKeys="true" parameterType = "com.pitchmanagement.model.request.BookingRequest" >

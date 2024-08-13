@@ -25,8 +25,14 @@ export class BookingService {
 
   public CancelBooking(booking :Booking){
     const url = ApiUrlUtil.buildQueryString("http://localhost:8080" + `/booking`);
-    console.log(url)
     return axios.put(url,booking,{
+        headers: HeadersUtil.getHeaders(),
+    })
+  }
+
+  public addBooking(booking: Booking){
+    const url = "http://localhost:8080/booking";
+    return axios.post(url,booking,{
         headers: HeadersUtil.getHeaders(),
     })
   }
@@ -34,7 +40,6 @@ export class BookingService {
   public total(modelSearch: any, id: number){
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
     const url = ApiUrlUtil.buildQueryString("http://localhost:8080" + `/booking/total/${id}`, params);
-    console.log(url)
     return axios.get(url,{
         headers: HeadersUtil.getHeaders(),
     })

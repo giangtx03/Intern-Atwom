@@ -1,16 +1,21 @@
 export default class Booking {
-  id?: number;
-  createAt?: Date;
-  update?: Date;
   status?: String;
   note?: String;
   userId?: number;
-  price?: number;
   pitchId?: number;
   timeSlotId?: number;
-  pitchName?: String;
-  address?: String;
-  type?: String;
-  startTime?: Date;
-  endTime?: Date;
+
+  constructor(
+    status?: String,
+    note?: String,
+    userId?: number,
+    pitchId?: number,
+    timeSlotId?: number
+  ) {
+    this.status = status;
+    this.note = note;
+    this.userId = userId;
+    this.pitchId = pitchId;
+    this.timeSlotId = timeSlotId;
+  }
 }

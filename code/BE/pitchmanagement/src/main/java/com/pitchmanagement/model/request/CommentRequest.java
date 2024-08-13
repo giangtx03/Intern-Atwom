@@ -2,6 +2,7 @@ package com.pitchmanagement.model.request;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 public class CommentRequest {
     private Integer id;
     @NotNull
+    @Min(value = 1, message = "Star request must be greater than 0")
     private Integer star;
     private String content;
     @NotNull

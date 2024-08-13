@@ -20,13 +20,10 @@ export default function Header() {
         
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                    <a className="nav-link" href="#">Dashboard</a>
+                    <a className="nav-link" href="./dashboard">Dashboard</a>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" href="#">Team</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" href="#">Projects</a>
+                    <a className="nav-link" href="./history">History</a>
                 </li>
             </ul>
         
@@ -37,25 +34,6 @@ export default function Header() {
                 <a className="text-reset me-3" href="#">
                     <i className="fas fa-shopping-cart text-white"></i>
                 </a>
-
-            
-                <div className="dropdown">
-                    <a data-mdb-dropdown-init className="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                        <i className="fas fa-bell text-white"></i>
-                        <span className="badge rounded-pill badge-notification bg-danger">1</span>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                        <li>
-                            <a className="dropdown-item" href="#">Some news</a>
-                        </li>
-                        <li>
-                            <a className="dropdown-item" href="#">Another news</a>
-                        </li>
-                        <li>
-                            <a className="dropdown-item" href="#">Something else here</a>
-                        </li>
-                    </ul>
-                </div>
             
                 <div className="dropdown">
                     <a data-mdb-dropdown-init className="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">

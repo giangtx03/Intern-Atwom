@@ -10,7 +10,9 @@ import com.pitchmanagement.model.request.CommentRequest;
 
 @Mapper
 public interface CommentDAO {
-    List<CommentDTO> GetCommentByPitch(@Param("pitch_id") Integer pitch_id);
+    List<CommentDTO> GetCommentByPitch(@Param("pitch_id") Integer pitch_id, @Param("user_id") Integer user_id);
+
+    Integer total(@Param("pitch_id") Integer pitch_id);
 
     void insert(CommentRequest comment);
 
