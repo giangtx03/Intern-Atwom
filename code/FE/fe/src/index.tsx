@@ -7,15 +7,18 @@ import RegisterPage from "./app/pages/auth/RegisterPage";
 import LoginPage from "./app/pages/auth/LoginPage";
 import { Provider } from "react-redux";
 import store from "./app/store/store";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <RegisterPage />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

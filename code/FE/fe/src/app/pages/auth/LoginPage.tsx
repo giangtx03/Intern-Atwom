@@ -4,10 +4,13 @@ import { useForm } from "react-hook-form";
 import { UserService } from "../../service/UserService";
 import { useAppDispatch } from "../../store/hooks";
 import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
+import { TokenService } from "../../service/TokenService";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
-
+  const navigate = useNavigate();
 
   const {
     register,
@@ -16,25 +19,45 @@ export default function LoginPage() {
     formState: { errors, touchedFields },
   } = useForm<LoginRequest>({ mode: "onTouched" });
 
-
   const onSubmit = (data: any) => {
-    UserService.getInstance()
-      .login({ email: data.email, password: data.password })
-      .then(response => {
-        console.log(response.data);
-        if (response.data.status === 202) {
-          toast.success("Cập nhật thành công!", {
+    dispatch(showOrHindSpinner(true));
+    setTimeout(() => {
+      UserService.getInstance()
+        .login({ email: data.email, password: data.password })
+        .then((response) => {
+          // console.log(response.data);
+          if (response.data.status === 202) {
+            toast.success(response.data.message, {
+              position: "top-right",
+            });
+            console.log(response.data.data);
+            TokenService.getInstance().setToken(response.data.data.token);
+            navigate("/dashboard");
+            dispatch(showOrHindSpinner(false));
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
             position: "top-right",
           });
-          // dispatch(showOrHindSpinner(false));
-        }
-      })
-      .catch(error =>{
-        console.error(error);
-      });
+          dispatch(showOrHindSpinner(false));
+        });
+    }, 300);
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex flex-column"
+      style={{
+        width: "60%",
+        maxWidth: "500px",
+        margin: "auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <div className="text-center mb-3">
         <h3>Sign in</h3>
       </div>
@@ -101,7 +124,7 @@ export default function LoginPage() {
 
       <div className="text-center">
         <p>
-          Not a member? <a href="#!">Register</a>
+          Not a member? <Link to={"/register"}>Register</Link>
         </p>
       </div>
     </form>

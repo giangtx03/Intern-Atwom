@@ -1,40 +1,84 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RegisterRequest } from "../../model/User";
 import { useForm } from "react-hook-form";
 import { UserService } from "../../service/UserService";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../store/hooks";
+import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors, touchedFields },
   } = useForm<RegisterRequest>({ mode: "onTouched" });
 
-
-  const handleInput = (event:any) => {
-    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  const handleInput = (event: any) => {
+    event.target.value = event.target.value.replace(/[^0-9]/g, "");
   };
 
   const onSubmit = (data: any) => {
-    UserService.getInstance()
-      .register({ email: data.email, password: data.password, fullname: data.fullname, phone_number: data.phoneNumber})
-      .then(response => {
-        console.log(response.data);
-        if (response.data.status === 201) {
-          toast.success("Cập nhật thành công!", {
+    dispatch(showOrHindSpinner(true));
+    setTimeout(() => {
+      UserService.getInstance()
+        .register({
+          email: data.email,
+          password: data.password,
+          fullname: data.fullname,
+          phone_number: data.phoneNumber,
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.status === 201) {
+            toast.success(response.data.message, {
+              position: "top-right",
+            });
+            navigate("/login");
+            dispatch(showOrHindSpinner(false));
+          }
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
             position: "top-right",
           });
-          // dispatch(showOrHindSpinner(false));
-        }
-      })
-      .catch(error =>{
-        console.error(error);
-      });
+          dispatch(showOrHindSpinner(false));
+        });
+    }, 300);
   };
+
+  useEffect(() => {
+    const retypePassword = watch("retypePassword");
+    if (retypePassword && retypePassword !== watch("password")) {
+      setError("retypePassword", {
+        type: "manual",
+        message: "Mật khẩu không khớp",
+      });
+    } else {
+      clearErrors("retypePassword");
+    }
+  }, [ watch("password"), watch, setError, clearErrors]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="d-flex flex-column"
+      style={{
+        width: "60%",
+        maxWidth: "500px",
+        margin: "auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <div className="text-center mb-3">
         <h3>Sign up</h3>
       </div>
@@ -100,7 +144,7 @@ export default function RegisterPage() {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerRetypePassword">
-          Rretype Password
+          Retype Password
         </label>
         <input
           type="password"
@@ -127,9 +171,9 @@ export default function RegisterPage() {
           {...register("phoneNumber", {
             required: "Số điện thoại không được để trống",
             minLength: {
-                value: 3,
-                message: "Số điện thoại tối thiểu 3 chữ số",
-              },
+              value: 3,
+              message: "Số điện thoại tối thiểu 3 chữ số",
+            },
           })}
           onInput={handleInput}
           className="form-control"

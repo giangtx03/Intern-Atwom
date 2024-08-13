@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import "./assets/spinner.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 // import './assets/css/spinner.css';
 import { Navigate, useRoutes } from 'react-router-dom';

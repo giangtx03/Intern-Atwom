@@ -26,4 +26,10 @@ export class UserService {
     const headers = HeadersUtil.getHeaders();
     return axios.post(url, modelRegister, {headers})
   }
+
+  public getUserDetails(id: number) {
+    const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/api/v1/users/${id}`);
+    const headers = HeadersUtil.getHeaders();
+    return axios.post(url, {headers})
+  }
 }
