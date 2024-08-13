@@ -1,5 +1,6 @@
 package com.pitchmanagement.service;
 
+import com.pitchmanagement.model.request.ChangePasswordRequest;
 import com.pitchmanagement.model.request.LoginRequest;
 import com.pitchmanagement.model.request.RegisterRequest;
 import com.pitchmanagement.model.request.UpdateUserRequest;
@@ -15,5 +16,7 @@ public interface UserService {
 
     UserResponse getUserById(Long id) throws Exception;
     UserResponse updateUser(UpdateUserRequest updateUserRequest) throws Exception;
+
+    void changePassword(ChangePasswordRequest request) throws Exception;
 
 }

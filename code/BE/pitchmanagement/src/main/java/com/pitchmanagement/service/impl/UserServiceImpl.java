@@ -3,6 +3,7 @@ package com.pitchmanagement.service.impl;
 import com.pitchmanagement.dao.UserDao;
 import com.pitchmanagement.dto.UserDto;
 import com.pitchmanagement.model.User;
+import com.pitchmanagement.model.request.ChangePasswordRequest;
 import com.pitchmanagement.model.request.LoginRequest;
 import com.pitchmanagement.model.request.RegisterRequest;
 import com.pitchmanagement.model.request.UpdateUserRequest;
@@ -135,7 +136,6 @@ public class UserServiceImpl implements UserService {
                 .id(updateUserRequest.getId())
                 .address(updateUserRequest.getAddress() != null ? updateUserRequest.getAddress() : (src.get("address") != null ? src.get("address").toString() : ""))
                 .fullname(updateUserRequest.getFullname() != null ? updateUserRequest.getFullname() : src.get("fullname").toString())
-                .password(updateUserRequest.getPassword() != null ? passwordEncoder.encode(updateUserRequest.getPassword()) : src.get("password").toString())
                 .avatar(updateUserRequest.getAvatar() != null ? image : (src.get("avatar") != null ? src.get("avatar").toString() : ""))
                 .phoneNumber(updateUserRequest.getPhoneNumber() != null ? updateUserRequest.getPhoneNumber() : src.get("phoneNumber").toString())
                 .updateAt(LocalDateTime.now())
@@ -152,6 +152,29 @@ public class UserServiceImpl implements UserService {
                 .updateAt(userDto.getUpdateAt())
                 .role(src.get("role").toString())
                 .build();
+    }
+
+    @Override
+    @Transactional(rollbackFor =  Exception.class)
+    public void changePassword(ChangePasswordRequest request) throws Exception {
+        Map<String, Object> src = userDao.getUserById(request.getUserId());
+
+        if(src == null || src.isEmpty()){
+            throw new UsernameNotFoundException("Người dùng không tồn tại!!!");
+        }
+
+        User user = User.toUser(src);
+
+        if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())){
+            throw new BadCredentialsException("Mật khẩu không chính xác!!!");
+        }
+
+        UserDto userDto = UserDto.builder()
+                .id(request.getUserId())
+                .password(passwordEncoder.encode(request.getNewPassword()))
+                .updateAt(LocalDateTime.now())
+                .build();
+        userDao.changePassword(userDto);
     }
 
 
