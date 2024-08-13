@@ -23,7 +23,7 @@ export default function MessageBook(props: Props) {
 
     const handleDate = (date: any) => {
         if (typeof date === 'string') {
-            date = date.substring(0, date.length - 3);
+            date = date.substring(0, date.length - 3).replace("T", " ");
         } else {
             console.error('Date is not a string:', date);
         }

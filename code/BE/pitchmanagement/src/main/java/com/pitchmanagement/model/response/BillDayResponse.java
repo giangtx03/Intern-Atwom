@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BillDay {
-    private int day;
+public class BillDayResponse {
+    private int dayOfMonth;
     private double totalPrice;
 }

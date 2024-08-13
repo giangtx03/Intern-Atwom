@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BillPitch {
+public class BillPitchResponse {
     private int id;
     private String namePitch;
     private double totalPrice;

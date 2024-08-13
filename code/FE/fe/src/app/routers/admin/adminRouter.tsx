@@ -10,11 +10,10 @@ export const AdminRouter: any =
 {
     path: 'admin',
     element: (
-
         <LayoutAdmin />
     ),
     children: [
-        { path: '', element: <Navigate to="messagebooks" replace /> },  // Redirect to MessageBooks by default
+        { path: '*', element: <Navigate to="messagebooks" replace /> },
         { path: 'messagebooks', element: <MessageBooks /> },
         { path: 'payments', element: <Payments /> },
         { path: 'dashboard', element: <Revenue /> },

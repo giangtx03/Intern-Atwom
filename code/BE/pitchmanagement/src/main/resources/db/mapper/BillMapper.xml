@@ -7,13 +7,34 @@
         VALUES (#{createAt}, #{note}, #{pitchBookingId});
     </insert>
 
-    <resultMap id="result" type="com.pitchmanagement.dto.admin.PaymentDto">
-        <result property="id" column="id"/>
-        <result property="create_at" column="createAt"/>
-        <result property="note" column="note"/>
-        <result property="time_book" column="timeBook"/>
-        <result property="name_pitch" column="namePitch"/>
-        <result property="address" column="address"/>
-        <result property="full" column="timeBook"/>
-    </resultMap>
+    <select id="selectBillDayByMonth" parameterType="string" resultType="com.pitchmanagement.model.response.BillDayResponse">
+        SELECT
+        DAY(b.create_at) AS day_of_month,
+        SUM(pt.price) AS total_price
+        FROM bill b
+        INNER JOIN pitch_booking pb ON pb.id = b.pitch_booking_id
+        INNER JOIN pitch p ON pb.pitch_time_pitch_id = p.id
+        INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
+        INNER JOIN user u ON pb.user_id = u.id
+        INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
+        WHERE DATE_FORMAT(b.create_at, '%Y-%m') = #{yearMonth}
+        GROUP BY DAY(b.create_at)
+        ORDER BY DAY(b.create_at);
+    </select>
+    
+    <select id="selectBillPitchByMonth" parameterType="string" resultType="com.pitchmanagement.model.response.BillPitchResponse">
+        SELECT
+        p.id,
+        p.name AS name_pitch,
+        SUM(pt.price) AS total_price
+        FROM bill b
+        INNER JOIN pitch_booking pb ON pb.id = b.pitch_booking_id
+        INNER JOIN pitch p ON pb.pitch_time_pitch_id = p.id
+        INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
+        INNER JOIN user u ON pb.user_id = u.id
+        INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
+        WHERE DATE_FORMAT(b.create_at, '%Y-%m') = #{yearMonth}
+        GROUP BY p.id,p.name
+        ORDER BY p.id, p.name;
+    </select>
 </mapper>

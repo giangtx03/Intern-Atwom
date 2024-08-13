@@ -5,16 +5,21 @@ import com.pitchmanagement.dao.BookingDAO;
 import com.pitchmanagement.dao.PitchTimeDAO;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.BillRequest;
+import com.pitchmanagement.model.response.BillDayResponse;
+import com.pitchmanagement.model.response.BillPitchResponse;
 import com.pitchmanagement.service.BillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class BillServiceImpl implements BillService {
 
     @Autowired
@@ -41,5 +46,25 @@ public class BillServiceImpl implements BillService {
         billDao.insertBill(bill);
 
         return bill;
+    }
+
+    @Override
+    public List<BillDayResponse> getBillDayByMonth(String yearMonth) {
+
+        if (billDao.selectBillDayByMonth(yearMonth) == null) {
+            throw new RuntimeException("Not billDAO " +  billDao.selectBillDayByMonth(yearMonth));
+        }
+
+        return billDao.selectBillDayByMonth(yearMonth);
+    }
+
+    @Override
+    public List<BillPitchResponse> getBillPitchByMonth(String yearMonth) {
+
+        if (billDao.selectBillPitchByMonth(yearMonth) == null) {
+            throw new RuntimeException("Not billDAO " +  billDao.selectBillPitchByMonth(yearMonth));
+        }
+
+        return billDao.selectBillPitchByMonth(yearMonth);
     }
 }
