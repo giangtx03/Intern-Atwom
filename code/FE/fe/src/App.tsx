@@ -5,6 +5,7 @@ import './App.css';
 // import './assets/css/spinner.css';
 import { Navigate, useRoutes } from 'react-router-dom';
 import { RoutersHook } from './app/routers/routers';
+import { ToastContainer } from 'react-toastify';
 
 export const spinner = (
   <div className="progress-spinner text-center">
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <div>
+      <ToastContainer></ToastContainer>
       <Suspense fallback={spinner}>{router}</Suspense>
     </div>
   );

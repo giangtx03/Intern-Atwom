@@ -5,9 +5,12 @@ import com.pitchmanagement.dto.UserDto;
 import com.pitchmanagement.model.User;
 import com.pitchmanagement.model.request.LoginRequest;
 import com.pitchmanagement.model.request.RegisterRequest;
+import com.pitchmanagement.model.request.UpdateUserRequest;
 import com.pitchmanagement.model.response.LoginResponse;
 import com.pitchmanagement.model.response.RegisterResponse;
+import com.pitchmanagement.model.response.UserResponse;
 import com.pitchmanagement.security.CustomUserDetails;
+import com.pitchmanagement.service.ImageService;
 import com.pitchmanagement.service.UserService;
 import com.pitchmanagement.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 
@@ -31,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final ImageService imageService;
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) throws Exception {
@@ -57,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
         String token = jwtUtil.generateToken(customUserDetails);
         return LoginResponse.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .fullname(user.getFullname())
                 .token(token)
@@ -92,6 +98,59 @@ public class UserServiceImpl implements UserService {
                 .role(userDto.getRole())
                 .createAt(userDto.getCreateAt())
                 .updateAt(userDto.getUpdateAt())
+                .build();
+    }
+
+    @Override
+    public UserResponse getUserById(Long id) throws Exception {
+
+        Map<String, Object> src = userDao.getUserById(id);
+
+        if(src == null || src.isEmpty()){
+            throw new UsernameNotFoundException("Người dùng không tồn tại!!!");
+        }
+
+        return UserResponse.toUserResponse(src);
+    }
+
+    @Override
+    @Transactional(rollbackFor =  Exception.class)
+    public UserResponse updateUser(UpdateUserRequest updateUserRequest) throws Exception {
+
+        Map<String, Object> src = userDao.getUserById(updateUserRequest.getId());
+
+        if(src == null || src.isEmpty()){
+            throw new UsernameNotFoundException("Người dùng không tồn tại!!!");
+        }
+
+        String image = "";
+        if(updateUserRequest.getAvatar() != null && !updateUserRequest.getAvatar().isEmpty()){
+            if(src.get("avatar") != null){
+                imageService.delete(src.get("avatar").toString());
+            }
+            image = imageService.upload(updateUserRequest.getAvatar());
+        }
+
+        UserDto userDto = UserDto.builder()
+                .id(updateUserRequest.getId())
+                .address(updateUserRequest.getAddress() != null ? updateUserRequest.getAddress() : (src.get("address") != null ? src.get("address").toString() : ""))
+                .fullname(updateUserRequest.getFullname() != null ? updateUserRequest.getFullname() : src.get("fullname").toString())
+                .password(updateUserRequest.getPassword() != null ? passwordEncoder.encode(updateUserRequest.getPassword()) : src.get("password").toString())
+                .avatar(updateUserRequest.getAvatar() != null ? image : (src.get("avatar") != null ? src.get("avatar").toString() : ""))
+                .phoneNumber(updateUserRequest.getPhoneNumber() != null ? updateUserRequest.getPhoneNumber() : src.get("phoneNumber").toString())
+                .updateAt(LocalDateTime.now())
+                .build();
+        userDao.update(userDto);
+        return UserResponse.builder()
+                .id(userDto.getId())
+                .email(src.get("email").toString())
+                .fullname(userDto.getFullname())
+                .address(userDto.getAddress())
+                .avatar(userDto.getAvatar())
+                .phoneNumber(userDto.getPhoneNumber())
+                .createAt(src.get("createAt") != null ? LocalDateTime.parse(src.get("createAt").toString().replace(".0",""), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : null)
+                .updateAt(userDto.getUpdateAt())
+                .role(src.get("role").toString())
                 .build();
     }
 

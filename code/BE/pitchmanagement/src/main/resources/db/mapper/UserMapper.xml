@@ -19,7 +19,22 @@
             create_at AS createAt,
             update_at AS updateAt,
             role
-        FROM user WHERE email = #{email};
+        FROM user WHERE email = #{email}
+    </select>
+
+    <select id="getUserById" parameterType="Long" resultType="map">
+        SELECT
+        id,
+        email,
+        fullname,
+        password,
+        address,
+        avatar,
+        phone_number AS phoneNumber,
+        create_at AS createAt,
+        update_at AS updateAt,
+        role
+        FROM user WHERE id = #{id}
     </select>
 
     <select id="existingByEmail" parameterType="String" resultType="boolean">
@@ -27,4 +42,15 @@
         FROM user
         WHERE email = #{email}
     </select>
+
+    <update id="update" parameterType="com.pitchmanagement.dto.UserDto">
+        UPDATE user SET
+            fullname = #{fullname},
+            password = #{password},
+            address = #{address},
+            avatar = #{avatar},
+            phone_number = #{phoneNumber},
+            update_at = #{updateAt}
+        WHERE id = #{id}
+    </update>
 </mapper>
