@@ -50,7 +50,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void update(BookingRequest bookingRequest) {
         bookingDAO.update(bookingRequest);
-        if (bookingRequest.getStatus() == "success") {
+        PitchBookingDTO booking = bookingDAO.selectById(bookingRequest.getId());
+        if (booking.getStatus() == "success") {
             pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());            
         }
     }
