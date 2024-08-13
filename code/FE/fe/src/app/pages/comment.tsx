@@ -11,6 +11,7 @@ import { Toast } from "primereact/toast";
 import swal from "sweetalert";
 import AddAndUpdate from "./addAndUpdate";
 import { Dialog } from "primereact/dialog";
+import { Image } from "primereact/image";
 
 export default function CommentDisplay(props: any) {
   const { pitch_id } = props;
@@ -126,7 +127,7 @@ export default function CommentDisplay(props: any) {
                   <>
                     <div className="card-body p-4">
                       <div className="d-flex flex-start">
-                        <img
+                        <Image
                           className="rounded-circle shadow-1-strong me-3"
                           src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
                           alt="avatar"
