@@ -5,8 +5,8 @@ import com.pitchmanagement.dao.BookingDAO;
 import com.pitchmanagement.dao.PitchTimeDAO;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.BillRequest;
-import com.pitchmanagement.model.response.BillDayResponse;
-import com.pitchmanagement.model.response.BillPitchResponse;
+import com.pitchmanagement.dto.admin.BillDayDto;
+import com.pitchmanagement.dto.admin.BillPitchDto;
 import com.pitchmanagement.service.BillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<BillDayResponse> getBillDayByMonth(int month, int year) {
+    public List<BillDayDto> getBillDayByMonth(int month, int year) {
 
         Map<String, Object> yearMonth = new HashMap<>();
         yearMonth.put("month", month);
@@ -63,7 +63,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<BillPitchResponse> getBillPitchByMonth(int month, int year) {
+    public List<BillPitchDto> getBillPitchByMonth(int month, int year) {
 
         Map<String, Object> yearMonth = new HashMap<>();
         yearMonth.put("month", month);

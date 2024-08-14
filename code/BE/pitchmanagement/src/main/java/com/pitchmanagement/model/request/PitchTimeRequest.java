@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PitchTimeRequest {
+
     private Integer price;
     private String status;
     private Integer pitchId;

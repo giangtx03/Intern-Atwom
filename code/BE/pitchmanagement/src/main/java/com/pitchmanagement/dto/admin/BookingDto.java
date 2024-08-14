@@ -7,12 +7,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class BookingDto {
 
-    private int id;
+    private Integer id;
     private String createAt;
     private String updateAt;
     private String status;
     private String note;
-    private int pitchTimePitchId;
-    private int pitchTimeTimeSlotId;
-    private int userId;
+    private Integer pitchTimePitchId;
+    private Integer pitchTimeTimeSlotId;
+    private Integer userId;
 }

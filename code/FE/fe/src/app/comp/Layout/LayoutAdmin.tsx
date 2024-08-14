@@ -20,9 +20,9 @@ export default function LayoutAdmin() {
   }
 
   return (
-    <div className='d-flex flex-column min-vh-100'>
+    <div className='d-flex flex-column'>
       <div className='flex-grow-1 container-fluid'>
-        <div className="row" style={{ height: "670px" }}>
+        <div className="row" style={{ height: "640px" }}>
           <div className="col-2 bg-body-secondary">
             <Button
               className={`w-100 rounded-2 my-2 text-start ${activeButton !== "messagebooks" ? 'p-button-text' : ''}`}

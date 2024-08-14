@@ -7,7 +7,7 @@
         VALUES (#{createAt}, #{note}, #{pitchBookingId});
     </insert>
 
-    <select id="selectBillDayByMonth" parameterType="map" resultType="com.pitchmanagement.model.response.BillDayResponse">
+    <select id="selectBillDayByMonth" parameterType="map" resultType="com.pitchmanagement.dto.admin.BillDayDto">
         SELECT
         DAY(b.create_at) AS day_of_month,
         SUM(pt.price) AS total_price
@@ -22,7 +22,7 @@
         ORDER BY DAY(b.create_at);
     </select>
     
-    <select id="selectBillPitchByMonth" parameterType="map" resultType="com.pitchmanagement.model.response.BillPitchResponse">
+    <select id="selectBillPitchByMonth" parameterType="map" resultType="com.pitchmanagement.dto.admin.BillPitchDto">
         SELECT
         p.id,
         p.name AS name_pitch,

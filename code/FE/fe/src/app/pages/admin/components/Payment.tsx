@@ -24,7 +24,7 @@ export default function Payment(props: Props) {
 
     const handleDate = (date: any) => {
         if (typeof date === 'string') {
-            date = date.substring(0, date.length - 3);
+            date = date.substring(0, date.length - 3).replace("T", " ");
         } else {
             console.error('Date is not a string:', date);
         }
@@ -69,7 +69,7 @@ export default function Payment(props: Props) {
 
     const subtitle = (
         <div className={props.message.statusBook === "Chưa thanh toán" ? "text-danger" : "text-success"}>
-            {props.message.statusBook} {props.message.statusBook === "Chưa thanh toán" ? "" : `(${handleDate(handleDateTime)})`}
+            {props.message.statusBook} {props.message.statusBook === "Chưa thanh toán" ? "" : `(${handleDate(props.message.createAt)})`}
             <hr />
         </div>
     )

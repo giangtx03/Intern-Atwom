@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BillRequest {
 
-    private int id;
+    private Integer id;
     private String createAt;
     private String note;
-    private int pitchBookingId;
+    private Integer pitchBookingId;
 }
