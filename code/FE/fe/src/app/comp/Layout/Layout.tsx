@@ -25,7 +25,7 @@ export default function Layout() {
         )}
         <div className={auth && !isAdminRoute ? "col-10" : "col-12"}>
           <Header />
-          <div className="mt-3">
+          <div>
             <Outlet />
           </div>
         </div>
