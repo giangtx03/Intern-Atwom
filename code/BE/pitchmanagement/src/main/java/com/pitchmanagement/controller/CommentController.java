@@ -41,14 +41,14 @@ public class CommentController {
         try {
             List<CommentDTO> lst = commentService.GetCommentByPitch(pitch_id, user_id, offset, limit);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.OK.value())
                     .message("success")
                     .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -61,14 +61,14 @@ public class CommentController {
         try {
             Integer lst = commentService.total(pitch_id);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.OK.value())
                     .message("success")
                     .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -80,14 +80,14 @@ public class CommentController {
         try {
             commentService.insert(commentRequest);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.CREATED)
+                    .status(HttpStatus.CREATED.value())
                     .message("success")
                     // .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -99,14 +99,14 @@ public class CommentController {
         try {
             commentService.update(commentRequest);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.CREATED)
+                    .status(HttpStatus.CREATED.value())
                     .message("success")
                     // .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -118,14 +118,14 @@ public class CommentController {
         try {
             commentService.delete(id);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NO_CONTENT.value())
                     .message("success")
                     // .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);

@@ -7,6 +7,37 @@
 
 
     <changeSet id="1"  author="Truong Xuan Giang">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <tableExists tableName="user"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch_type"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch"/>
+                </not>
+                <not>
+                    <tableExists tableName="image"/>
+                </not>
+                <not>
+                    <tableExists tableName="time_slot"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch_time_slot"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch_booking"/>
+                </not>
+                <not>
+                    <tableExists tableName="bill"/>
+                </not>
+                <not>
+                    <tableExists tableName="comment"/>
+                </not>
+            </and>
+        </preConditions>
         <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -18,11 +49,12 @@
             <column name="password" type="varchar(255)"/>
             <column name="phone_number" type="varchar(15)"/>
             <column name="address" type="varchar(255)"/>
+            <column name="avatar" type="varchar(255)"/>
             <column name="role" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column name="create_at" type="date"/>
-            <column name="update_at" type="date"/>
+            <column name="create_at" type="timestamp"/>
+            <column name="update_at" type="timestamp"/>
         </createTable>
 
         <createTable tableName="pitch_type">
@@ -37,8 +69,8 @@
             </column>
             <column name="name" type="varchar(125)"/>
             <column name="address" type="varchar(255)"/>
-            <column name="create_at" type="date"/>
-            <column name="update_at" type="date"/>
+            <column name="create_at" type="timestamp"/>
+            <column name="update_at" type="timestamp"/>
             <column name="pitch_type_id" type="bigint"/>
         </createTable>
         <addForeignKeyConstraint
@@ -71,8 +103,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="start_time" type="date"/>
-            <column name="end_time" type="date"/>
+            <column name="start_time" type="timestamp"/>
+            <column name="end_time" type="timestamp"/>
         </createTable>
 
         <createTable tableName="pitch_time_slot">
@@ -100,8 +132,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="create_at" type="date"/>
-            <column name="update_at" type="date"/>
+            <column name="create_at" type="timestamp"/>
+            <column name="update_at" type="timestamp"/>
             <column name="user_id" type="bigint"/>
             <column name="pitch_id" type="bigint"/>
             <column name="time_slot_id" type="bigint"/>
@@ -144,8 +176,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="create_at" type="date"/>
-            <column name="update_at" type="date"/>
+            <column name="create_at" type="timestamp"/>
+            <column name="update_at" type="timestamp"/>
             <column name="content" type="varchar(255)"/>
             <column name="star" type="float"/>
             <column name="user_id" type="bigint"/>

@@ -27,7 +27,7 @@ public class BillController {
         BillRequest myBill = billService.addBill(bill);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.ACCEPTED.value())
                 .data(myBill)
                 .message("success")
                 .build();
@@ -40,7 +40,7 @@ public class BillController {
         List<BillDayDto> myBill = billService.getBillDayByMonth(month, year);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.ACCEPTED.value())
                 .data(myBill)
                 .message("success")
                 .build();
@@ -53,7 +53,7 @@ public class BillController {
         List<BillPitchDto> myBill = billService.getBillPitchByMonth(month, year);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.ACCEPTED.value())
                 .data(myBill)
                 .message("success")
                 .build();

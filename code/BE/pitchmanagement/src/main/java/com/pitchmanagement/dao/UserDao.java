@@ -11,8 +11,14 @@ import java.util.Map;
 @Mapper
 public interface UserDao {
     void insert(UserDto userDto);
+    void update(UserDto userDto);
+    void changePassword(UserDto userDto);
 
     Map<String,Object> getUserByEmail(@Param("email") String email);
 
     boolean existingByEmail(@Param("email") String email);
+
+    Map<String, Object> getUserById(@Param("id") Long id);
+
+
 }

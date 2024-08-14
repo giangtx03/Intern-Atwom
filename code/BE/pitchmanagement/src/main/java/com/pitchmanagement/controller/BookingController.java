@@ -46,14 +46,14 @@ public class BookingController {
         try {
             List<PitchBookingDTO> lst = bookingService.SelectByUser(user_id,search, offset, limit);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.OK.value())
                     .message("success")
                     .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -67,14 +67,14 @@ public class BookingController {
         try {
             Integer lst = bookingService.total(user_id, search);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.OK.value())
                     .message("success")
                     .data(lst)
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -86,13 +86,13 @@ public class BookingController {
         try {
             bookingService.update(bookingRequest);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NO_CONTENT.value())
                     .message("Tạo thành công")
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -105,13 +105,13 @@ public class BookingController {
         try {
             bookingService.insert(bookingRequest);
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.NO_CONTENT.value())
                     .message("Cập nhật thành công")
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST)
+                    .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
                     .build();
             return ResponseEntity.badRequest().body(response);
@@ -124,7 +124,7 @@ public class BookingController {
         List<ConfirmPitchBookingDto> confirmPitchBookings = bookingService.getConfirmPitchBookingByStatus(status);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.ACCEPTED.value())
                 .data(confirmPitchBookings)
                 .message("success")
                 .build();
@@ -137,7 +137,7 @@ public class BookingController {
         ConfirmPitchBookingDto tempConfirmPitchBooking = bookingService.updateStatusPitchBooking(statusMap);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.ACCEPTED.value())
                 .data(tempConfirmPitchBooking)
                 .message("success")
                 .build();

@@ -1,37 +1,45 @@
-package com.pitchmanagement.model;
+package com.pitchmanagement.model.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pitchmanagement.model.User;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class User {
+@Getter
+@Setter
+@SuperBuilder
+public class UserResponse {
+
+    @JsonProperty("id")
     private Long id;
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("fullname")
     private String fullname;
-    private String password;
+    @JsonProperty("address")
     private String address;
+    @JsonProperty("avatar")
     private String avatar;
+    @JsonProperty("phone_number")
     private String phoneNumber;
+    @JsonProperty("create_at")
     private LocalDateTime createAt;
+    @JsonProperty("update_at")
     private LocalDateTime updateAt;
+    @JsonProperty("role")
     private String role;
 
-    public static User toUser(Map<String, Object> src){
-        return User.builder()
+    public static UserResponse toUserResponse(Map<String, Object> src){
+        return UserResponse.builder()
                 .id(Long.parseLong(src.get("id").toString()))
                 .email(src.get("email").toString())
                 .fullname(src.get("fullname").toString())
-                .password(src.get("password").toString())
                 .address(src.get("address") != null ? src.get("address").toString() : "")
                 .avatar(src.get("avatar") != null ? src.get("avatar").toString() : "")
                 .phoneNumber(src.get("phoneNumber").toString())
