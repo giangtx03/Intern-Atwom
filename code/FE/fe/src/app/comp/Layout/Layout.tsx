@@ -7,16 +7,23 @@ import { spinner } from "../../../App";
 
 export default function Layout() {
   const loading = useAppSelector((state) => state.spinner.loading);
+
+  const auth = useAppSelector((state) => state.user.isAuthenticated);
+
   return (
     <>
       {loading && spinner}
-      <div className="d-flex">
-        <div className="col-2">
-          <Sidebar />
-        </div>
-        <div className="col-10">
+      <div className="d-flex justify-content-center">
+        {auth && (
+          <div className="col-2">
+            <Sidebar />
+          </div>
+        )}
+        <div className={auth ? "col-10" : "col-12"}>
           <Header />
-          <Outlet />
+          <div className="mt-3">
+            <Outlet />
+          </div>
         </div>
       </div>
     </>

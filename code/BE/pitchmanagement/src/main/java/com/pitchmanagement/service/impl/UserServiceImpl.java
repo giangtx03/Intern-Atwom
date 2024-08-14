@@ -66,9 +66,13 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .email(user.getEmail())
                 .fullname(user.getFullname())
+                .avatar(user.getAvatar())
+                .phoneNumber(user.getPhoneNumber())
+                .address(user.getAddress())
                 .token(token)
                 .createAt(user.getCreateAt())
                 .updateAt(user.getUpdateAt())
+                .role(user.getRole())
                 .build();
     }
 
