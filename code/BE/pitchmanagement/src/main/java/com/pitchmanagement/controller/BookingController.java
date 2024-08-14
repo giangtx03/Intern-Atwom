@@ -7,6 +7,7 @@ import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -119,6 +120,7 @@ public class BookingController {
     }
 
     //------------------------------------------------------------------
+    @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin/confirm")
     ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(@RequestParam List<String> status) {
         List<ConfirmPitchBookingDto> confirmPitchBookings = bookingService.getConfirmPitchBookingByStatus(status);
@@ -132,6 +134,7 @@ public class BookingController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PreAuthorize("ROLE_ADMIN")
     @PutMapping("/admin/confirm")
     ResponseEntity<BaseResponse> updateStatusPitchBooking(@RequestBody Map<String, Object> statusMap) {
         ConfirmPitchBookingDto tempConfirmPitchBooking = bookingService.updateStatusPitchBooking(statusMap);

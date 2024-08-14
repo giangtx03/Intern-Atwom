@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./comp/Sidebar";
 import Header from "./comp/Header";
 import { useAppSelector } from "../../store/hooks";
@@ -10,16 +10,20 @@ export default function Layout() {
 
   const auth = useAppSelector((state) => state.user.isAuthenticated);
 
+  const location = useLocation();
+
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   return (
     <>
       {loading && spinner}
       <div className="d-flex justify-content-center">
-        {auth && (
+        {auth && !isAdminRoute && (
           <div className="col-2">
             <Sidebar />
           </div>
         )}
-        <div className={auth ? "col-10" : "col-12"}>
+        <div className={auth && !isAdminRoute ? "col-10" : "col-12"}>
           <Header />
           <div className="mt-3">
             <Outlet />
