@@ -12,9 +12,9 @@ export default function Layout() {
 
   return (
     <>
-      {loading && spinner}
+    {loading && spinner}
       <div className="d-flex justify-content-center">
-        {auth && (
+        {false && (
           <div className="col-2">
             <Sidebar />
           </div>

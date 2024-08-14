@@ -9,9 +9,10 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import BookingDialog from "./BookingDialog";
 import { Toast } from "primereact/toast";
 import swal from "sweetalert";
-import { useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { showOrHindSpinner } from "../reduces/SpinnerSlice";
 import { spinner } from "../../App";
-
+import { useNavigate } from "react-router-dom";
 
 export default function History() {
   const [booking, setBooking] = useState([]);
@@ -23,35 +24,51 @@ export default function History() {
   );
   const toast = useRef<Toast>(null);
 
-  const loading = useAppSelector((state) => state.spinner.loading);
+  const dispatch = useAppDispatch();
 
-  const show = () => {
+  const showSuccess = (message: string) => {
     toast.current?.show({
-      severity: "info",
-      summary: "Info",
-      detail: "Message Content",
+      severity: "success",
+      summary: "Success",
+      detail: message,
+      life: 3000,
     });
   };
-
+  const showError = (message: string) => {
+    toast.current?.show({
+      severity: "error",
+      summary: "Error",
+      detail: message,
+      life: 3000,
+    });
+  };
   const fetchData = async () => {
+    dispatch(showOrHindSpinner(true));
     try {
-      const response = await BookingService.getInstance().getLstBooking(
-        search,
-        1
-      );
-      const responseTotal = await BookingService.getInstance().total(search, 1);
-      setTotal(responseTotal.data.data);
-      setBooking(response.data.data);
+      await BookingService.getInstance()
+        .getLstBooking(search, 1)
+        .then((response) => {
+          if (response.data.status == 200) {
+            setBooking(response.data.data);
+            dispatch(showOrHindSpinner(false));
+            showSuccess(response.data.message);
+          }
+        })
+        .catch((response) => {
+          showError(response.data.message);
+        });
+      await BookingService.getInstance()
+        .total(search, 1)
+        .then((response) => {
+          if (response.data.status == 200) {
+            setTotal(response.data.data);
+          }
+        })
+        .catch((response) => {
+          showError(response.message);
+        });
     } catch (error: any) {
-      if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        console.log(error.request);
-      } else {
-        console.log("Lỗi: ", error.message);
-      }
+      showError(error.message);
     }
   };
 
@@ -109,126 +126,127 @@ export default function History() {
   };
   return (
     <>
-    {loading && spinner}
-    <div className="list-group">
-      <h2 className="h4" style={{ margin: "1.5%" }}>
-        History
-      </h2>
-      <select
-        className="custom-select"
-        onChange={(e: any) => {
-          setSearch({
-            ...search,
-            timer: new Date().getTime(),
-            keySearch: e.target.value,
-            page: 1,
-          });
-        }}
-      >
+      <div className="list-group">
         <Toast ref={toast} />
-        <option selected value="">
-          Status
-        </option>
-        <option value="success">Thành công</option>
-        <option value="wait">chờ</option>
-        <option value="finished">đã xong</option>
-        <option value="cancel">huy</option>
-      </select>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col">address</th>
-            <th scope="col">Type</th>
-            <th scope="col">Status</th>
-            <th scope="col">create</th>
-            <th scope="col"> time frame</th>
-            <th scope="col"> action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {booking.map((item: any, index: number) => {
-            return (
-              <tr className={status[`${item.status}`]}>
-                <th scope="row">{index + 1}</th>
-                <td>{item.pitchName}</td>
-                <td>{item.address}</td>
-                <td>{item.type}</td>
-                <td>{item.status}</td>
-                <td>{dayjs(item.createAt).format("DD/MM/YYYY")}</td>
-                <td>{`${item.startTime} - ${item.endTime}`}</td>
-                <td>
-                  <button
-                    type="button"
-                    className={`btn btn-danger ${item.status == "success" || item.status == "wait"
-                        ? ""
-                        : "hide"
-                      } `}
-                    onClick={(e) => {
-                      ChoseCancelBooking(item);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn btn-success ${item.status == "cancel" || item.status == "finished"
-                        ? ""
-                        : "hide"
-                      } `}
-                    onClick={(e) => {
-                      setVisible(true);
-                      setChoseBookingID(item.pitchId);
-                    }}
-                  >
-                    Order
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className="center">
-        <button
-          className="btn btn-secondary"
-          onClick={() => {
-            if (search.page > 1) {
-              setSearch({
-                ...search,
-                page: search.page - 1,
-                timer: new Date().getTime(),
-              });
-            }
+        <h2 className="h4" style={{ margin: "1.5%" }}>
+          History
+        </h2>
+        <select
+          className="custom-select"
+          onChange={(e: any) => {
+            setSearch({
+              ...search,
+              timer: new Date().getTime(),
+              keySearch: e.target.value,
+              page: 1,
+            });
           }}
         >
-          Pre
-        </button>
-        <span>{search.page}</span>
-        <button
-          className="btn btn-dark"
-          onClick={() => {
-            if (search.page <= total / search.limit) {
-              setSearch({
-                ...search,
-                page: search.page + 1,
-                timer: new Date().getTime(),
-              });
-            }
-          }}
-        >
-          Next
-        </button>
+          <Toast ref={toast} />
+          <option selected value="">
+            Status
+          </option>
+          <option value="success">Thành công</option>
+          <option value="wait">chờ</option>
+          <option value="finished">đã xong</option>
+          <option value="cancel">huy</option>
+        </select>
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Name</th>
+              <th scope="col">address</th>
+              <th scope="col">Type</th>
+              <th scope="col">Status</th>
+              <th scope="col">create</th>
+              <th scope="col"> time frame</th>
+              <th scope="col"> action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {booking.map((item: any, index: number) => {
+              return (
+                <tr className={status[`${item.status}`]}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{item.pitchName}</td>
+                  <td>{item.address}</td>
+                  <td>{item.type}</td>
+                  <td>{item.status}</td>
+                  <td>{dayjs(item.createAt).format("DD/MM/YYYY")}</td>
+                  <td>{`${item.startTime} - ${item.endTime}`}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className={`btn btn-danger ${
+                        item.status == "success" || item.status == "wait"
+                          ? ""
+                          : "hide"
+                      } `}
+                      onClick={(e) => {
+                        ChoseCancelBooking(item);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn btn-success ${
+                        item.status == "cancel" || item.status == "finished"
+                          ? ""
+                          : "hide"
+                      } `}
+                      onClick={(e) => {
+                        setVisible(true);
+                        setChoseBookingID(item.pitchId);
+                      }}
+                    >
+                      Order
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <div className="center">
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              if (search.page > 1) {
+                setSearch({
+                  ...search,
+                  page: search.page - 1,
+                  timer: new Date().getTime(),
+                });
+              }
+            }}
+          >
+            Pre
+          </button>
+          <span>{search.page}</span>
+          <button
+            className="btn btn-dark"
+            onClick={() => {
+              if (search.page <= total / search.limit) {
+                setSearch({
+                  ...search,
+                  page: search.page + 1,
+                  timer: new Date().getTime(),
+                });
+              }
+            }}
+          >
+            Next
+          </button>
+        </div>
+        <BookingDialog
+          visible={visible}
+          setVisible={setVisible}
+          choseBookingId={choseBookingId}
+          setChoseBookingID={setChoseBookingID}
+        ></BookingDialog>
       </div>
-      <BookingDialog
-        visible={visible}
-        setVisible={setVisible}
-        choseBookingId={choseBookingId}
-        setChoseBookingID={setChoseBookingID}
-        show={show}
-      ></BookingDialog>
-    </div>
     </>
   );
 }

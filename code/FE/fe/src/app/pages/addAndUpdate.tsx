@@ -34,7 +34,6 @@ export default function AddAndUpdate(props: any) {
 
   const addComment = async (e: any) => {
     if (editComment == null) {
-      console.log(123)
       await CommentService.getInstance()
         .AddComment(new Comment(0, rating, value, 1, 1))
         .then((response)=>{

@@ -13,6 +13,7 @@ import AddAndUpdate from "./addAndUpdate";
 import { Dialog } from "primereact/dialog";
 import { Image } from "primereact/image";
 import { TokenService } from "../service/TokenService";
+import { error } from "console";
 
 export default function CommentDisplay(props: any) {
   const { pitch_id } = props;
@@ -28,45 +29,44 @@ export default function CommentDisplay(props: any) {
 
   useEffect(() => {
     const fetchComment = async () => {
-    try {
-      const response = await CommentService.getInstance().getLstPitchTime(
-        search,
-        1
-      );
-      const responseTotal = await CommentService.getInstance().getTotal(1);
-      if (response.data.status == 200) {
-        setLstComment(response.data.data);
-        
+      try {
+        const response = await CommentService.getInstance().getLstPitchTime(
+          search,
+          1
+        );
+        const responseTotal = await CommentService.getInstance().getTotal(1);
+        if (response.data.status == 200) {
+          setLstComment(response.data.data);
+        }
+        if (responseTotal.data.status == 200) {
+          setTotal(responseTotal.data.data);
+        }
+      } catch (error: any) {
+        if (error.response) {
+          console.log(error);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Lỗi: ", error.message);
+        }
       }
-      if(responseTotal.data.status == 200){
-        setTotal(responseTotal.data.data);
-      }
-    } catch (error: any) {
-      if (error.response) {
-        console.log(error);
-      } else if (error.request) {
-        console.log(error.request);
-      } else {
-        console.log("Lỗi: ", error.message);
-      }
-    }
-  };
+    };
     fetchComment();
-  }, [search.timer,search.page]);
+  }, [search.timer, search.page]);
 
-  const showSuccess = () => {
+  const showSuccess = (message: string) => {
     toast.current?.show({
       severity: "success",
       summary: "Success",
-      detail: "Success",
+      detail: message,
       life: 3000,
     });
   };
-  const showError = () => {
+  const showError = (message: string) => {
     toast.current?.show({
       severity: "error",
       summary: "Error",
-      detail: "Message Content",
+      detail: message,
       life: 3000,
     });
   };
@@ -76,18 +76,24 @@ export default function CommentDisplay(props: any) {
       buttons: ["Quay lại", "Đồng ý"],
       icon: "warning",
       dangerMode: true,
-    }).then(async (value) => {
-       if(value){
-           await CommentService.getInstance()
-             .DeleteComment(commentId)
-             .then(showSuccess)
-             .catch(showError);
-       }
-      setSearch({
-        ...search,
-        timer: new Date().getTime(),
-      });
-    }).catch(showError);
+    })
+      .then(async (value) => {
+        if (value) {
+          await CommentService.getInstance()
+            .DeleteComment(commentId)
+            .then((response) => {
+              showSuccess(response.data.message);
+            })
+            .catch((response)=>{
+              showError(response.data.message);
+            });
+        }
+        setSearch({
+          ...search,
+          timer: new Date().getTime(),
+        });
+      })
+      .catch();
   };
 
   return (
@@ -97,10 +103,12 @@ export default function CommentDisplay(props: any) {
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
-              {TokenService.getInstance().getToken()  && <AddAndUpdate
-                search={search}
-                setSearch={setSearch}
-              ></AddAndUpdate>}
+              {localStorage.getItem("access_token") && (
+                <AddAndUpdate
+                  search={search}
+                  setSearch={setSearch}
+                ></AddAndUpdate>
+              )}
             </div>
             <br />
             <div>
@@ -160,7 +168,7 @@ export default function CommentDisplay(props: any) {
                         <Button
                           label="Delete"
                           severity="danger"
-                          style={{ left: "70%" ,margin:"1%"}}
+                          style={{ left: "70%", margin: "1%" }}
                           onClick={(e) => {
                             deleteComment(e, item.id);
                           }}
@@ -168,7 +176,7 @@ export default function CommentDisplay(props: any) {
                         <Button
                           label="Update"
                           severity="success"
-                          style={{ left: "70%" ,margin:"1%" }}
+                          style={{ left: "70%", margin: "1%" }}
                           onClick={(e) => {
                             setEditOn(true);
                             setEditComment(
@@ -208,36 +216,36 @@ export default function CommentDisplay(props: any) {
           </div>
         </div>
         <div className="center">
-        <button
-          className="btn btn-secondary"
-          onClick={() => {
-            if (search.page > 1) {
-              setSearch({
-                ...search,
-                page: search.page - 1,
-                timer: new Date().getTime(),
-              });
-            }
-          }}
-        >
-          Pre
-        </button>
-        <span>{search.page}</span>
-        <button
-          className="btn btn-dark"
-          onClick={() => {
-            if (search.page < total/search.limit ) {
-              setSearch({
-                ...search,
-                page: search.page + 1,
-                timer: new Date().getTime(),
-              });
-            }
-          }}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              if (search.page > 1) {
+                setSearch({
+                  ...search,
+                  page: search.page - 1,
+                  timer: new Date().getTime(),
+                });
+              }
+            }}
+          >
+            Pre
+          </button>
+          <span>{search.page}</span>
+          <button
+            className="btn btn-dark"
+            onClick={() => {
+              if (search.page < total / search.limit) {
+                setSearch({
+                  ...search,
+                  page: search.page + 1,
+                  timer: new Date().getTime(),
+                });
+              }
+            }}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </>
   );
