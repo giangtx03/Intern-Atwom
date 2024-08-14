@@ -3,8 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import RegisterPage from "./app/pages/auth/RegisterPage";
-import LoginPage from "./app/pages/auth/LoginPage";
 import { Provider } from "react-redux";
 import store from "./app/store/store";
 import { BrowserRouter } from "react-router-dom";

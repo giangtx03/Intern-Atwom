@@ -2,6 +2,7 @@ package com.pitchmanagement.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -9,20 +10,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
-public class LoginResponse {
+@SuperBuilder
+public class LoginResponse extends UserResponse {
 
-    @JsonProperty("id")
-    private Long id;
-    @JsonProperty("email")
-    private String email;
-    @JsonProperty("fullname")
-    private String fullname;
     @JsonProperty("token")
     private String token;
-    @JsonProperty("create_at")
-    private LocalDateTime createAt;
-    @JsonProperty("update_at")
-    private LocalDateTime updateAt;
 
 }

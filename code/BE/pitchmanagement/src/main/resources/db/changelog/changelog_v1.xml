@@ -7,6 +7,37 @@
 
 
     <changeSet id="1"  author="Truong Xuan Giang">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <tableExists tableName="user"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch_type"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch"/>
+                </not>
+                <not>
+                    <tableExists tableName="image"/>
+                </not>
+                <not>
+                    <tableExists tableName="time_slot"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch_time_slot"/>
+                </not>
+                <not>
+                    <tableExists tableName="pitch_booking"/>
+                </not>
+                <not>
+                    <tableExists tableName="bill"/>
+                </not>
+                <not>
+                    <tableExists tableName="comment"/>
+                </not>
+            </and>
+        </preConditions>
         <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

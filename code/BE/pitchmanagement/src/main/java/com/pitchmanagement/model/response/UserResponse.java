@@ -3,6 +3,7 @@ package com.pitchmanagement.model.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pitchmanagement.model.User;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +13,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class UserResponse {
 
     @JsonProperty("id")

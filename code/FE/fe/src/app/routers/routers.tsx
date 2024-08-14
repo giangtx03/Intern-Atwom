@@ -5,6 +5,7 @@ import Layout from '../comp/Layout/Layout';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import Dashboard from '../pages/Dashboard';
+import UserProfile from '../pages/auth/UserProfile';
 
 
 export const RoutersHook: any = {
@@ -15,6 +16,7 @@ export const RoutersHook: any = {
     children: [
       { path: '/dashboard', element: <Dashboard/>},
       {path: '/login', element: <LoginPage/>},
-      {path: '/register', element: <RegisterPage/>}
+      {path: '/register', element: <RegisterPage/>},
+      {path: '/profile', element: <UserProfile/>},
     ],
 };
