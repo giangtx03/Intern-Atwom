@@ -6,8 +6,10 @@ import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.dto.admin.BookingDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import com.pitchmanagement.dto.PitchBookingDTO;
+import com.pitchmanagement.dto.PitchTimeDTO;
 import com.pitchmanagement.model.request.BookingRequest;
 
 @Mapper
@@ -17,6 +19,7 @@ public interface BookingDAO {
     List<PitchBookingDTO> SelectByUser(@Param("user_id") Integer user_id,@Param("status") String status);
 
     Integer total(@Param("user_id") Integer user_id, @Param("status") String status);
+    List<PitchBookingDTO> SelectByUser(@Param("user_id") Integer user_id);
 
     void insert(BookingRequest pitchBooking);
 

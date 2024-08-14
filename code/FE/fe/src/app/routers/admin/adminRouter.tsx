@@ -17,5 +17,6 @@ export const AdminRouter: any =
         { path: 'payments', element: <Payments /> },
         { path: 'revenue', element: <Revenue /> },
         { path: 'editPitch', element: <Spinner /> },
+      { path: '/admin'},
     ],
-};
+  };

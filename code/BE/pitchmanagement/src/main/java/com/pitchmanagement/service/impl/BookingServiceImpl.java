@@ -52,7 +52,7 @@ public class BookingServiceImpl implements BookingService {
         bookingDAO.update(bookingRequest);
         PitchBookingDTO booking = bookingDAO.selectById(bookingRequest.getId());
         if (booking.getStatus() == "success") {
-            pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());            
+            pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());
         }
     }
 
