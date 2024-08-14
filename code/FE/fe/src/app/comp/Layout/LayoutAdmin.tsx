@@ -21,9 +21,9 @@ export default function LayoutAdmin() {
 
   return (
     <div className='d-flex flex-column'>
-      <div className='flex-grow-1 container-fluid'>
-        <div className="row" style={{ height: "640px" }}>
-          <div className="col-2 bg-body-secondary">
+      <div className='container-fluid'>
+        <div className="row" style={{ height: "629px" }}>
+          <div className="col-2 bg-body-secondary pt-2">
             <Button
               className={`w-100 rounded-2 my-2 text-start ${activeButton !== "messagebooks" ? 'p-button-text' : ''}`}
               label="Message Books"
@@ -45,7 +45,7 @@ export default function LayoutAdmin() {
               onClick={() => redirect("editPitch")}
             />
           </div>
-          <div className="col-10">
+          <div className="col-10 p-2">
             <Outlet />
           </div>
         </div>

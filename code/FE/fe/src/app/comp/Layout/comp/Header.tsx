@@ -4,9 +4,9 @@ import { InputText } from 'primereact/inputtext';
 import { Avatar } from 'primereact/avatar';
 import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router-dom';
-import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';  
-import 'primereact/resources/primereact.min.css';                 
-import 'primeicons/primeicons.css';                               
+import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 
 interface MenuItem {
@@ -32,6 +32,11 @@ export default function Header() {
             label: 'History',
             icon: 'pi pi-star',
             command: () => navigate('/history')
+        },
+        {
+            label: 'admin',
+            icon: 'pi pi-lock',
+            command: () => navigate('/admin')
         },
     ];
 
@@ -62,7 +67,7 @@ export default function Header() {
     );
 
     return (
-        <div className="card">
+        <div className="card rounded-0">
             <Menubar model={items} start={start} end={end} />
         </div>
     );

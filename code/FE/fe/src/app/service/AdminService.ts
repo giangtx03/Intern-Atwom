@@ -5,12 +5,17 @@ import { RevenueDay } from "../model/RevenueDay";
 import { RevenuePitch } from "../model/RevenuePitch";
 
 // Cấu hình axios
+
+const token = localStorage.getItem("access_token");
 const api = axios.create({
     baseURL: 'http://localhost:8080',
     headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
     },
 });
+
+
 
 // List các thông báo
 export const getMessageAll = async (status1: string, status2?: string) => {

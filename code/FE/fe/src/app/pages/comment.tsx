@@ -14,6 +14,7 @@ import { Dialog } from "primereact/dialog";
 import { Image } from "primereact/image";
 import { TokenService } from "../service/TokenService";
 import { error } from "console";
+import { useAppSelector } from "../store/hooks";
 
 export default function CommentDisplay(props: any) {
   const { pitch_id } = props;
@@ -24,6 +25,7 @@ export default function CommentDisplay(props: any) {
     undefined
   );
   const [total, setTotal] = useState<number>(0);
+  const auth = useAppSelector((state) => state.user.isAuthenticated);
 
   const toast = useRef<Toast>(null);
 
@@ -103,7 +105,7 @@ export default function CommentDisplay(props: any) {
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
-              {localStorage.getItem("access_token") && (
+              {(
                 <AddAndUpdate
                   search={search}
                   setSearch={setSearch}
@@ -164,7 +166,7 @@ export default function CommentDisplay(props: any) {
                       </div>
                     </div>
                     {item.userId == 1 && (
-                      <div>
+                      auth && <div>
                         <Button
                           label="Delete"
                           severity="danger"

@@ -115,6 +115,7 @@ public class BookingController {
     }
 
     //------------------------------------------------------------------
+    @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin/confirm")
     ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(@RequestParam List<String> status) {
         List<ConfirmPitchBookingDto> confirmPitchBookings = bookingService.getConfirmPitchBookingByStatus(status);
@@ -128,6 +129,7 @@ public class BookingController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PreAuthorize("ROLE_ADMIN")
     @PutMapping("/admin/confirm")
     ResponseEntity<BaseResponse> updateStatusPitchBooking(@RequestBody Map<String, Object> statusMap) {
         ConfirmPitchBookingDto tempConfirmPitchBooking = bookingService.updateStatusPitchBooking(statusMap);
