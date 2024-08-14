@@ -12,6 +12,7 @@ import swal from "sweetalert";
 import AddAndUpdate from "./addAndUpdate";
 import { Dialog } from "primereact/dialog";
 import { Image } from "primereact/image";
+import { TokenService } from "../service/TokenService";
 
 export default function CommentDisplay(props: any) {
   const { pitch_id } = props;
@@ -33,10 +34,11 @@ export default function CommentDisplay(props: any) {
         1
       );
       const responseTotal = await CommentService.getInstance().getTotal(1);
-      if (response.data.status == "OK") {
+      if (response.data.status == 200) {
         setLstComment(response.data.data);
+        
       }
-      if(responseTotal.data.status == "OK"){
+      if(responseTotal.data.status == 200){
         setTotal(responseTotal.data.data);
       }
     } catch (error: any) {
@@ -95,10 +97,10 @@ export default function CommentDisplay(props: any) {
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
-              <AddAndUpdate
+              {TokenService.getInstance().getToken()  && <AddAndUpdate
                 search={search}
                 setSearch={setSearch}
-              ></AddAndUpdate>
+              ></AddAndUpdate>}
             </div>
             <br />
             <div>
@@ -224,7 +226,7 @@ export default function CommentDisplay(props: any) {
         <button
           className="btn btn-dark"
           onClick={() => {
-            if (search.page <= total/search.limit -1) {
+            if (search.page < total/search.limit ) {
               setSearch({
                 ...search,
                 page: search.page + 1,

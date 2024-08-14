@@ -7,16 +7,9 @@ import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.pitchmanagement.dto.PitchBookingDTO;
 import com.pitchmanagement.model.request.BookingRequest;
@@ -37,6 +30,7 @@ public class BookingController {
     @Autowired
     BookingService bookingService;
 
+    @PreAuthorize("ROLE_USER")
     @GetMapping("/{id}")
     public ResponseEntity<?> Get(
             @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer user_id,
@@ -60,6 +54,7 @@ public class BookingController {
         }
     }
 
+    @PreAuthorize("ROLE_USER")
     @GetMapping("/total/{id}")
     public ResponseEntity<?> total(
             @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer user_id,
@@ -80,7 +75,7 @@ public class BookingController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
+    @PreAuthorize("ROLE_USER")
     @PutMapping
     public ResponseEntity<?> Update(@Valid @RequestBody BookingRequest bookingRequest) {
         try {
@@ -91,6 +86,7 @@ public class BookingController {
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
+            System.out.println(e);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)
@@ -99,7 +95,7 @@ public class BookingController {
         }
 
     }
-
+    @PreAuthorize("ROLE_USER")
     @PostMapping
     public ResponseEntity<?> Booking(@Valid @RequestBody BookingRequest bookingRequest) {
         try {

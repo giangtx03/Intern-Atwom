@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("{id}")
     public ResponseEntity<?> getCommentByPitch(
             @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id,
@@ -55,6 +57,7 @@ public class CommentController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("/total/{id}")
     public ResponseEntity<?> total(
             @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id) {
@@ -75,6 +78,7 @@ public class CommentController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @PostMapping
     public ResponseEntity<?> insert(@Valid @RequestBody CommentRequest commentRequest) {
         try {
@@ -94,6 +98,7 @@ public class CommentController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody CommentRequest commentRequest) {
         try {
@@ -113,6 +118,7 @@ public class CommentController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         try {

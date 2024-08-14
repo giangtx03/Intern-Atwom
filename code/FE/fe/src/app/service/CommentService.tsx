@@ -22,6 +22,7 @@ export default class CommentService {
       "http://localhost:8080" + `/comment/${pitch_id}`,
       params,
     );
+    console.log(url)
     return axios.get(url, {
       headers: HeadersUtil.getHeaders(),
     });

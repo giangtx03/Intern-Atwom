@@ -9,6 +9,9 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import BookingDialog from "./BookingDialog";
 import { Toast } from "primereact/toast";
 import swal from "sweetalert";
+import { useAppSelector } from "../store/hooks";
+import { spinner } from "../../App";
+
 
 export default function History() {
   const [booking, setBooking] = useState([]);
@@ -19,6 +22,8 @@ export default function History() {
     undefined
   );
   const toast = useRef<Toast>(null);
+
+  const loading = useAppSelector((state) => state.spinner.loading);
 
   const show = () => {
     toast.current?.show({
@@ -79,7 +84,7 @@ export default function History() {
             });
           })
           .catch((response) => {
-            swal("Cancel false", {
+            swal(response.message, {
               icon: "warning",
             });
           });
@@ -103,6 +108,8 @@ export default function History() {
     success: "table-warning",
   };
   return (
+    <>
+    {loading && spinner}
     <div className="list-group">
       <h2 className="h4" style={{ margin: "1.5%" }}>
         History
@@ -222,5 +229,6 @@ export default function History() {
         show={show}
       ></BookingDialog>
     </div>
+    </>
   );
 }

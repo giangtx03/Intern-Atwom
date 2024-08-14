@@ -1,130 +1,69 @@
-import React, { useEffect, useState } from 'react'
-import { BookingService } from '../../../service/BookingService';
-import { Link } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { Menubar } from 'primereact/menubar';
+import { InputText } from 'primereact/inputtext';
+import { Avatar } from 'primereact/avatar';
+import { Menu } from 'primereact/menu';
+import { useNavigate } from 'react-router-dom';
+import 'primereact/resources/themes/bootstrap4-light-blue/theme.css';  
+import 'primereact/resources/primereact.min.css';                 
+import 'primeicons/primeicons.css';                               
+
+
+interface MenuItem {
+    label: string;
+    icon: string;
+    link?: string;
+    badge?: string;
+    shortcut?: string;
+    command?: () => void;
+}
 
 export default function Header() {
+    const navigate = useNavigate();
+    const menu = useRef<Menu>(null);
+
+    const items: MenuItem[] = [
+        {
+            label: 'Home',
+            icon: 'pi pi-home',
+            command: () => navigate('/')
+        },
+        {
+            label: 'History',
+            icon: 'pi pi-star',
+            command: () => navigate('/history')
+        },
+    ];
+
+    const userMenuItems = [
+        {
+            label: 'Profile',
+            icon: 'pi pi-user',
+            command: () => navigate('/profile')
+        },
+        {
+            label: 'Settings',
+            icon: 'pi pi-cog',
+            command: () => navigate('/settings')
+        },
+        {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            command: () => navigate('/logout')
+        }
+    ];
+
+    const start = <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2"></img>;
+    const end = (
+        <div className="flex align-items-center gap-2">
+            <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png" shape="circle" className="cursor-pointer" onClick={(e) => menu.current?.toggle(e)} />
+            <Menu model={userMenuItems} popup ref={menu} />
+        </div>
+    );
+
     return (
-        <div><nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-
-            <div className="container-fluid">
-
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <a className="nav-link" href="./dashboard">Dashboard</a>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="./history">History</Link>
-                        </li>
-                    </ul>
-
-
-
-                    <div className="d-flex align-items-center justify-content-start">
-
-                        <a className="text-reset me-3" href="#">
-                            <i className="fas fa-shopping-cart text-white"></i>
-                        </a>
-
-                        <div className="dropdown">
-                            <a data-mdb-dropdown-init className="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" className="rounded-circle" height="25" alt="Black and White Portrait of a Man" loading="lazy" />
-                            </a>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                                <li>
-                                    <a className="dropdown-item" href="#">My profile</a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">Settings</a>
-                                </li>
-                                <li>
-                                    <a className="dropdown-item" href="#">Logout</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <a className="navbar-brand mt-2 mt-lg-0" href="#">
-                <h5 className="pt-1" >MDB</h5>
-            </a>
-
-            <button data-mdb-button-init className="navbar-toggler" type="button" data-mdb-collapse-init data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i className="fas fa-bars"></i>
-            </button>
-
-
-
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Dashboard</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Team</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Projects</a>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="admin">Admin</Link>
-                    </li>
-                </ul>
-
-
-
-                <div className="d-flex align-items-center justify-content-start">
-
-                    <a className="text-reset me-3" href="#">
-                        <i className="fas fa-shopping-cart text-white"></i>
-                    </a>
-
-
-                    <div className="dropdown">
-                        <a data-mdb-dropdown-init className="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                            <i className="fas fa-bell text-white"></i>
-                            <span className="badge rounded-pill badge-notification bg-danger">1</span>
-                        </a>
-                        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li>
-                                <a className="dropdown-item" href="#">Some news</a>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#">Another news</a>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#">Something else here</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="dropdown">
-                        <a data-mdb-dropdown-init className="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" className="rounded-circle" height="25" alt="Black and White Portrait of a Man" loading="lazy" />
-                        </a>
-                        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                            <li>
-                                <a className="dropdown-item" href="#">My profile</a>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#">Settings</a>
-                            </li>
-                            <li>
-                                <a className="dropdown-item" href="#">Logout</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-
-
-
-        </nav ></div >
-    )
+        <div className="card">
+            <Menubar model={items} start={start} end={end} />
+        </div>
+    );
 }

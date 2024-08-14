@@ -34,6 +34,7 @@ export default function AddAndUpdate(props: any) {
 
   const addComment = async (e: any) => {
     if (editComment == null) {
+      console.log(123)
       await CommentService.getInstance()
         .AddComment(new Comment(0, rating, value, 1, 1))
         .then((response)=>{
@@ -51,7 +52,7 @@ export default function AddAndUpdate(props: any) {
       });
     }else{
         await CommentService.getInstance()
-        .AddComment(new Comment(editComment.id, rating, value, 1, 1))
+        .Update(new Comment(editComment.id, rating, value, 1, 1))
         .then(showSuccess)
         .catch(showError);
       setRating(0);
