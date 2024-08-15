@@ -86,7 +86,7 @@ export default function CommentDisplay(props: any) {
             .then((response) => {
               showSuccess(response.data.message);
             })
-            .catch((response)=>{
+            .catch((response) => {
               showError(response.data.message);
             });
         }
@@ -105,12 +105,7 @@ export default function CommentDisplay(props: any) {
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
-              {(
-                <AddAndUpdate
-                  search={search}
-                  setSearch={setSearch}
-                ></AddAndUpdate>
-              )}
+              <AddAndUpdate search={search} setSearch={setSearch} />
             </div>
             <br />
             <div>
@@ -165,8 +160,8 @@ export default function CommentDisplay(props: any) {
                         </div>
                       </div>
                     </div>
-                    {item.userId == 1 && (
-                      auth && <div>
+                    {item.userId == 1 && auth && (
+                      <div>
                         <Button
                           label="Delete"
                           severity="danger"
