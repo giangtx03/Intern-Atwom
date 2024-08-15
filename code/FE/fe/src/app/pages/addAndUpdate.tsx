@@ -17,7 +17,6 @@ export default function AddAndUpdate(props: any) {
     editComment != null ? editComment.star : 0
   );
   const [hover, setHover] = useState<number>(0);
-  const auth = useAppSelector((state) => state.user.isAuthenticated);
 
   const toast = useRef<Toast>(null);
 
@@ -72,7 +71,6 @@ export default function AddAndUpdate(props: any) {
   };
   return (
     <>
-      {auth && (
         <div>
           <Toast ref={toast} />
           <h3 style={{ margin: "1%" }}>Đánh Giá</h3>
@@ -115,7 +113,6 @@ export default function AddAndUpdate(props: any) {
             />
           </div>
         </div>
-      )}
     </>
   );
 }

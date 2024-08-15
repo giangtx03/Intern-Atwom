@@ -1,6 +1,6 @@
 package com.pitchmanagement.util;
 
-import com.pitchmanagement.security.CustomUserDetails;
+import com.pitchmanagement.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 
@@ -25,10 +27,13 @@ public class JwtUtil {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    public String generateToken(CustomUserDetails user) {
+    public String generateToken(User user) {
 
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("user_id", user.getId());
         return Jwts.builder()
-                .subject(user.getUsername())
+                .claims(claims)
+                .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

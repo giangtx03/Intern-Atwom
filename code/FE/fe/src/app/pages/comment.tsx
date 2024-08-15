@@ -25,7 +25,6 @@ export default function CommentDisplay(props: any) {
     undefined
   );
   const [total, setTotal] = useState<number>(0);
-  const auth = useAppSelector((state) => state.user.isAuthenticated);
 
   const toast = useRef<Toast>(null);
 
@@ -160,7 +159,7 @@ export default function CommentDisplay(props: any) {
                         </div>
                       </div>
                     </div>
-                    {item.userId == 1 && auth && (
+                    {item.userId == 1 && (
                       <div>
                         <Button
                           label="Delete"

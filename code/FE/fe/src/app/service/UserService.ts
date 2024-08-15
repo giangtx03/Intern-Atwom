@@ -2,6 +2,7 @@ import axios from "axios";
 import { ApiUrlUtil } from "../utils/ApiUtil";
 import { ParamUtil, RequestParam } from "../utils/ParamUtil";
 import { HeadersUtil } from "../utils/HeaderUtil";
+import axiosCustom from "../config/interceptors/interceptors";
 
 export class UserService {
   private static _userService: UserService;
@@ -28,8 +29,7 @@ export class UserService {
   }
 
   public getUserDetails(id: number) {
-    const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/api/v1/users/${id}`);
-    const headers = HeadersUtil.getHeaders();
-    return axios.post(url, {headers})
+    const url = ApiUrlUtil.buildQueryString(`/users/${id}`);
+    return axiosCustom.get(url)
   }
 }

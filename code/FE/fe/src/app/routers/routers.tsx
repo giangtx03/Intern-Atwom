@@ -1,15 +1,15 @@
-import React, { Suspense } from 'react'
-import { Navigate, useRoutes } from 'react-router-dom';
-import { PrimeReactProvider } from 'primereact/api'
-import Layout from '../comp/Layout/Layout';
-import LoginPage from '../pages/auth/LoginPage';
-import RegisterPage from '../pages/auth/RegisterPage';
-import Dashboard from '../pages/Dashboard';
-import UserProfile from '../pages/auth/UserProfile';
-import History from '../pages/History';
-import CommentDisplay from '../pages/comment';
-import { AdminRouter } from './admin/adminRouter';
-
+import React, { Suspense } from "react";
+import { Navigate, useRoutes } from "react-router-dom";
+import { PrimeReactProvider } from "primereact/api";
+import Layout from "../comp/Layout/Layout";
+import LoginPage from "../pages/auth/LoginPage";
+import RegisterPage from "../pages/auth/RegisterPage";
+import Dashboard from "../pages/Dashboard";
+import UserProfile from "../pages/auth/UserProfile";
+import History from "../pages/History";
+import CommentDisplay from "../pages/comment";
+import path from "path";
+import { AdminRouter } from "./admin/adminRouter";
 
 export const RoutersHook: any = {
   path: '/',
@@ -23,7 +23,6 @@ export const RoutersHook: any = {
     { path: '/profile', element: <UserProfile /> },
     { path: 'history', element: <History /> },
     { path: "comment", element: <CommentDisplay /> },
-    { ...AdminRouter }
-
+    { ...AdminRouter}
   ]
 };
