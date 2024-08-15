@@ -151,7 +151,7 @@ export default function RegisterPage() {
           id="registerRetypePassword"
           className="form-control"
           {...register("retypePassword", {
-            required: "Retype Password không được để trống",
+            required: "Xác nhận mật khẩu không được để trống",
             validate: (value) =>
               value === watch("password") || "Mật khẩu không khớp",
           })}

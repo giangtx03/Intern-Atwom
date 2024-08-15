@@ -137,7 +137,7 @@ export default function ChangePasswordForm(props: any) {
           id="registerRetypePassword"
           className="form-control"
           {...register("retypePassword", {
-            required: "Retype Password không được để trống",
+            required: "Xác nhận mật khẩu không được để trống",
             validate: (value) =>
               value === watch("newPassword") || "Mật khẩu không khớp",
           })}

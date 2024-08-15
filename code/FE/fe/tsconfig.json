@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/app/pages/pitch/Pitch.tsx"  ]
 }

@@ -5,6 +5,7 @@ import { ParamUtil, RequestParam } from "../utils/ParamUtil";
 import Search from "../model/SearchModel";
 import { ApiUrlUtil } from "../utils/ApiUtil";
 import Comment from "../model/Comment";
+import axiosCustom from "../config/interceptors/interceptors";
 
 export default class CommentService {
   public static _commentService: CommentService;
@@ -16,42 +17,40 @@ export default class CommentService {
     return CommentService._commentService;
   }
 
-  public getLstPitchTime(modelSearch: Search, pitch_id: number) {
+  public getLstPitchTime(modelSearch: Search, pitch_id?: number) {
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
-    const url = ApiUrlUtil.buildQueryString(
-      "http://localhost:8080" + `/comment/${pitch_id}`,
+    const url = ApiUrlUtil.buildQueryString(`/comment/${pitch_id}`,
       params,
     );
-    console.log(url)
-    return axios.get(url, {
+    return axiosCustom.get(url, {
       headers: HeadersUtil.getHeaders(),
     });
   }
 
-  public getTotal(pitch_id:number){
-    const url = `http://localhost:8080/comment/total/${pitch_id}`;
-    return axios.get(url,{
+  public getTotal(pitch_id?:number){
+    const url = ApiUrlUtil.buildQueryString(`/comment/total/${pitch_id}`)
+    return axiosCustom.get(url,{
         headers: HeadersUtil.getHeaders(),
     })
   }
 
   public AddComment(comment: Comment) {
-    const url = "http://localhost:8080/comment";
-    return axios.post(url, comment, {
+    const url = ApiUrlUtil.buildQueryString(`/comment`)
+    return axiosCustom.post(url, comment, {
       headers: HeadersUtil.getHeaders(),
     });
   }
 
   public Update(comment: Comment){
-    const url = "http://localhost:8080/comment";
-    return axios.put(url,comment,{
+    const url = ApiUrlUtil.buildQueryString(`/comment`)
+    return axiosCustom.put(url,comment,{
         headers: HeadersUtil.getHeaders(),
     })
   }
 
-  public DeleteComment(commentId: number){
-    const url = `http://localhost:8080/comment/${commentId}`;
-    return axios.delete(url, {
+  public DeleteComment(commentId?: number){
+    const url = ApiUrlUtil.buildQueryString(`/comment/${commentId}`)
+    return axiosCustom.delete(url, {
       headers: HeadersUtil.getHeaders(),
     });
   }

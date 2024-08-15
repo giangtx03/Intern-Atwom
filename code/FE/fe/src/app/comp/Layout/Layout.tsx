@@ -10,13 +10,11 @@ export default function Layout() {
 
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
-
   return (
     <>
-    {loading && spinner}
+      {loading && spinner}
       <div className="d-flex justify-content-center">
-        <div className= "col-12">
+        <div className="col-12">
           <Header />
           <div>
             <Outlet />

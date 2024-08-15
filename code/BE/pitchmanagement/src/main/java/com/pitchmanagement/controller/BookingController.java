@@ -82,7 +82,7 @@ public class BookingController {
             bookingService.update(bookingRequest);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.NO_CONTENT.value())
-                    .message("Tạo thành công")
+                    .message("Cập nhật thành công")
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {

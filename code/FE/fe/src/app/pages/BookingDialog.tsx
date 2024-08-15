@@ -11,15 +11,28 @@ import swal from "sweetalert";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useAppDispatch } from "../store/hooks";
-import { showOrHindSpinner } from "../reduces/SpinnerSlice"
+import { showOrHindSpinner } from "../reduces/SpinnerSlice";
 import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
+import { DecodedToken } from "../model/User";
+import { TokenService } from "../service/TokenService";
 
 export default function BookingDialog(props: any) {
-  let { visible, setVisible, choseBookingId, setChoseBookingID } = props;
+  let {
+    visible,
+    setVisible,
+    choseBookingId,
+    setChoseBookingID,
+    search,
+    setSearch,
+  } = props;
   const [listPitchTime, setListPitchTime] = useState<[]>();
   const [selectTime, setSelectTime] = useState(Object);
   const [message, setMessage] = useState<boolean>(false);
   const [note, setNote] = useState("");
+  const user_id = decodeToken<DecodedToken>(
+    TokenService.getInstance().getToken()
+  )?.user_id;
 
   const add = () => {
     if (selectTime.timeSlotId == undefined) {
@@ -44,6 +57,10 @@ export default function BookingDialog(props: any) {
                 icon: "warning",
               });
             }
+            setSearch({
+              ...search,
+              timer: new Date().getTime(),
+            });
             setVisible(false);
           })
           .catch((response) => {
@@ -67,6 +84,8 @@ export default function BookingDialog(props: any) {
               setSelectTime(new Object());
               setNote("");
               setMessage(false);
+            }else{
+              console.log(response)
             }
           });
       }
