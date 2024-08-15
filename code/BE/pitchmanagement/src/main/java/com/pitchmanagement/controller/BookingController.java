@@ -28,7 +28,7 @@ import jakarta.validation.constraints.Min;
 @RequiredArgsConstructor
 public class BookingController {
 
-    BookingService bookingService;
+    private final BookingService bookingService;
 
     @PreAuthorize("ROLE_USER")
     @GetMapping("/{id}")

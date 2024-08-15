@@ -55,6 +55,19 @@
         WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}
     </select>
 
+    <select id="selectPictTimeByPitchId" parameterType="int" resultMap="resultPitchId" >
+        SELECT ts.start_time, ts.end_time, pt.price
+        FROM pitch_time pt
+        INNER JOIN time_slot ts ON ts.id = pt.time_slot_id
+        WHERE pt.pitch_id = #{pitchId}
+    </select>
+
+    <resultMap id="resultPitchId" type="com.pitchmanagement.dto.admin.PitchTimeChildrenDto">
+        <result property="start_time" column="startTime"/>
+        <result property="end_time" column="endTime"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
     <resultMap id="result" type="com.pitchmanagement.model.request.PitchTimeRequest">
         <result property="id" column="id"/>
         <result property="status" column="status"/>

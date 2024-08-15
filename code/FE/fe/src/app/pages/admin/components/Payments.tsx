@@ -57,7 +57,7 @@ export default function Payments() {
     }
 
     return (
-        <div style={{ maxHeight: '640px', overflowY: "auto" }}>
+        <div>
             {
                 messages.length > 0
                     ?

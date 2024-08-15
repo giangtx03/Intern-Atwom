@@ -4,6 +4,7 @@ import Payments from "../../pages/admin/components/Payments";
 import Spinner from "../../comp/Spinner";
 import LayoutAdmin from "../../comp/Layout/LayoutAdmin";
 import Revenue from "../../pages/admin/components/Revenue";
+import EditPitchs from "../../pages/admin/components/EditPitchs";
 
 export const AdminRouter: any = {
   path: "admin",
@@ -13,7 +14,7 @@ export const AdminRouter: any = {
     { path: "messagebooks", element: <MessageBooks /> },
     { path: "payments", element: <Payments /> },
     { path: "revenue", element: <Revenue /> },
-    { path: "editPitch", element: <Spinner /> },
+    { path: "editPitch", element: <EditPitchs /> },
     { path: "/admin" },
   ],
 };

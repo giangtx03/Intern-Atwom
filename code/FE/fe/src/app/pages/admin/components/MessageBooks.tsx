@@ -62,7 +62,7 @@ export default function MessageBooks() {
 
     return (
         <div className="">
-            <div style={{ maxHeight: '640px', overflowY: "auto" }}>
+            <div>
                 {
                     messages.length > 0
                         ?

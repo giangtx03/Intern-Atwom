@@ -22,14 +22,8 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 public class BillServiceImpl implements BillService {
 
-    @Autowired
     private final BillDao billDao;
-
-    @Autowired
     private final BookingDAO pitchBookingDao;
-
-    @Autowired
-    private final PitchTimeDAO pitchTimeDao;
 
     @Override
     public BillRequest addBill(BillRequest bill) {

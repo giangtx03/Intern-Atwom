@@ -33,7 +33,7 @@ import jakarta.validation.constraints.Min;
 @RequiredArgsConstructor
 public class CommentController {
 
-    CommentService commentService;
+    private final CommentService commentService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("{id}")

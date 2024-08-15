@@ -3,6 +3,7 @@ package com.pitchmanagement.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,6 +23,8 @@ public interface PitchTimeDAO {
     void updateStatusPitchTimeByIds(PitchTimeRequest pitchTime);
 
     PitchTimeRequest selectPitchTimeByIds(Map<String, Object> params);
+
+    List<PitchTimeChildrenDto> selectPictTimeByPitchId(int pitchId);
 
     //------------------------------------------------------------------
 }
