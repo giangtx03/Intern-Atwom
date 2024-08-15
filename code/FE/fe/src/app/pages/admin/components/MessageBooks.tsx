@@ -17,7 +17,7 @@ export default function MessageBooks() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await getMessageAll("cho");
+                const result = await getMessageAll("chờ");
                 setMessages(result);
                 setIsLoading(false);
 

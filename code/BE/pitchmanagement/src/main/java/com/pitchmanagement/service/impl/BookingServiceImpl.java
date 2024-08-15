@@ -63,36 +63,6 @@ public class BookingServiceImpl implements BookingService {
 
         List<ConfirmPitchBookingDto> confirmPitchBookings = bookingDAO.selectConfirmPitchBookingByStatus(statuses);
 
-//        // Định dạng trong sql
-//        SimpleDateFormat originalFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-//
-//        // Định dạng muốn hiển thị
-//        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        SimpleDateFormat newFormatTime = new SimpleDateFormat("HH:mm:ss");
-//
-//        confirmPitchBookings.forEach(cpb -> {
-//
-//            // Kiểm tra định dạng xem đúng với định dạng mới chưa
-//            try {
-//                newFormat.parse(cpb.getCreateAt());
-//                newFormatTime.parse(cpb.getStartTime());
-//                newFormatTime.parse(cpb.getEndTime());
-//            } catch (ParseException e) {
-//                try {
-//                    Date date = originalFormat.parse(cpb.getCreateAt());
-//                    cpb.setCreateAt(newFormat.format(date));
-//
-//                    Date timeStart = originalFormat.parse(cpb.getStartTime());
-//                    cpb.setStartTime(newFormatTime.format(timeStart));
-//
-//                    Date timeEnd = originalFormat.parse(cpb.getEndTime());
-//                    cpb.setEndTime(newFormatTime.format(timeEnd));
-//                } catch (ParseException ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        });
-
         return bookingDAO.selectConfirmPitchBookingByStatus(statuses);
     }
 
