@@ -8,16 +8,21 @@ import Dashboard from "../pages/Dashboard";
 import UserProfile from "../pages/auth/UserProfile";
 import History from "../pages/History";
 import CommentDisplay from "../pages/comment";
+import path from "path";
+import { AdminRouter } from "./admin/adminRouter";
 
 export const RoutersHook: any = {
-  path: "/",
-  element: <Layout />,
+  path: '/',
+  element: (
+    <Layout />
+  ),
   children: [
-    { path: "/dashboard", element: <Dashboard /> },
-    { path: "/login", element: <LoginPage /> },
-    { path: "/register", element: <RegisterPage /> },
-    { path: "/profile", element: <UserProfile /> },
-    { path: "history", element: <History /> },
+    { path: '/dashboard', element: <Dashboard /> },
+    { path: '/login', element: <LoginPage /> },
+    { path: '/register', element: <RegisterPage /> },
+    { path: '/profile', element: <UserProfile /> },
+    { path: 'history', element: <History /> },
     { path: "comment", element: <CommentDisplay /> },
-  ],
+    { ...AdminRouter}
+  ]
 };

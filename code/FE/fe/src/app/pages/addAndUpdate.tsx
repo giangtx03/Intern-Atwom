@@ -5,6 +5,7 @@ import { FaStar } from "react-icons/fa";
 import CommentService from "../service/CommentService";
 import Comment from "../model/Comment";
 import { Toast } from "primereact/toast";
+import { useAppSelector } from "../store/hooks";
 
 export default function AddAndUpdate(props: any) {
   const { search, setSearch, editComment, setEditOn} = props;
@@ -12,6 +13,7 @@ export default function AddAndUpdate(props: any) {
   const [value, setValue] = useState(editComment != null ? editComment.content :"");
   const [rating, setRating] = useState<number>(editComment != null ? editComment.star : 0);
   const [hover, setHover] = useState<number>(0);
+  const auth = useAppSelector((state) => state.user.isAuthenticated);
 
   const toast = useRef<Toast>(null);
 
@@ -51,7 +53,7 @@ export default function AddAndUpdate(props: any) {
       });
     }else{
         await CommentService.getInstance()
-        .AddComment(new Comment(editComment.id, rating, value, 1, 1))
+        .Update(new Comment(editComment.id, rating, value, 1, 1))
         .then(showSuccess)
         .catch(showError);
       setRating(0);
@@ -65,7 +67,7 @@ export default function AddAndUpdate(props: any) {
     }
   };
   return (
-    <div>
+    auth && <div>
       <Toast ref={toast} />
       <h3 style={{ margin: "1%" }}>Đánh Giá</h3>
       {[...Array(5)].map((star, index) => {

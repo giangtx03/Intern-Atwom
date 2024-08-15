@@ -14,7 +14,7 @@
 }
 
 .hide{
-  display: none;
+  display: none !important;
 }
 
 .center{
@@ -54,5 +54,10 @@ input[type="radio"] {
 }
 
 button{
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
+
+a {
+  text-decoration: none !important;
+}
+

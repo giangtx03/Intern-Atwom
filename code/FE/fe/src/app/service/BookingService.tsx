@@ -18,6 +18,7 @@ export class BookingService {
   public getLstBooking(modelSearch: any, id: number){
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
     const url = ApiUrlUtil.buildQueryString("http://localhost:8080" + `/booking/${id}`, params);
+    console.log(url);
     return axios.get(url,{
         headers: HeadersUtil.getHeaders(),
     })

@@ -10,63 +10,65 @@ import { Messages } from "primereact/messages";
 import swal from "sweetalert";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
+import { useAppDispatch } from "../store/hooks";
+import { showOrHindSpinner } from "../reduces/SpinnerSlice"
+import { useNavigate } from "react-router-dom";
 
 export default function BookingDialog(props: any) {
-  let { visible, setVisible, choseBookingId, setChoseBookingID,show } = props;
+  let { visible, setVisible, choseBookingId, setChoseBookingID } = props;
   const [listPitchTime, setListPitchTime] = useState<[]>();
   const [selectTime, setSelectTime] = useState(Object);
   const [message, setMessage] = useState<boolean>(false);
   const [note, setNote] = useState("");
 
-  const add = ()=>{
-    if(selectTime.timeSlotId == undefined) {
+  const add = () => {
+    if (selectTime.timeSlotId == undefined) {
       setMessage(true);
-    }else{
+    } else {
       swal("Bạn muốn cập nhật tượng này chứ?", {
         buttons: ["Quay lại", "Đồng ý"],
         icon: "warning",
         dangerMode: true,
-      }).then( async (value) => {
-        await BookingService.getInstance().addBooking(
-          new Booking(
-            "wait",
-            note,
-            1,
-            choseBookingId,
-            selectTime.timeSlotId
+      }).then(async (value) => {
+        await BookingService.getInstance()
+          .addBooking(
+            new Booking("wait", note, 1, choseBookingId, selectTime.timeSlotId)
           )
-        ).then(response=>{
-          if(response.data.status = "OK"){
-            swal("Cancel success", {
-              icon: "success",
-            });
-          }else{
-            swal("An error occurred", {
+          .then((response) => {
+            if ((response.data.status = "OK")) {
+              swal("Cancel success", {
+                icon: "success",
+              });
+            } else {
+              swal("An error occurred", {
+                icon: "warning",
+              });
+            }
+            setVisible(false);
+          })
+          .catch((response) => {
+            swal("Cancel false", {
               icon: "warning",
             });
-          }
-          setVisible(false);
-        }).catch(response=>{
-          swal("Cancel false", {
-            icon: "warning",
+            setVisible(false);
           });
-          setVisible(false);
-        });
-      })
-      
+      });
     }
-  }
+  };
 
   const fetchData = async () => {
     try {
       if (choseBookingId != undefined) {
-        const response = await PitchTimeService.getInstance().getLstPitchTime(
-          choseBookingId
-        );
-        setListPitchTime(response.data.data);
-        setSelectTime(new Object());
-        setNote("");
-        setMessage(false);
+        await PitchTimeService.getInstance()
+          .getLstPitchTime(choseBookingId)
+          .then((response) => {
+            if (response.data.status == 200) {
+              setListPitchTime(response.data.data);
+              setSelectTime(new Object());
+              setNote("");
+              setMessage(false);
+            }
+          });
       }
     } catch (error: any) {
       if (error.response) {
@@ -96,11 +98,11 @@ export default function BookingDialog(props: any) {
         setChoseBookingID(undefined);
       }}
     >
-      <p className="w-full md:w-14rem" >
+      <p className="w-full md:w-14rem">
         {" "}
         price: {selectTime !== undefined ? selectTime.price : ""}
       </p>
-      <div style={{ display: "flex",margin: "0 0 1% 0" }}>
+      <div style={{ display: "flex", margin: "0 0 1% 0" }}>
         <Dropdown
           value={selectTime}
           onChange={(e: DropdownChangeEvent) => {
@@ -118,17 +120,14 @@ export default function BookingDialog(props: any) {
         </p>
       </div>
       <Message
-          severity="error"
-          text="Error Message"
-          className={message == false ? "hide" : ""}
-        />
+        severity="error"
+        text="Error Message"
+        className={message == false ? "hide" : ""}
+      />
       <div>
         <InputText value={note} onChange={(e) => setNote(e.target.value)} />
       </div>
-      <Button
-        label="Submit"
-        onClick={add}
-      />
+      <Button label="Submit" onClick={add} />
     </Dialog>
   );
 }

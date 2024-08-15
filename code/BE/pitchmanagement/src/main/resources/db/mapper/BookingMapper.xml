@@ -13,7 +13,7 @@
                 pt.price,
                 pt.pitch_id as pitchId,
                 pt.time_slot_id as timeSlotId,
-                p.name as pitch_name as pitchName,
+                p.name  as pitchName,
                 p.address,
                 pt1.name as type,
                 ts.start_time as startTime,
@@ -26,7 +26,7 @@
         where pb.id  = #{id}
     </select>
 
-    <select id ="SelectByUser" parameterType="int" resultType="com.pitchmanagement.dto.PitchBookingDTO">
+    <select id ="SelectByUser" parameterType="map" resultType="com.pitchmanagement.dto.PitchBookingDTO">
         SELECT  pb.id,
         pb.create_at as createAt,
         pb.update_at as updateAt,
