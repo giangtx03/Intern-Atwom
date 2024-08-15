@@ -13,7 +13,7 @@ export class TokenService {
   }
 
   public getToken(): any {
-    localStorage.getItem("access_token");
+    return localStorage.getItem("access_token");
   }
 
   public removeToken() {

@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { TokenService } from "../../service/TokenService";
-import { doLoginAction } from "../../reduces/UserSlice";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
@@ -31,8 +30,6 @@ export default function LoginPage() {
             toast.success(response.data.message, {
               position: "top-right",
             });
-            console.log(response.data.data);
-            dispatch(doLoginAction(response.data.data));
             TokenService.getInstance().setToken(response.data.data.token);
             navigate("/dashboard");
             dispatch(showOrHindSpinner(false));
