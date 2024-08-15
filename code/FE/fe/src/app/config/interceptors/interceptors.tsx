@@ -1,19 +1,21 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Tạo một instance của Axios
 const axiosCustom = axios.create({
-  baseURL: 'http://localhost:8080/api/v1', // Thay bằng URL gốc của API của bạn
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: "http://localhost:8080/api/v1", // Thay bằng URL gốc của API của bạn
 });
 
 // Thêm một interceptor để tự động thêm token vào tất cả các yêu cầu
 axiosCustom.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token'); // Lấy token từ localStorage
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
+    const token = localStorage.getItem("access_token"); // Lấy token từ localStorage
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
@@ -31,7 +33,7 @@ axiosCustom.interceptors.response.use(
     // Xử lý các lỗi 401, 403, 500, hoặc làm mới token ở đây nếu cần
     if (error.response.status === 401) {
       // Ví dụ: Chuyển hướng đến trang đăng nhập nếu không được phép
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

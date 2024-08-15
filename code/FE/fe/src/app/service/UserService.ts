@@ -32,4 +32,16 @@ export class UserService {
     const url = ApiUrlUtil.buildQueryString(`/users/${id}`);
     return axiosCustom.get(url)
   }
+
+  public changePassword(modelChangePassword: any) {
+    // console.log(process.env.REACT_APP_API_URL + '/login');
+    const url = ApiUrlUtil.buildQueryString('users/change_password');
+    return axiosCustom.put(url, modelChangePassword);
+  }
+
+  public updateUserDetails(modelUpdateUserDetails: any) {
+    // console.log(process.env.REACT_APP_API_URL + '/login');
+    const url = ApiUrlUtil.buildQueryString('users');
+    return axiosCustom.put(url, modelUpdateUserDetails);
+  }
 }
