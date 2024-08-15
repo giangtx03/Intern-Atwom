@@ -16,12 +16,12 @@ export default function Layout() {
     <>
     {loading && spinner}
       <div className="d-flex justify-content-center">
-        { !isAdminRoute && (
+        { isAdminRoute && (
           <div className="col-2">
             <Sidebar />
           </div>
         )}
-        <div className={ !isAdminRoute ? "col-10" : "col-12"}>
+        <div className={ isAdminRoute ? "col-10" : "col-12"}>
           <Header />
           <div>
             <Outlet />

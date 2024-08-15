@@ -16,7 +16,7 @@ import com.pitchmanagement.model.response.BaseResponse;
 import com.pitchmanagement.service.PitchTimeService;
 
 @RestController
-@RequestMapping("pitchtime")
+@RequestMapping("${api.prefix}/pitchtime")
 public class TimeSlotController {
 
     @Autowired

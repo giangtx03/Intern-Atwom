@@ -22,8 +22,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 @RestController
-@RequestMapping("booking")
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("${api.prefix}/booking")
 @Validated
 public class BookingController {
 
@@ -82,7 +81,7 @@ public class BookingController {
             bookingService.update(bookingRequest);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.NO_CONTENT.value())
-                    .message("Tạo thành công")
+                    .message("Cập nhật thành công")
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {

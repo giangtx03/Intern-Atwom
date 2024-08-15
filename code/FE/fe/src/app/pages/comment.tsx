@@ -15,6 +15,8 @@ import { Image } from "primereact/image";
 import { TokenService } from "../service/TokenService";
 import { error } from "console";
 import { useAppSelector } from "../store/hooks";
+import { DecodedToken } from "../model/User";
+import { decodeToken } from "react-jwt";
 
 export default function CommentDisplay(props: any) {
   const { pitch_id } = props;
@@ -25,6 +27,10 @@ export default function CommentDisplay(props: any) {
     undefined
   );
   const [total, setTotal] = useState<number>(0);
+  const user_id = decodeToken<DecodedToken>(
+    TokenService.getInstance().getToken()
+  )?.user_id;
+
 
   const toast = useRef<Toast>(null);
 
@@ -124,7 +130,7 @@ export default function CommentDisplay(props: any) {
                 <option selected value="">
                   Tất cả comment
                 </option>
-                <option value="1">Comment của bạn</option>
+                <option value={user_id}>Comment của bạn</option>
               </select>
             </div>
             <div className="card text-body">

@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("${api.prefix}/comment")
 @Validated
 public class CommentController {
     @Autowired

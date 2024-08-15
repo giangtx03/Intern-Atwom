@@ -2,7 +2,6 @@ import { stat } from "fs";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { decodeToken } from "react-jwt";
 import { DecodedToken, UserDetails } from "../../model/User";
 import { TokenService } from "../../service/TokenService";
 import { UserService } from "../../service/UserService";
@@ -12,6 +11,7 @@ import { formatDate } from "../../utils/FormatDate";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import ChangePasswordForm from "./comp/ChangePasswordForm";
+import { decodeToken } from "react-jwt";
 import UpdateProfile from "./comp/UpdateProfile";
 
 export default function UserProfile() {
