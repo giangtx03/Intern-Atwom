@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BillController {
 
-    @Autowired
     private final BillService billService;
 
     @PreAuthorize("ROLE_ADMIN")

@@ -10,18 +10,11 @@ export default function Layout() {
 
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
-
   return (
     <>
-    {loading && spinner}
+      {loading && spinner}
       <div className="d-flex justify-content-center">
-        { isAdminRoute && (
-          <div className="col-2">
-            <Sidebar />
-          </div>
-        )}
-        <div className={ isAdminRoute ? "col-10" : "col-12"}>
+        <div className="col-12">
           <Header />
           <div>
             <Outlet />

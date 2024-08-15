@@ -180,6 +180,7 @@ export default function UpdateProfile(props: any) {
               onClick={() => handleUpdate()}
               label="Hủy"
               severity="secondary"
+              type="button"
             />
             <Button type="submit" label="Cập nhật" className="mx-3" />
           </div>

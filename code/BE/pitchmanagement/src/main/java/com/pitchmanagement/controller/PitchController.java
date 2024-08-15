@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PitchController {
 
-    @Autowired
     private final PitchService pitchService;
 
     @PreAuthorize("ROLE_ADMIN")
