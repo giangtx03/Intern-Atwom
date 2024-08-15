@@ -23,9 +23,6 @@ public class UpdateUserRequest {
     @Size(min = 3, message = "Số điện thoại ít nhất 3 chữ số")
     private String phoneNumber;
 
-    @Size(min = 8, message = "Mật khẩu ít nhất chứa 8 ký tự")
-    private String password;
-
     private String address;
 
     private MultipartFile avatar;

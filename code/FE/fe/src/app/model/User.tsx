@@ -16,16 +16,30 @@ export type DecodedToken = {
   sub: string;
   exp: number;
   iat: number;
-}
+};
 
 export type UserDetails = {
-    id: number;
-    email: string;
-    phoneNumber: string;
-    fullname: string;
-    address: string;
-    avatar: string;
-    createAt: string;
-    updateAt: string;
-    role: string;
-}
+  id: number;
+  email: string;
+  phone_number: string;
+  fullname: string;
+  address: string;
+  avatar: string;
+  create_at: string;
+  update_at: string;
+  role: string;
+};
+
+export type ChangePasswordRequest = {
+  oldPassword: string;
+  newPassword: string;
+  retypePassword: string;
+};
+
+export type UpdateUserDetailsRequest = {
+  id: number;
+  phone_number: string;
+  fullname: string;
+  address: string;
+  avatar: File | null;
+};
