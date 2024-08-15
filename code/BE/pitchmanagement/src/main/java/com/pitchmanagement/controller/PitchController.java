@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("pitch")
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("${api.prefix}/pitch")
 @RequiredArgsConstructor
 public class PitchController {
 
-    @Autowired
     private final PitchService pitchService;
 
     @PreAuthorize("ROLE_ADMIN")

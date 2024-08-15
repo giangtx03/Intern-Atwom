@@ -2,6 +2,7 @@ package com.pitchmanagement.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,10 +28,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("${api.prefix}/comment")
 @Validated
+@RequiredArgsConstructor
 public class CommentController {
-    @Autowired
+
     CommentService commentService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
 @RestController
-@RequestMapping("booking")
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("${api.prefix}/booking")
 @Validated
+@RequiredArgsConstructor
 public class BookingController {
 
-    @Autowired
     BookingService bookingService;
 
     @PreAuthorize("ROLE_USER")

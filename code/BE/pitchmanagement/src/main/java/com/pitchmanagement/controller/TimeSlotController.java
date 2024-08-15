@@ -2,6 +2,7 @@ package com.pitchmanagement.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,10 @@ import com.pitchmanagement.model.response.BaseResponse;
 import com.pitchmanagement.service.PitchTimeService;
 
 @RestController
-@RequestMapping("pitchtime")
+@RequestMapping("${api.prefix}/pitchtime")
+@RequiredArgsConstructor
 public class TimeSlotController {
 
-    @Autowired
     PitchTimeService pitchTimeService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
