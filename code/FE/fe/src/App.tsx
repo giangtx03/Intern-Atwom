@@ -9,7 +9,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Navigate, useRoutes } from 'react-router-dom';
 import { RoutersHook } from './app/routers/routers';
 import { ToastContainer } from 'react-toastify';
-import { AdminRouter } from './app/routers/admin/AdminRouter';
 
 export const spinner = (
   <div className="progress-spinner text-center">
