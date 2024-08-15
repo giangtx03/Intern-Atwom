@@ -5,7 +5,6 @@ import { RevenueDay } from "../model/RevenueDay";
 import { RevenuePitch } from "../model/RevenuePitch";
 
 // Cấu hình axios
-
 const token = localStorage.getItem("access_token");
 const api = axios.create({
     baseURL: 'http://localhost:8080',
@@ -14,6 +13,36 @@ const api = axios.create({
         'Authorization': `Bearer ${token}`
     },
 });
+
+
+// Thêm một interceptor để tự động thêm token vào tất cả các yêu cầu
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('access_token'); // Lấy token từ localStorage
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Thêm một interceptor để xử lý lỗi từ phía server
+api.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        // Xử lý các lỗi 401, 403, 500, hoặc làm mới token ở đây nếu cần
+        if (error.response.status === 401) {
+            // Ví dụ: Chuyển hướng đến trang đăng nhập nếu không được phép
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
 
 
 
