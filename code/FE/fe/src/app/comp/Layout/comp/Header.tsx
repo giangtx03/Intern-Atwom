@@ -71,7 +71,7 @@ export default function Header() {
     {
       label: "Profile",
       icon: "pi pi-user",
-      command: () => navigate("/profile"),
+      command: () => navigate("/user/profile"),
     },
     {
       label: "Settings",

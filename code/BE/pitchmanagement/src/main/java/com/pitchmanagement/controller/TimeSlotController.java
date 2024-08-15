@@ -21,7 +21,7 @@ import com.pitchmanagement.service.PitchTimeService;
 @RequiredArgsConstructor
 public class TimeSlotController {
 
-    PitchTimeService pitchTimeService;
+    private final PitchTimeService pitchTimeService;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("/{id}")
