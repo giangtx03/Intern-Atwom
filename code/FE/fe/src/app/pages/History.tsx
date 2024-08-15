@@ -16,15 +16,36 @@ import { useNavigate } from "react-router-dom";
 import { DecodedToken } from "../model/User";
 import { decodeToken } from "react-jwt";
 import { TokenService } from "../service/TokenService";
+import { DataTable } from "primereact/datatable";
+import { Button } from "primereact/button";
+import { Column } from "primereact/column";
+import { Paginator } from "primereact/paginator";
+import { Tag } from "primereact/tag";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+
+interface StatusSearch {
+  name: string;
+  code: string;
+}
 
 export default function History() {
   const [booking, setBooking] = useState([]);
   const [search, setSearch] = useState(new Search("", 5, 1, 1, 100));
+  const [rows, setRows] = useState(search.limit);
+  const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number | undefined>(undefined);
   const [visible, setVisible] = useState<boolean>(false);
   const [choseBookingId, setChoseBookingID] = useState<number | undefined>(
     undefined
   );
+
+  const statusSearch: StatusSearch[] = [
+    { name: "Tất cả", code: "" },
+    { name: "Thành công", code: "success" },
+    { name: "chờ", code: "wait" },
+    { name: "Đã thanh toán", code: "finished" },
+    { name: "Hủy", code: "cancel" },
+  ];
   const toast = useRef<Toast>(null);
   const token = localStorage.getItem("access_token");
   const user_id = decodeToken<DecodedToken>(
@@ -49,6 +70,59 @@ export default function History() {
       life: 3000,
     });
   };
+
+  const onPageChange = (e: any) => {
+    setFirst(e.first);
+    setRows(e.rows);
+    setSearch({
+      ...search,
+      page: e.page + 1,
+      limit: e.rows,
+      timer: new Date().getTime(),
+    });
+  };
+
+  const timeFrameBodyTemplate = (item: any) => {
+    return `${item.startTime} - ${item.endTime}`;
+  };
+
+  const dateBodyTemplate = (item: any) => {
+    return dayjs(item.createAt).format("DD/MM/YYYY");
+  };
+
+  const actionBodyTemplate = (item: any) => {
+    return (
+      <React.Fragment>
+        <Button
+          label="Cancel"
+          className={`p-button-danger ${
+            item.status == "success" || item.status == "wait" ? "" : "hide"
+          }`}
+          onClick={() => ChoseCancelBooking(item)}
+        />
+        <Button
+          label="Order"
+          className={`p-button-success ${
+            item.status == "cancel" || item.status == "finished" ? "" : "hide"
+          }`}
+          onClick={() => {
+            setVisible(true);
+            setChoseBookingID(item.pitchId);
+          }}
+        />
+      </React.Fragment>
+    );
+  };
+
+  const statusBodyTemplate = (item: any) => {
+    return (
+      <Tag
+        value={item.status}
+        severity={item.status ? status[item.status] : "danger"}
+      ></Tag>
+    );
+  };
+
   const fetchData = async () => {
     dispatch(showOrHindSpinner(true));
     try {
@@ -75,7 +149,6 @@ export default function History() {
           dispatch(showOrHindSpinner(false));
           showError(response.message);
         });
-        
     } catch (error: any) {
       showError(error.message);
     }
@@ -84,10 +157,6 @@ export default function History() {
   useEffect(() => {
     fetchData();
   }, [search.timer]);
-
-  type StatusType = {
-    [key: string]: string;
-  };
 
   const ChoseCancelBooking = (bookChose: Booking) => {
     swal("Bạn muốn cập nhật tượng này chứ?", {
@@ -123,11 +192,11 @@ export default function History() {
     });
   };
 
-  const status: StatusType = {
-    finished: "table-success",
-    cancel: "table-danger",
-    wait: "table-secondary",
-    success: "table-warning",
+  const status: { [key: string]: "info" | "danger" | "warning" | "success" } = {
+    finished: "info",
+    cancel: "danger",
+    wait: "warning",
+    success: "success",
   };
   return (
     <>
@@ -137,116 +206,51 @@ export default function History() {
           <h2 className="h4" style={{ margin: "1.5%" }}>
             History
           </h2>
-          <select
-            className="custom-select"
-            onChange={(e: any) => {
+          <Dropdown
+            value={search.keySearch}
+            options={statusSearch}
+            optionLabel="name"
+            onChange={(e: DropdownChangeEvent) => {
               setSearch({
                 ...search,
                 timer: new Date().getTime(),
-                keySearch: e.target.value,
+                keySearch: e.value.code,
                 page: 1,
               });
             }}
+          ></Dropdown>
+          <DataTable
+            value={booking}
+            rows={5}
+            tableStyle={{ minWidth: "50rem" }}
           >
-            <option selected value="">
-              Status
-            </option>
-            <option value="success">Thành công</option>
-            <option value="wait">chờ</option>
-            <option value="finished">đã xong</option>
-            <option value="cancel">huy</option>
-          </select>
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">id</th>
-                <th scope="col">Name</th>
-                <th scope="col">address</th>
-                <th scope="col">Type</th>
-                <th scope="col">Status</th>
-                <th scope="col">create</th>
-                <th scope="col"> time frame</th>
-                <th scope="col"> action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {booking.map((item: any, index: number) => {
-                return (
-                  <tr className={status[`${item.status}`]}>
-                    <th scope="row">
-                      {search.limit * (search.page - 1) + index + 1}
-                    </th>
-                    <td>{item.pitchName}</td>
-                    <td>{item.address}</td>
-                    <td>{item.type}</td>
-                    <td>{item.status}</td>
-                    <td>{dayjs(item.createAt).format("DD/MM/YYYY")}</td>
-                    <td>{`${item.startTime} - ${item.endTime}`}</td>
-                    <td>
-                      <button
-                        type="button"
-                        className={`btn btn-danger ${
-                          item.status == "success" || item.status == "wait"
-                            ? ""
-                            : "hide"
-                        } `}
-                        onClick={(e) => {
-                          ChoseCancelBooking(item);
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        className={`btn btn-success ${
-                          item.status == "cancel" || item.status == "finished"
-                            ? ""
-                            : "hide"
-                        } `}
-                        onClick={(e) => {
-                          setVisible(true);
-                          setChoseBookingID(item.pitchId);
-                        }}
-                      >
-                        Order
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <div className="center">
-            <button
-              className="btn btn-secondary"
-              onClick={() => {
-                if (search.page > 1) {
-                  setSearch({
-                    ...search,
-                    page: search.page - 1,
-                    timer: new Date().getTime(),
-                  });
-                }
-              }}
-            >
-              Pre
-            </button>
-            <span>{search.page}</span>
-            <button
-              className="btn btn-dark"
-              onClick={() => {
-                if (total != undefined && search.page <= total / search.limit) {
-                  setSearch({
-                    ...search,
-                    page: search.page + 1,
-                    timer: new Date().getTime(),
-                  });
-                }
-              }}
-            >
-              Next
-            </button>
-          </div>
+            <Column field="pitchName" header="Name"></Column>
+            <Column field="address" header="Address"></Column>
+            <Column field="type" header="Type"></Column>
+            <Column
+              field="status"
+              header="Status"
+              body={statusBodyTemplate}
+            ></Column>
+            <Column
+              field="createAt"
+              header="Create"
+              body={dateBodyTemplate}
+            ></Column>
+            <Column
+              field="timeFrame"
+              header="Time Frame"
+              body={timeFrameBodyTemplate}
+            ></Column>
+            <Column header="Action" body={actionBodyTemplate}></Column>
+          </DataTable>
+          <Paginator
+            first={first}
+            rows={search.limit}
+            totalRecords={total}
+            rowsPerPageOptions={[5, 10]}
+            onPageChange={onPageChange}
+          />
           <BookingDialog
             visible={visible}
             setVisible={setVisible}
