@@ -6,4 +6,16 @@
         INSERT INTO `pitch` (`name`, `address`, `create_at`, `pitch_type_id`)
         VALUES (#{name}, #{address}, #{createAt}, #{pitchTypeId});
     </insert>
+
+    <select id="searchPitch" parameterType="">
+        SELECT
+            p.id,
+            p.name,
+            p.address,
+            p.create_at AS createAt,
+            p.update_at AS updateAt,
+            pt.id AS pitchTypeId
+        FROM pitch p
+        RIGHT JOIN pitch_type pt ON pt.id = p.pitch_type_id
+    </select>
 </mapper>
