@@ -22,9 +22,9 @@ public class CommentServiceImpl implements CommentService {
     CommentDAO commentDAO;
 
     @Override
-    public List<CommentDTO> GetCommentByPitch(Integer pitch_id,Integer user_id, Integer offset, Integer limit) {
+    public List<CommentDTO> GetCommentByPitch(Integer pitch_id,Integer user_id, Integer offset, Integer limit, String order) {
         PageHelper.startPage(offset, limit);
-        List<CommentDTO> lst = commentDAO.GetCommentByPitch(pitch_id,user_id);
+        List<CommentDTO> lst = commentDAO.GetCommentByPitch(pitch_id,user_id,order);
         return lst;
     }
 

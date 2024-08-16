@@ -4,8 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import CommentService from "../service/CommentService";
 import Comment from "../model/Comment";
+import swal from "sweetalert";
 import { Toast } from "primereact/toast";
 import { useAppSelector } from "../store/hooks";
+import { Rating, RatingChangeEvent } from "primereact/rating";
 
 export default function AddAndUpdate(props: any) {
   const { search, setSearch, editComment, setEditOn } = props;
@@ -14,9 +16,8 @@ export default function AddAndUpdate(props: any) {
     editComment != null ? editComment.content : ""
   );
   const [rating, setRating] = useState<number>(
-    editComment != null ? editComment.star : 0
+    editComment == null ? 0 : editComment.star
   );
-  const [hover, setHover] = useState<number>(0);
 
   const toast = useRef<Toast>(null);
 
@@ -55,64 +56,59 @@ export default function AddAndUpdate(props: any) {
         page: 1,
       });
     } else {
-      await CommentService.getInstance()
-        .Update(new Comment(editComment.id, rating, value, 1, 1))
-        .then(showSuccess)
-        .catch(showError);
-      setRating(0);
-      setValue("");
-      setSearch({
-        ...search,
-        timer: new Date().getTime(),
-        page: 1,
+      swal("Bạn muốn cập nhật tượng này chứ?", {
+        buttons: ["Quay lại", "Đồng ý"],
+        icon: "warning",
+        dangerMode: true,
+      }).then(async (vl) => {
+        if (vl) {
+          await CommentService.getInstance()
+            .Update(new Comment(editComment.id, rating, value, 1, 1))
+            .then(showSuccess)
+            .catch(showError);
+          setRating(0);
+          setValue("");
+          setSearch({
+            ...search,
+            timer: new Date().getTime(),
+            page: 1,
+          });
+          setEditOn(false);
+        } else {
+          setSearch({
+            ...search,
+            timer: new Date().getTime(),
+            page: 1,
+          });
+          setEditOn(false);
+        }
       });
-      setEditOn(false);
     }
   };
   return (
     <>
+      <div>
+        <Toast ref={toast} />
+        <h3 style={{ margin: "1%" }}>Đánh Giá</h3>
+        <Rating
+          value={rating}
+          onChange={(e: RatingChangeEvent) => setRating(e.value ?? 0)}
+          cancel={false}
+          style={{ margin: "1%" }}
+        />
         <div>
-          <Toast ref={toast} />
-          <h3 style={{ margin: "1%" }}>Đánh Giá</h3>
-          {[...Array(5)].map((star, index) => {
-            const currentRating = index + 1;
-            return (
-              <label>
-                <input
-                  type="radio"
-                  name="rating"
-                  value={currentRating}
-                  onClick={() => {
-                    setRating(currentRating);
-                  }}
-                />
-                <FaStar
-                  size={20}
-                  className="star"
-                  color={currentRating <= (hover || rating) ? "yellow" : "grey"}
-                  onMouseEnter={() => {
-                    setHover(currentRating);
-                  }}
-                  onMouseLeave={() => {
-                    setHover(0);
-                  }}
-                />
-              </label>
-            );
-          })}
-          <div>
-            <InputText
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              style={{ width: "95%", margin: "1%" }}
-            />
-            <Button
-              label="Submit"
-              style={{ left: "85%" }}
-              onClick={addComment}
-            />
-          </div>
+          <InputText
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            style={{ width: "95%", margin: "1%" }}
+          />
+          <Button
+            label="Submit"
+            style={{ left: "85%", margin: "1%" }}
+            onClick={addComment}
+          />
         </div>
+      </div>
     </>
   );
 }

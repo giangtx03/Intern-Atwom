@@ -17,39 +17,43 @@ export default class CommentService {
     return CommentService._commentService;
   }
 
-  public getLstPitchTime(modelSearch: Search, pitch_id?: number) {
+  public getLstPitchTime(modelSearch: Search, pitch_id?: number,order? : string) {
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
-    const url = ApiUrlUtil.buildQueryString(`/comment/${pitch_id}`,
-      params,
-    );
-    return axiosCustom.get(url, {
+    const url = ApiUrlUtil.buildQueryString(
+      `http://localhost:8080/public/api/v1/comment/${pitch_id}`,
+      params
+    ) + `&order=${order??""}`;
+    console.log(url);
+    return axios.get(url, {
       headers: HeadersUtil.getHeaders(),
     });
   }
 
-  public getTotal(pitch_id?:number){
-    const url = ApiUrlUtil.buildQueryString(`/comment/total/${pitch_id}`)
-    return axiosCustom.get(url,{
-        headers: HeadersUtil.getHeaders(),
-    })
+  public getTotal(pitch_id?: number) {
+    const url = ApiUrlUtil.buildQueryString(
+      `http://localhost:8080/public/api/v1/comment/total/${pitch_id}`
+    );
+    return axios.get(url, {
+      headers: HeadersUtil.getHeaders(),
+    });
   }
 
   public AddComment(comment: Comment) {
-    const url = ApiUrlUtil.buildQueryString(`/comment`)
+    const url = ApiUrlUtil.buildQueryString(`/comment`);
     return axiosCustom.post(url, comment, {
       headers: HeadersUtil.getHeaders(),
     });
   }
 
-  public Update(comment: Comment){
-    const url = ApiUrlUtil.buildQueryString(`/comment`)
-    return axiosCustom.put(url,comment,{
-        headers: HeadersUtil.getHeaders(),
-    })
+  public Update(comment: Comment) {
+    const url = ApiUrlUtil.buildQueryString(`/comment`);
+    return axiosCustom.put(url, comment, {
+      headers: HeadersUtil.getHeaders(),
+    });
   }
 
-  public DeleteComment(commentId?: number){
-    const url = ApiUrlUtil.buildQueryString(`/comment/${commentId}`)
+  public DeleteComment(commentId?: number) {
+    const url = ApiUrlUtil.buildQueryString(`/comment/${commentId}`);
     return axiosCustom.delete(url, {
       headers: HeadersUtil.getHeaders(),
     });

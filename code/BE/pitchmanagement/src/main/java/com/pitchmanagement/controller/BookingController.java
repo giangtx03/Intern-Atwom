@@ -86,7 +86,6 @@ public class BookingController {
                     .build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            System.out.println(e);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
                     .message("failed: " + e)

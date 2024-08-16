@@ -17,6 +17,19 @@ import { error } from "console";
 import { useAppSelector } from "../store/hooks";
 import { DecodedToken } from "../model/User";
 import { decodeToken } from "react-jwt";
+import { Rating, RatingChangeEvent } from "primereact/rating";
+import { Paginator } from "primereact/paginator";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+
+interface Options {
+  select: string;
+  values: string;
+}
+
+interface Order{
+  name: string,
+  type: string,
+}
 
 export default function CommentDisplay(props: any) {
   const { pitch_id } = props;
@@ -26,20 +39,32 @@ export default function CommentDisplay(props: any) {
   const [editComment, setEditComment] = useState<Comment | undefined>(
     undefined
   );
+  const [rows, setRows] = useState(search.limit);
+  const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number>(0);
+  const [selectOption, setSelectOption] = useState<Options|null>(null)
+  const [selectOrder, setSelectOrder] = useState<Order|null>(null)
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
 
-
   const toast = useRef<Toast>(null);
+  const options: Options[] = [
+    { select: "Tất cả comment", values: "" },
+    { select: "Comment của bạn", values: `${user_id}` },
+  ];
+  const order :Order[]=[
+    {name:"Tốt nhất", type:"DESC"},
+    {name:"Tệ nhất", type:"ASC"},
+  ]
 
   useEffect(() => {
     const fetchComment = async () => {
       try {
         const response = await CommentService.getInstance().getLstPitchTime(
           search,
-          1
+          1,
+          selectOrder?.type
         );
         const responseTotal = await CommentService.getInstance().getTotal(1);
         if (response.data.status == 200) {
@@ -102,6 +127,16 @@ export default function CommentDisplay(props: any) {
       })
       .catch();
   };
+  const onPageChange = (e: any) => {
+    setFirst(e.first);
+    setRows(e.rows);
+    setSearch({
+      ...search,
+      page: e.page + 1,
+      limit: e.rows,
+      timer: new Date().getTime(),
+    });
+  };
 
   return (
     <>
@@ -110,28 +145,44 @@ export default function CommentDisplay(props: any) {
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
-              <AddAndUpdate search={search} setSearch={setSearch} />
+              {user_id && (
+                <AddAndUpdate search={search} setSearch={setSearch} />
+              )}
             </div>
             <br />
             <div>
               <h3 style={{ margin: "1%" }}> Các đánh giá khác</h3>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                onChange={(e) => {
+              {user_id && (
+                <Dropdown
+                value={selectOption}
+                onChange={(e: DropdownChangeEvent) => {
+                  setSelectOption(e.value);
                   setSearch({
                     ...search,
                     timer: new Date().getTime(),
-                    keySearch: e.target.value,
+                    keySearch : e.value.values
                   });
                 }}
-                style={{ margin: "1%" }}
-              >
-                <option selected value="">
-                  Tất cả comment
-                </option>
-                <option value={user_id}>Comment của bạn</option>
-              </select>
+                options={options}
+                optionLabel="select"
+                placeholder="Tất cả comment"
+                style={{width:"18%",margin:"2%"}}
+              ></Dropdown>
+              )}
+              <Dropdown
+                value={selectOrder}
+                onChange={(e: DropdownChangeEvent) => {
+                  setSelectOrder(e.value);
+                  setSearch({
+                    ...search,
+                    timer: new Date().getTime()
+                  });
+                }}
+                options={order}
+                optionLabel="name"
+                placeholder="Sắp xếp theo"
+                style={{width:"15%",margin:"2%"}}
+              ></Dropdown>
             </div>
             <div className="card text-body">
               {lstComment.map((item: any) => {
@@ -154,12 +205,7 @@ export default function CommentDisplay(props: any) {
                             </p>
                           </div>
                           <div>
-                            {[...Array(5)].map((_, index) => {
-                              if (index < item.star) {
-                                return <FaStar size={20} color="yellow" />;
-                              }
-                              return <FaStar size={20} color="grey" />;
-                            })}
+                            <Rating value={item.star} cancel={false} />
                           </div>
                           <p className="mb-0">{item.content}</p>
                         </div>
@@ -218,35 +264,13 @@ export default function CommentDisplay(props: any) {
           </div>
         </div>
         <div className="center">
-          <button
-            className="btn btn-secondary"
-            onClick={() => {
-              if (search.page > 1) {
-                setSearch({
-                  ...search,
-                  page: search.page - 1,
-                  timer: new Date().getTime(),
-                });
-              }
-            }}
-          >
-            Pre
-          </button>
-          <span>{search.page}</span>
-          <button
-            className="btn btn-dark"
-            onClick={() => {
-              if (search.page < total / search.limit) {
-                setSearch({
-                  ...search,
-                  page: search.page + 1,
-                  timer: new Date().getTime(),
-                });
-              }
-            }}
-          >
-            Next
-          </button>
+          <Paginator
+            first={first}
+            rows={search.limit}
+            totalRecords={total}
+            rowsPerPageOptions={[3, 5]}
+            onPageChange={onPageChange}
+          />
         </div>
       </div>
     </>

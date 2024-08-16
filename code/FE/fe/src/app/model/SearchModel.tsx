@@ -1,5 +1,5 @@
 export default class Search{
-    keySearch: string
+    keySearch?: string
     limit: number
     offset: number
     page: number

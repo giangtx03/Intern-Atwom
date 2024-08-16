@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pitchmanagement.dao.CommentDAO">
-    <select id ="GetCommentByPitch" parameterType="int" resultType="com.pitchmanagement.dto.CommentDTO">
+    <select id ="GetCommentByPitch" parameterType="map" resultType="com.pitchmanagement.dto.CommentDTO">
         SELECT 
             cm.id,
             cm.star,
@@ -15,7 +15,14 @@
             u.avatar
         FROM comment cm
         join user u on u.id = cm.user_id
-        where cm.pitch_id = #{pitch_id} and (#{user_id} is null or user_id = #{user_id}) Order By cm.update_at and cm.star DESC
+        where cm.pitch_id = #{pitch_id} and (#{user_id} is null or user_id = #{user_id}) <choose>
+            <when test="order == 'ASC'">
+                ORDER BY  cm.star ASC, cm.update_at DESC
+            </when>
+            <otherwise>
+                ORDER BY  cm.star DESC, cm.update_at DESC
+            </otherwise>
+        </choose>
     </select>
 
     <select id="total" parameterType="map" resultType="int">

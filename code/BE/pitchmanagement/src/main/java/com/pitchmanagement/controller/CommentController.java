@@ -35,50 +35,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
-    @GetMapping("{id}")
-    public ResponseEntity<?> getCommentByPitch(
-            @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id,
-            @RequestParam(name = "keySearch", required = false) Integer user_id,
-            @RequestParam(name = "page", defaultValue = "1", required = false) Integer offset,
-            @RequestParam(name = "limit", defaultValue = "5", required = false) Integer limit) {
-        try {
-            List<CommentDTO> lst = commentService.GetCommentByPitch(pitch_id, user_id, offset, limit);
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK.value())
-                    .message("success")
-                    .data(lst)
-                    .build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .message("failed: " + e)
-                    .build();
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
-
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
-    @GetMapping("/total/{id}")
-    public ResponseEntity<?> total(
-            @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id) {
-        try {
-            Integer lst = commentService.total(pitch_id);
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK.value())
-                    .message("success")
-                    .data(lst)
-                    .build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .message("failed: " + e)
-                    .build();
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
+    
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @PostMapping
