@@ -2,14 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { getEditPitch } from '../../service/AdminService';
 import Spinner from '../../comp/Spinner';
-import { DataTable, DataTableCellSelection } from 'primereact/datatable';
+import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { EditPitchModel } from '../../model/EditPitchModel';
 import { Dialog } from 'primereact/dialog';
+import PitchTimeTable from './components/PitchTimeTable';
+import { set } from 'react-hook-form';
 
 export default function BasicDemo() {
     const [pitches, setPitches] = useState<EditPitchModel[]>([]);
+    const [pitchId, setPitchId] = useState<number>();
 
 
     const [isLoading, setIsLoading] = useState(true);
@@ -49,13 +51,13 @@ export default function BasicDemo() {
     }
 
     const handleClick = (rowData: any) => {
-        console.log('Clicked row:', rowData);
-        // Thực hiện các hành động khác với rowData
+        setPitchId(rowData.id);
+        setVisible(true);
     };
 
     const nameTemplate = (rowData: any) => {
         return (
-            <span onClick={() => setVisible(true)} style={{ cursor: 'pointer', color: 'blue' }}>
+            <span onClick={() => handleClick(rowData)} style={{ cursor: 'pointer', color: 'blue' }}>
                 {rowData.name}
             </span>
         );
@@ -73,12 +75,7 @@ export default function BasicDemo() {
                 <Column field="sumImg" header="Sum img"></Column>
             </DataTable>
             <Dialog header="Header" visible={visible} style={{ width: '50vw' }} onHide={() => { if (!visible) return; setVisible(false); }}>
-                <p className="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+                <PitchTimeTable pitchId={pitchId!} />
             </Dialog>
         </div>
     )

@@ -5,6 +5,7 @@ import { RevenuePitchModel } from "../model/RevenuePitchModel";
 import axiosCustom from "../config/interceptors/interceptors";
 import { RevenueDayModel } from "../model/RevenueDayModel";
 import { EditPitchModel } from "../model/EditPitchModel";
+import { PitchTimeModel } from "../model/PitchTimeModel";
 
 
 
@@ -82,6 +83,20 @@ export const getEditPitch = async () => {
         const url = `/pitch/admin`
 
         const response: AxiosResponse<{ data: EditPitchModel[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách pitch
+export const getPitchTimeByPitchId = async (id: number) => {
+    try {
+
+        const url = `/pitchtime/admin?pitchId=${id}`
+
+        const response: AxiosResponse<{ data: PitchTimeModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
