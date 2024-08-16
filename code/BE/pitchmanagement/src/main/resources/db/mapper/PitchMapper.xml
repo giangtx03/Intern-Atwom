@@ -16,7 +16,7 @@
         LEFT JOIN image i ON p.id = i.pitch_id
         GROUP BY p.id, p.name, address, create_at, update_at, pt.name
     </select>
-    <select id="searchPitch" parameterType="">
+    <select id="searchPitch" parameterType="map">
         SELECT
             p.id,
             p.name,
@@ -25,6 +25,6 @@
             p.update_at AS updateAt,
             pt.id AS pitchTypeId
         FROM pitch p
-        RIGHT JOIN pitch_type pt ON pt.id = p.pitch_type_id
+        LEFT JOIN pitch_type pt ON pt.id = p.pitch_type_id
     </select>
 </mapper>
