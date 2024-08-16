@@ -8,6 +8,7 @@ import java.util.Map;
 import com.pitchmanagement.dto.admin.BookingDto;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +25,11 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-    @Autowired
-    BookingDAO bookingDAO;
 
-    @Autowired
-    PitchTimeDAO pitchTimeDAO;
+    private final BookingDAO bookingDAO;
+    private final PitchTimeDAO pitchTimeDAO;
 
     @Override
     public List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit) {
