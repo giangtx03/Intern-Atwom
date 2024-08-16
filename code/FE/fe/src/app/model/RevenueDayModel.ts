@@ -1,4 +1,4 @@
-export class RevenueDay {
+export class RevenueDayModel {
     dayOfMonth?: number;
     totalPrice?: number;
 }

@@ -1,48 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import { MessageModel } from "../model/MessageModel";
 import { BillModel } from "../model/BillModel";
-import { RevenueDay } from "../model/RevenueDay";
-import { RevenuePitch } from "../model/RevenuePitch";
-
-// Cấu hình axios
-const token = localStorage.getItem("access_token");
-const api = axios.create({
-    baseURL: 'http://localhost:8080/api/v1',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    },
-});
-
-
-// Thêm một interceptor để tự động thêm token vào tất cả các yêu cầu
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('access_token'); // Lấy token từ localStorage
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
-// Thêm một interceptor để xử lý lỗi từ phía server
-api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    (error) => {
-        // Xử lý các lỗi 401, 403, 500, hoặc làm mới token ở đây nếu cần
-        if (error.response.status === 401) {
-            // Ví dụ: Chuyển hướng đến trang đăng nhập nếu không được phép
-            window.location.href = '/login';
-        }
-        return Promise.reject(error);
-    }
-);
+import { RevenuePitchModel } from "../model/RevenuePitchModel";
+import axiosCustom from "../config/interceptors/interceptors";
+import { RevenueDayModel } from "../model/RevenueDayModel";
+import { EditPitchModel } from "../model/EditPitchModel";
+import { PitchTimeModel } from "../model/PitchTimeModel";
 
 
 
@@ -56,7 +19,7 @@ export const getMessageAll = async (status1: string, status2?: string) => {
             url = `/booking/admin/confirm?status=${status1}`
         }
 
-        const response: AxiosResponse<{ data: MessageModel[] }> = await api.get(url);
+        const response: AxiosResponse<{ data: MessageModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
@@ -67,7 +30,7 @@ export const getMessageAll = async (status1: string, status2?: string) => {
 // Cập nhật trạng thái đặt sân
 export const updateStatus = async (statusObj: {}) => {
     try {
-        await api.put('/booking/admin/confirm', statusObj);
+        await axiosCustom.put('/booking/admin/confirm', statusObj);
     } catch (error) {
         console.error('Error fetching data', error);
         throw error;
@@ -77,7 +40,7 @@ export const updateStatus = async (statusObj: {}) => {
 // Tạo bill thanh toán
 export const createBill = async (bill: BillModel) => {
     try {
-        await api.post(`/bill/admin`, bill);
+        await axiosCustom.post(`/bill/admin`, bill);
 
     } catch (error) {
         console.error('Error fetching data', error);
@@ -85,13 +48,13 @@ export const createBill = async (bill: BillModel) => {
     }
 }
 
-// Lấy danh sách bill
+// Lấy danh sách bill theo ngày
 export const getBillDay = async (month: number, year: number) => {
     try {
 
-        const url = `http://localhost:8080/bill/admin/billday?month=${month}&year=${year}`
+        const url = `/bill/admin/billday?month=${month}&year=${year}`
 
-        const response: AxiosResponse<{ data: RevenueDay[] }> = await api.get(url);
+        const response: AxiosResponse<{ data: RevenueDayModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
@@ -99,13 +62,13 @@ export const getBillDay = async (month: number, year: number) => {
     }
 };
 
-// Lấy danh sách bill
+// Lấy danh sách bill theo sân
 export const getBillPitch = async (month: number, year: number) => {
     try {
 
-        const url = `http://localhost:8080/bill/admin/billpitch?month=${month}&year=${year}`
+        const url = `/bill/admin/billpitch?month=${month}&year=${year}`
 
-        const response: AxiosResponse<{ data: RevenuePitch[] }> = await api.get(url);
+        const response: AxiosResponse<{ data: RevenuePitchModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
@@ -113,5 +76,32 @@ export const getBillPitch = async (month: number, year: number) => {
     }
 };
 
+// Lấy danh sách pitch
+export const getEditPitch = async () => {
+    try {
+
+        const url = `/pitch/admin`
+
+        const response: AxiosResponse<{ data: EditPitchModel[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách pitch
+export const getPitchTimeByPitchId = async (id: number) => {
+    try {
+
+        const url = `/pitchtime/admin?pitchId=${id}`
+
+        const response: AxiosResponse<{ data: PitchTimeModel[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
 
 

@@ -1,6 +1,7 @@
 package com.pitchmanagement.controller;
 
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
+import com.pitchmanagement.dto.admin.PitchDto;
 import com.pitchmanagement.model.request.PitchRequest;
 import com.pitchmanagement.model.response.BaseResponse;
 import com.pitchmanagement.service.PitchService;
@@ -28,6 +29,20 @@ public class PitchController {
                 .builder()
                 .status(HttpStatus.ACCEPTED.value())
                 .data(pitchRequest)
+                .message("success")
+                .build();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PreAuthorize("ROLE_ADMIN")
+    @GetMapping("/admin")
+    ResponseEntity<BaseResponse> getPitchAll() {
+        List<PitchDto> pitchDtos = pitchService.getPitchAll();
+        BaseResponse response = BaseResponse
+                .builder()
+                .status(HttpStatus.ACCEPTED.value())
+                .data(pitchDtos)
                 .message("success")
                 .build();
 

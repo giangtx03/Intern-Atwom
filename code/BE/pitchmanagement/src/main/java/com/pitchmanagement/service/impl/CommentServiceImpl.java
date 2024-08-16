@@ -3,6 +3,7 @@ package com.pitchmanagement.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,10 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    CommentDAO commentDAO;
+    private final CommentDAO commentDAO;
 
     @Override
     public List<CommentDTO> GetCommentByPitch(Integer pitch_id,Integer user_id, Integer offset, Integer limit, String order) {

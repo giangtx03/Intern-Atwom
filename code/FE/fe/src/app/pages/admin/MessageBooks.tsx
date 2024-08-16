@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import MessageBook from './MessageBook'
-import { MessageModel } from '../../../model/MessageModel';
-import { getMessageAll, updateStatus } from '../../../service/AdminService';
 import { toast } from 'react-toastify';
-import Spinner from '../../../comp/Spinner';
+import { getMessageAll, updateStatus } from '../../service/AdminService';
+import { MessageModel } from '../../model/MessageModel';
+import MessageBook from './components/MessageBook';
+import Spinner from '../../comp/Spinner';
 
 export default function MessageBooks() {
 
@@ -62,7 +62,7 @@ export default function MessageBooks() {
 
     return (
         <div className="">
-            <div style={{ maxHeight: '640px', overflowY: "auto" }}>
+            <div>
                 {
                     messages.length > 0
                         ?

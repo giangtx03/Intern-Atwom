@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
-import { RevenuePitch } from '../../../model/RevenuePitch';
+import { RevenuePitchModel } from '../../../model/RevenuePitchModel';
 
 type Props = {
-    billPitches: RevenuePitch[];
+    billPitches: RevenuePitchModel[];
     month: number;
     year: number
 };

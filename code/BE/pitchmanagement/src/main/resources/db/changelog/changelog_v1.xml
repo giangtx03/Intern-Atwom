@@ -107,22 +107,22 @@
             <column name="end_time" type="timestamp"/>
         </createTable>
 
-        <createTable tableName="pitch_time_slot">
+        <createTable tableName="pitch_time">
             <column name="price" type="int"/>
             <column name="status" type="varchar(255)"/>
             <column name="pitch_id" type="bigint"/>
             <column name="time_slot_id" type="bigint"/>
         </createTable>
 
-        <addPrimaryKey tableName="pitch_time_slot" columnNames="pitch_id, time_slot_id" constraintName="pk_pitch_time_slot"/>
+        <addPrimaryKey tableName="pitch_time" columnNames="pitch_id, time_slot_id" constraintName="pk_pitch_time_slot"/>
 
-        <addForeignKeyConstraint baseTableName="pitch_time_slot"
+        <addForeignKeyConstraint baseTableName="pitch_time"
                                  baseColumnNames="pitch_id"
                                  constraintName="fk_pitch_time_slot_pitch"
                                  referencedTableName="pitch"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="pitch_time_slot"
+        <addForeignKeyConstraint baseTableName="pitch_time"
                                  baseColumnNames="time_slot_id"
                                  constraintName="fk_pitch_time_slot_time_slot"
                                  referencedTableName="time_slot"
@@ -134,9 +134,10 @@
             </column>
             <column name="create_at" type="timestamp"/>
             <column name="update_at" type="timestamp"/>
+            <column name="status" type="varchar(45)"/>
             <column name="user_id" type="bigint"/>
-            <column name="pitch_id" type="bigint"/>
-            <column name="time_slot_id" type="bigint"/>
+            <column name="pitch_time_pitch_id" type="bigint"/>
+            <column name="pitch_time_time_slot_id" type="bigint"/>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="pitch_booking"
@@ -146,13 +147,13 @@
                                  referencedColumnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="pitch_booking"
-                                 baseColumnNames="pitch_id"
+                                 baseColumnNames="pitch_time_pitch_id"
                                  constraintName="fk_pitch_pitch_booking"
                                  referencedTableName="pitch"
                                  referencedColumnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="pitch_booking"
-                                 baseColumnNames="time_slot_id"
+                                 baseColumnNames="pitch_time_time_slot_id"
                                  constraintName="fk_time_slot_pitch_booking"
                                  referencedTableName="time_slot"
                                  referencedColumnNames="id"/>

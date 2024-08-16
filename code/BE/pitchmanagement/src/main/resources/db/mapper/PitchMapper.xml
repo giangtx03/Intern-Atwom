@@ -2,8 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.pitchmanagement.dao.PitchDao">
+
     <insert id="insertPitch" parameterType="com.pitchmanagement.model.request.PitchRequest">
         INSERT INTO `pitch` (`name`, `address`, `create_at`, `pitch_type_id`)
         VALUES (#{name}, #{address}, #{createAt}, #{pitchTypeId});
     </insert>
+
+    <select id="selectPitchAll" resultType="com.pitchmanagement.dto.admin.PitchDto">
+        SELECT p.id, p.name, address, create_at, update_at, pt.name AS `type`, COUNT(ptime.pitch_id) AS sum_time, COUNT(i.id) AS sum_img
+        FROM pitch p
+        INNER JOIN pitch_type pt ON pt.id = p.pitch_type_id
+        LEFT JOIN pitch_time ptime ON p.id = ptime.pitch_id
+        LEFT JOIN image i ON p.id = i.pitch_id
+        GROUP BY p.id, p.name, address, create_at, update_at, pt.name
+    </select>
+    <select id="searchPitch" parameterType="map">
+        SELECT
+            p.id,
+            p.name,
+            p.address,
+            p.create_at AS createAt,
+            p.update_at AS updateAt,
+            pt.id AS pitchTypeId
+        FROM pitch p
+        LEFT JOIN pitch_type pt ON pt.id = p.pitch_type_id
+    </select>
 </mapper>
