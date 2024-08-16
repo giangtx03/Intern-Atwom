@@ -5,6 +5,7 @@ import Revenue from "../../pages/admin/Revenues";
 import EditPitches from "../../pages/admin/EditPitches";
 import MessageBooks from "../../pages/admin/MessageBooks";
 import Payments from "../../pages/admin/Payments";
+import Test from "../../pages/admin/Test";
 
 export const AdminRouter: any = {
   path: "admin",
@@ -14,7 +15,7 @@ export const AdminRouter: any = {
     { path: "messagebooks", element: <MessageBooks /> },
     { path: "payments", element: <Payments /> },
     { path: "revenue", element: <Revenue /> },
-    { path: "editPitch", element: <EditPitches /> },
+    { path: "editPitch", element: <Test /> },
     { path: "/admin" },
   ],
 };

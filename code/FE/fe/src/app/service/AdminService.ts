@@ -6,6 +6,8 @@ import axiosCustom from "../config/interceptors/interceptors";
 import { RevenueDayModel } from "../model/RevenueDayModel";
 import { EditPitchModel } from "../model/EditPitchModel";
 import { PitchTimeModel } from "../model/PitchTimeModel";
+import { PitchTypeModel } from "../model/PitchTypeModel";
+import { PitchModel } from "../model/PitchModel";
 
 
 
@@ -41,7 +43,6 @@ export const updateStatus = async (statusObj: {}) => {
 export const createBill = async (bill: BillModel) => {
     try {
         await axiosCustom.post(`/bill/admin`, bill);
-
     } catch (error) {
         console.error('Error fetching data', error);
         throw error;
@@ -91,12 +92,39 @@ export const getEditPitch = async () => {
 };
 
 // Lấy danh sách pitch
+export const postEditPitch = async (pitch: PitchModel) => {
+    try {
+
+        const url = `/pitch/admin`
+        await axiosCustom.post(url, pitch);
+
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách pitch_time
 export const getPitchTimeByPitchId = async (id: number) => {
     try {
 
         const url = `/pitchtime/admin?pitchId=${id}`
 
         const response: AxiosResponse<{ data: PitchTimeModel[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách pitch_type
+export const getPitchTypeAll = async () => {
+    try {
+
+        const url = `/pitchtype/admin`
+
+        const response: AxiosResponse<{ data: PitchTypeModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
