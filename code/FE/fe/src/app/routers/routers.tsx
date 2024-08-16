@@ -11,6 +11,7 @@ import path from "path";
 import { AdminRouter } from "./admin/adminRouter";
 import { UserRouter } from "./user/userRouter";
 import Pitch from "../pages/pitch/Pitch";
+import PitchDetail from "../pages/pitch/PitchDetail";
 
 export const RoutersHook: any = {
   path: '/',
@@ -19,7 +20,7 @@ export const RoutersHook: any = {
   ),
   children: [
     { path: '/dashboard', element: <Dashboard /> },
-    { path: '/home', element: <Pitch /> },
+    { path: '/home', element: <PitchDetail /> },
     { path: '/login', element: <LoginPage /> },
     { path: '/register', element: <RegisterPage /> },
     { path: 'history', element: <History /> },
