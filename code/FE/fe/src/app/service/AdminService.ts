@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { MessageModel } from "../model/MessageModel";
 import { BillModel } from "../model/BillModel";
-import { RevenueDay } from "../model/RevenueDay";
-import { RevenuePitch } from "../model/RevenuePitch";
+import { RevenuePitchModel } from "../model/RevenuePitchModel";
 import axiosCustom from "../config/interceptors/interceptors";
+import { RevenueDayModel } from "../model/RevenueDayModel";
+import { EditPitchModel } from "../model/EditPitchModel";
 
 
 
@@ -46,13 +47,13 @@ export const createBill = async (bill: BillModel) => {
     }
 }
 
-// Lấy danh sách bill
+// Lấy danh sách bill theo ngày
 export const getBillDay = async (month: number, year: number) => {
     try {
 
         const url = `/bill/admin/billday?month=${month}&year=${year}`
 
-        const response: AxiosResponse<{ data: RevenueDay[] }> = await axiosCustom.get(url);
+        const response: AxiosResponse<{ data: RevenueDayModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
@@ -60,13 +61,13 @@ export const getBillDay = async (month: number, year: number) => {
     }
 };
 
-// Lấy danh sách bill
+// Lấy danh sách bill theo sân
 export const getBillPitch = async (month: number, year: number) => {
     try {
 
         const url = `/bill/admin/billpitch?month=${month}&year=${year}`
 
-        const response: AxiosResponse<{ data: RevenuePitch[] }> = await axiosCustom.get(url);
+        const response: AxiosResponse<{ data: RevenuePitchModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
@@ -74,5 +75,18 @@ export const getBillPitch = async (month: number, year: number) => {
     }
 };
 
+// Lấy danh sách pitch
+export const getEditPitch = async () => {
+    try {
+
+        const url = `/pitch/admin`
+
+        const response: AxiosResponse<{ data: EditPitchModel[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
 
 

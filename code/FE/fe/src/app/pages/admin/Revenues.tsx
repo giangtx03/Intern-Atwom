@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import RevenueBar from './RevenueBar'
-import RevenuePie from './RevenuePie'
-import { RevenueDay } from '../../../model/RevenueDay';
-import { getBillDay, getBillPitch } from '../../../service/AdminService';
-import Spinner from '../../../comp/Spinner';
-import { RevenuePitch } from '../../../model/RevenuePitch';
+import RevenueBar from './components/RevenueBar'
+import RevenuePie from './components/RevenuePie'
+import { getBillDay, getBillPitch } from '../../service/AdminService';
+import Spinner from '../../comp/Spinner';
+import { RevenueDayModel } from '../../model/RevenueDayModel';
+import { RevenuePitchModel } from '../../model/RevenuePitchModel';
 
 export default function Revenue() {
-    const [billDays, setBillDays] = useState<RevenueDay[]>([]);
-    const [billPitches, setBillPitches] = useState<RevenuePitch[]>([]);
+    const [billDays, setBillDays] = useState<RevenueDayModel[]>([]);
+    const [billPitches, setBillPitches] = useState<RevenuePitchModel[]>([]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Payment from './Payment'
-import { MessageModel } from '../../../model/MessageModel';
-import { createBill, getMessageAll } from '../../../service/AdminService';
 import { toast } from 'react-toastify';
-import { BillModel } from '../../../model/BillModel';
-import Spinner from '../../../comp/Spinner';
+import { MessageModel } from '../../model/MessageModel';
+import { createBill, getMessageAll } from '../../service/AdminService';
+import { BillModel } from '../../model/BillModel';
+import Spinner from '../../comp/Spinner';
+import Payment from './components/Payment';
 
 export default function Payments() {
 

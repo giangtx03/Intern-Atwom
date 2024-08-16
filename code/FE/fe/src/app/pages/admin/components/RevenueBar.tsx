@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from 'primereact/chart';
-import { RevenueDay } from '../../../model/RevenueDay';
+import { RevenueDayModel } from '../../../model/RevenueDayModel';
 
 type Props = {
-    billDays: RevenueDay[];
+    billDays: RevenueDayModel[];
     month: number;
     year: number
 };

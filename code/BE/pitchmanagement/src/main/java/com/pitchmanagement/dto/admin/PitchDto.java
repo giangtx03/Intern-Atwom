@@ -18,15 +18,6 @@ public class PitchDto {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private String type;
-    private List<PitchTimeChildrenDto> children;
-
-    public PitchDto(int id, String name, String address, LocalDateTime createAt, LocalDateTime updateAt, String type) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
-        this.type = type;
-        this.children = new ArrayList<>();
-    }
+    private String sumTime;
+    private String sumImg;
 }

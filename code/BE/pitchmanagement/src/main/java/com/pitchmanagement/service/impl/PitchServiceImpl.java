@@ -36,19 +36,6 @@ public class PitchServiceImpl implements PitchService {
 
     @Override
     public List<PitchDto> getPitchAll() {
-
-        List<PitchDto> pitchDtos = pitchDao.selectPitchAll();
-        for (PitchDto pitchDto : pitchDtos) {
-            pitchTimeChildren(pitchDto);
-        }
-
-        return pitchDtos;
-    }
-
-    private void pitchTimeChildren(PitchDto pitchDto) {
-        List<PitchTimeChildrenDto> pitchTimeChildrenDtos = pitchTimeDAO.selectPictTimeByPitchId(pitchDto.getId());
-        if (pitchTimeChildrenDtos != null && !pitchTimeChildrenDtos.isEmpty()) {
-            pitchDto.setChildren(pitchTimeChildrenDtos);
-        }
+        return pitchDao.selectPitchAll();
     }
 }
