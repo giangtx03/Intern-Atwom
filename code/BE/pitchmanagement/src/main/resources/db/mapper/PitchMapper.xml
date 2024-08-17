@@ -27,4 +27,17 @@
         FROM pitch p
         LEFT JOIN pitch_type pt ON pt.id = p.pitch_type_id
     </select>
+
+    <select id="getPitchById" parameterType="Long" resultType="map">
+        SELECT
+            p.id,
+            p.name,
+            p.address,
+            p.create_at AS createAt,
+            p.update_at AS updateAt,
+            pt.name AS pitchTypeName
+        FROM pitch p
+        LEFT JOIN pitch_type pt ON pt.id = p.pitch_type_id
+        WHERE p.id = #{id}
+    </select>
 </mapper>
