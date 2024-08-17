@@ -27,7 +27,7 @@ public class PitchTimeServiceImpl implements PitchTimeService {
     }
 
     @Override
-    public List<PitchTimeChildrenDto> getPitchTimeByPitchId(int pitchId) {
+    public List<PitchTimeChildrenDto> getPitchTimeByPitchId(Long pitchId) {
         return pitchTimeDAO.selectPictTimeByPitchId(pitchId);
     }
 }

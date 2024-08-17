@@ -55,7 +55,7 @@
         WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}
     </select>
 
-    <select id="selectPictTimeByPitchId" parameterType="int" resultMap="resultPitchId" >
+    <select id="selectPictTimeByPitchId" parameterType="Long" resultMap="resultPitchId" >
         SELECT ts.start_time, ts.end_time, pt.price
         FROM pitch_time pt
         INNER JOIN time_slot ts ON ts.id = pt.time_slot_id

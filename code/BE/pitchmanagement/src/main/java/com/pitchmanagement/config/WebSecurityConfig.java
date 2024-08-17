@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                 String.format("public/%s/products/**", apiPrefix),
                 String.format("public/%s/users/**", apiPrefix),
                 String.format("public/%s/image/**", apiPrefix),
+                String.format("public/%s/pitch/**", apiPrefix),
                 String.format("public/%s/categories/**", apiPrefix),
                 String.format("public/%s/comment/**", apiPrefix)
         };
