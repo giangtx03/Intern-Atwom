@@ -24,7 +24,7 @@ public interface PitchTimeDAO {
 
     PitchTimeRequest selectPitchTimeByIds(Map<String, Object> params);
 
-    List<PitchTimeChildrenDto> selectPictTimeByPitchId(int pitchId);
+    List<PitchTimeChildrenDto> selectPictTimeByPitchId(Long pitchId);
 
     //------------------------------------------------------------------
 }

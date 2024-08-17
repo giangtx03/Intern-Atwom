@@ -8,5 +8,5 @@ import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
 public interface PitchTimeService {
     List<PitchTimeDTO> FilterPitchByPitchId(Integer pitch_id);
 
-    List<PitchTimeChildrenDto> getPitchTimeByPitchId(int pitchId);
+    List<PitchTimeChildrenDto> getPitchTimeByPitchId(Long pitchId);
 }

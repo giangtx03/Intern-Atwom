@@ -9,7 +9,8 @@
     </insert>
 
     <select id="selectPitchAll" resultType="com.pitchmanagement.dto.admin.PitchDto">
-        SELECT p.id, p.name, address, create_at, update_at, pt.name AS `type`, COUNT(ptime.pitch_id) AS sum_time, COUNT(i.id) AS sum_img
+        SELECT
+        p.id, p.name, address, create_at, update_at, pt.name AS `type`, COUNT(ptime.pitch_id) AS sum_time, COUNT(i.id) AS sum_img
         FROM pitch p
         INNER JOIN pitch_type pt ON pt.id = p.pitch_type_id
         LEFT JOIN pitch_time ptime ON p.id = ptime.pitch_id
