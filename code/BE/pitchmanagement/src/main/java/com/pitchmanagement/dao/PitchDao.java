@@ -13,5 +13,7 @@ public interface PitchDao {
 
     void insertPitch(PitchRequest pitchRequest);
     List<PitchDto> selectPitchAll();
+//    <!-- ...................Giang...................................... -->
     Map<String, Object> getPitchById(@Param("id") Long id);
+    List<Map<String, Object>> getAllPitch( @Param("keyword") String keyword, @Param("pitchTypeId") Long pitchTypeId, @Param("timeSlotId") Long timeSlotId);
 }

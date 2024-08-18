@@ -1,5 +1,7 @@
 package com.pitchmanagement.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pitchmanagement.dao.ImageDao;
 import com.pitchmanagement.dao.PitchDao;
 import com.pitchmanagement.dao.PitchTimeDAO;
@@ -7,6 +9,7 @@ import com.pitchmanagement.dto.ImageDto;
 import com.pitchmanagement.dto.admin.PitchDto;
 import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
 import com.pitchmanagement.model.request.PitchRequest;
+import com.pitchmanagement.model.response.ListResponse;
 import com.pitchmanagement.model.response.PitchResponse;
 import com.pitchmanagement.service.PitchService;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +62,25 @@ public class PitchServiceImpl implements PitchService {
         List<PitchTimeChildrenDto> timeDtos = pitchTimeDAO.selectPictTimeByPitchId(id);
 
         return PitchResponse.fromSrc(src, imageDtos, timeDtos);
+    }
+
+    @Override
+    public ListResponse getAllPitch(String keyword, Long pitchTypeId, Long timeSlotId, int pageNumber, int limit, String sortBy, String sortOrder) {
+        PageHelper.startPage(pageNumber, limit);
+        PageHelper.orderBy(sortBy + " " + sortOrder);
+        List<Map<String, Object>> list = pitchDao.getAllPitch(keyword, pitchTypeId, timeSlotId);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(list);
+        List<PitchResponse> listPitch=  list.stream()
+                .map((src) -> {
+                    List<ImageDto> imageDtos = imageDao.getImageByPitchId(Long.parseLong(src.get("id").toString()));
+                    List<PitchTimeChildrenDto> timeDtos = pitchTimeDAO.selectPictTimeByPitchId(Long.parseLong(src.get("id").toString()));
+                    return PitchResponse.fromSrc(src, imageDtos, timeDtos);
+                })
+                .toList();
+        return ListResponse.builder()
+                .items(listPitch)
+                .totalItems(pageInfo.getTotal())
+                .totalPages(pageInfo.getPages())
+                .build();
     }
 }
