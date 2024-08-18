@@ -1,8 +1,55 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { PitchService } from "../../service/PitchService";
+import { useAppDispatch } from "../../store/hooks";
+import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
+import { PitchResponse } from "../../model/PitchModel";
+import { formatDate } from "../../utils/FormatDate";
+import { Carousel } from "primereact/carousel";
 
 export default function PitchDetail() {
-  return (
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { id } = useParams<{ id: string }>();
+
+  const [pitch, setPitch] = useState<PitchResponse>();
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(showOrHindSpinner(true));
+      setTimeout(() => {
+        PitchService.getInstance()
+          .getPitchById(Number.parseInt(id))
+          .then((response: any) => {
+            if (response.data.status === 200) {
+              setPitch(response.data.data);
+              dispatch(showOrHindSpinner(false));
+            }
+          })
+          .catch((error: any) => {
+            console.log(error);
+            dispatch(showOrHindSpinner(false));
+            navigate("/login");
+          });
+      }, 300);
+    }
+  }, []);
+
+  const imageTemplate = (image: any) => {
+    return (
+      <div className="carousel-item active">
+        <img
+          className="d-block w-100"
+          src={`http://localhost:8080/public/api/v1/image/${image.name}`}
+          alt="Ảnh sân bóng"
+        />
+      </div>
+    );
+  };
+
+  return pitch ? (
     <div className="main-content">
       <div className="page-content">
         <div className="container-fluid">
@@ -29,82 +76,13 @@ export default function PitchDetail() {
                 <div className="card-body">
                   <div className="row gx-lg-5">
                     <div className="col-xl-4 col-md-8 mx-auto">
-                      <div className="product-img-slider sticky-side-div">
-                        <div className="swiper product-thumbnail-slider p-2 rounded bg-light">
-                          <div className="swiper-wrapper">
-                            <div className="swiper-slide">
-                              <img
-                                src="assets/images/products/img-8.png"
-                                alt=""
-                                className="img-fluid d-block"
-                              />
-                            </div>
-                            <div className="swiper-slide">
-                              <img
-                                src="assets/images/products/img-6.png"
-                                alt=""
-                                className="img-fluid d-block"
-                              />
-                            </div>
-                            <div className="swiper-slide">
-                              <img
-                                src="assets/images/products/img-1.png"
-                                alt=""
-                                className="img-fluid d-block"
-                              />
-                            </div>
-                            <div className="swiper-slide">
-                              <img
-                                src="assets/images/products/img-8.png"
-                                alt=""
-                                className="img-fluid d-block"
-                              />
-                            </div>
-                          </div>
-                          <div className="swiper-button-next material-shadow" />
-                          <div className="swiper-button-prev material-shadow" />
-                        </div>
-                        {/* end swiper thumbnail slide */}
-                        <div className="swiper product-nav-slider mt-2">
-                          <div className="swiper-wrapper">
-                            <div className="swiper-slide">
-                              <div className="nav-slide-item">
-                                <img
-                                  src="assets/images/products/img-8.png"
-                                  alt=""
-                                  className="img-fluid d-block"
-                                />
-                              </div>
-                            </div>
-                            <div className="swiper-slide">
-                              <div className="nav-slide-item">
-                                <img
-                                  src="assets/images/products/img-6.png"
-                                  alt=""
-                                  className="img-fluid d-block"
-                                />
-                              </div>
-                            </div>
-                            <div className="swiper-slide">
-                              <div className="nav-slide-item">
-                                <img
-                                  src="assets/images/products/img-1.png"
-                                  alt=""
-                                  className="img-fluid d-block"
-                                />
-                              </div>
-                            </div>
-                            <div className="swiper-slide">
-                              <div className="nav-slide-item">
-                                <img
-                                  src="assets/images/products/img-8.png"
-                                  alt=""
-                                  className="img-fluid d-block"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="product-img-slider sticky-side-div carousel-inner">
+                        <Carousel
+                          value={pitch.images}
+                          numScroll={1}
+                          numVisible={1}
+                          itemTemplate={imageTemplate}
+                        />
                         {/* end swiper nav slide */}
                       </div>
                     </div>
@@ -113,8 +91,11 @@ export default function PitchDetail() {
                       <div className="mt-xl-0 mt-5">
                         <div className="d-flex">
                           <div className="flex-grow-1">
-                            <h4>Full Sleeve Sweatshirt for Men (Pink)</h4>
+                            <h4>{pitch.name}</h4>
                           </div>
+                          <button className="btn btn-success">
+                            Đặt sân ngay
+                          </button>
                         </div>
                         <div className="row mt-4">
                           <div className="col-lg-3 col-sm-6">
@@ -127,7 +108,10 @@ export default function PitchDetail() {
                                 </div>
                                 <div className="flex-grow-1">
                                   <p className="text-muted mb-1">Price :</p>
-                                  <h5 className="mb-0">$120.40</h5>
+                                  <h5 className="mb-0">
+                                    {price == 0 ? pitch.times[0].price : price}{" "}
+                                    VND
+                                  </h5>
                                 </div>
                               </div>
                             </div>
@@ -137,102 +121,26 @@ export default function PitchDetail() {
                         <div className="row">
                           <div className="col-xl-6">
                             <div className="mt-4">
-                              <h5 className="fs-14">Sizes :</h5>
-                              <div className="d-flex flex-wrap gap-2">
-                                <div
-                                  data-bs-toggle="tooltip"
-                                  data-bs-trigger="hover"
-                                  data-bs-placement="top"
-                                  title="Out of Stock"
-                                >
-                                  <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="productsize-radio"
-                                    id="productsize-radio1"
-                                    disabled
-                                  />
-                                  <label
-                                    className="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                    htmlFor="productsize-radio1"
-                                  >
-                                    S
-                                  </label>
-                                </div>
-                                <div
-                                  data-bs-toggle="tooltip"
-                                  data-bs-trigger="hover"
-                                  data-bs-placement="top"
-                                  title="04 Items Available"
-                                >
-                                  <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="productsize-radio"
-                                    id="productsize-radio2"
-                                  />
-                                  <label
-                                    className="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                    htmlFor="productsize-radio2"
-                                  >
-                                    M
-                                  </label>
-                                </div>
-                                <div
-                                  data-bs-toggle="tooltip"
-                                  data-bs-trigger="hover"
-                                  data-bs-placement="top"
-                                  title="06 Items Available"
-                                >
-                                  <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="productsize-radio"
-                                    id="productsize-radio3"
-                                  />
-                                  <label
-                                    className="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                    htmlFor="productsize-radio3"
-                                  >
-                                    L
-                                  </label>
-                                </div>
-                                <div
-                                  data-bs-toggle="tooltip"
-                                  data-bs-trigger="hover"
-                                  data-bs-placement="top"
-                                  title="Out of Stock"
-                                >
-                                  <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="productsize-radio"
-                                    id="productsize-radio4"
-                                    disabled
-                                  />
-                                  <label
-                                    className="btn btn-soft-primary avatar-xs rounded-circle p-0 d-flex justify-content-center align-items-center"
-                                    htmlFor="productsize-radio4"
-                                  >
-                                    XL
-                                  </label>
-                                </div>
-                              </div>
+                              <h5 className="fs-14">Times :</h5>
+                              <select
+                                className="form-select"
+                                onChange={(e) => {
+                                  const selectedIndex = e.target.selectedIndex;
+                                  const selectedTime =
+                                    pitch.times[selectedIndex];
+                                  setPrice(selectedTime.price);
+                                }}
+                              >
+                                {pitch.times.map((time, index) => (
+                                  <option key={index} value={index}>
+                                    {time.startTime} - {time.endTime}
+                                  </option>
+                                ))}
+                              </select>
                             </div>
                           </div>
                         </div>
                         {/* end row */}
-                        <div className="mt-4 text-muted">
-                          <h5 className="fs-14">Description :</h5>
-                          <p>
-                            Tommy Hilfiger men striped pink sweatshirt. Crafted
-                            with cotton. Material composition is 100% organic
-                            cotton. This is one of the world’s leading designer
-                            lifestyle brands and is internationally recognized
-                            for celebrating the essence of classic American cool
-                            style, featuring preppy with a twist designs.
-                          </p>
-                        </div>
                         <div className="product-content mt-5">
                           <h5 className="fs-14 mb-3">Pitch Description :</h5>
                           <div
@@ -250,25 +158,21 @@ export default function PitchDetail() {
                                   <tbody>
                                     <tr>
                                       <th scope="row" style={{ width: 200 }}>
-                                        Category
+                                        Pitch Type
                                       </th>
-                                      <td>T-Shirt</td>
+                                      <td>{pitch.pitch_type_name}</td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Brand</th>
-                                      <td>Tommy Hilfiger</td>
+                                      <th scope="row">Address</th>
+                                      <td>{pitch.address}</td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Color</th>
-                                      <td>Blue</td>
+                                      <th scope="row">Create At</th>
+                                      <td>{formatDate(pitch.create_at)}</td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Material</th>
-                                      <td>Cotton</td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">Weight</th>
-                                      <td>140 Gram</td>
+                                      <th scope="row">Update At</th>
+                                      <td>{formatDate(pitch.update_at)}</td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -294,5 +198,7 @@ export default function PitchDetail() {
         {/* container-fluid */}
       </div>
     </div>
+  ) : (
+    <></>
   );
 }

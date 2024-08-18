@@ -4,3 +4,25 @@ export class PitchModel {
     address?: string;
     pitchTypeId?: number;
 }
+
+type ImageResponse = {
+    id: number;
+    name: string;
+}
+
+type TimeReponse = {
+    startTime: number;
+    endTime: string;
+    price: number
+}
+
+export type PitchResponse ={
+    id: number;
+    name: string;
+    address: string;
+    create_at: string;
+    update_at: string;
+    pitch_type_name: string;
+    images : ImageResponse[];
+    times : TimeReponse[];
+}
