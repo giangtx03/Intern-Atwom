@@ -31,11 +31,11 @@ export default function PitchDetail() {
           .catch((error: any) => {
             console.log(error);
             dispatch(showOrHindSpinner(false));
-            navigate("/login");
+            navigate("/not-permission");
           });
       }, 300);
     }
-  }, []);
+  }, [id]);
 
   const imageTemplate = (image: any) => {
     return (
@@ -109,7 +109,7 @@ export default function PitchDetail() {
                                 <div className="flex-grow-1">
                                   <p className="text-muted mb-1">Price :</p>
                                   <h5 className="mb-0">
-                                    {price == 0 ? pitch.times[0].price : price}{" "}
+                                    {price === 0 ? pitch.times[0].price : price}{" "}
                                     VND
                                   </h5>
                                 </div>

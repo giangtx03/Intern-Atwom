@@ -1,5 +1,4 @@
 import axios from "axios";
-import { PitchResponse } from "../model/PitchModel";
 import { ApiUrlUtil } from "../utils/ApiUtil";
 import { HeadersUtil } from "../utils/HeaderUtil";
 
@@ -15,6 +14,12 @@ export class PitchService {
 
   public getPitchById(id: number): any {
     const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/public/api/v1/pitch/${id}`);
+    const headers = HeadersUtil.getHeaders();
+    return axios.get(url, {headers});
+  }
+
+  public getAllPitch(): any {
+    const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/public/api/v1/pitch`);
     const headers = HeadersUtil.getHeaders();
     return axios.get(url, {headers});
   }
