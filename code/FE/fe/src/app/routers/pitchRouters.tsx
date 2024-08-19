@@ -1,3 +1,4 @@
+import AuthGuard from "../guard/authGuard";
 import Pitch from "../pages/pitch/Pitch";
 import PitchDetail from "../pages/pitch/PitchDetail";
 

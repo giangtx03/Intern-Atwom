@@ -20,7 +20,7 @@ function App() {
 
   let router = useRoutes([
     { path: 'not-permission' }, //403
-    { path: '/', element: <Navigate to="/dashboard" replace /> },
+    { path: '/', element: <Navigate to="/pitch" replace /> },
     RoutersHook,
     { path: 'err-network' }, //500
     { path: '*' }, //404
