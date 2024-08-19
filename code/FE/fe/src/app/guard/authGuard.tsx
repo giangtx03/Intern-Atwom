@@ -12,9 +12,15 @@ export default function AuthGuard(props: any) {
 
   useEffect(() => {
     if (isTokenExpired || !decode || decode.user_id <= 0) {
+      TokenService.getInstance().removeToken();
       navigate("/login");
     }
   }, [isTokenExpired, decode, navigate]);
+
+
+  if (isTokenExpired || !decode || decode.user_id <= 0) {
+    return null;
+  }
 
   return <>{props.children}</>;
 }

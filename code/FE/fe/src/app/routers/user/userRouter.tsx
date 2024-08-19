@@ -1,7 +1,4 @@
-import React from "react";
 import UserProfile from "../../pages/auth/UserProfile";
-import Layout from "../../comp/Layout/Layout";
-import path from "path";
 import { Navigate } from "react-router-dom";
 import AuthGuard from "../../guard/authGuard";
 

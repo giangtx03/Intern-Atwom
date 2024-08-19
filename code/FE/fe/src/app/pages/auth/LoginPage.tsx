@@ -31,7 +31,7 @@ export default function LoginPage() {
               position: "top-right",
             });
             TokenService.getInstance().setToken(response.data.data.token);
-            navigate("/dashboard");
+            navigate("/pitch");
             dispatch(showOrHindSpinner(false));
           }
         })
