@@ -68,7 +68,7 @@ export default function RegisterPage() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="d-flex flex-column"
+      className="d-flex flex-column mt-3"
       style={{
         width: "60%",
         maxWidth: "500px",

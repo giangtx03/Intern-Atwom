@@ -7,12 +7,12 @@ import CommentDisplay from "../pages/comment";
 import { AdminRouter } from "./admin/adminRouter";
 import { UserRouter } from "./user/userRouter";
 import { PitchRouter } from "./pitchRouters";
+import { Navigate } from "react-router-dom";
 
 export const RoutersHook: any = {
   path: "/",
   element: <Layout />,
   children: [
-    { path: "/dashboard", element: <Dashboard /> },
     { path: "/login", element: <LoginPage /> },
     { path: "/register", element: <RegisterPage /> },
     { path: "history", element: <History /> },
