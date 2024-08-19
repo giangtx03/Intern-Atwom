@@ -13,13 +13,13 @@ export class PitchService {
   }
 
   public getPitchById(id: number): any {
-    const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/public/api/v1/pitch/${id}`);
+    const url = ApiUrlUtil.buildQueryString( process.env.REACT_APP_API_URL + `/pitch/${id}`);
     const headers = HeadersUtil.getHeaders();
     return axios.get(url, {headers});
   }
 
   public getAllPitch(): any {
-    const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/public/api/v1/pitch`);
+    const url = ApiUrlUtil.buildQueryString( process.env.REACT_APP_API_URL + '/pitch');
     const headers = HeadersUtil.getHeaders();
     return axios.get(url, {headers});
   }

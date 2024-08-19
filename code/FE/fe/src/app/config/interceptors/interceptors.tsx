@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Tạo một instance của Axios
 const axiosCustom = axios.create({
-  baseURL: "http://localhost:8080/api/v1", // Thay bằng URL gốc của API của bạn
+  baseURL: process.env.REACT_APP_AUTH_URL, // Thay bằng URL gốc của API của bạn
 });
 
 // Thêm một interceptor để tự động thêm token vào tất cả các yêu cầu

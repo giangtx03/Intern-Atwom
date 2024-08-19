@@ -6,6 +6,7 @@ import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { PitchResponse } from "../../model/PitchModel";
 import { formatDate } from "../../utils/FormatDate";
 import { Carousel } from "primereact/carousel";
+import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
 
 export default function PitchDetail() {
   const dispatch = useAppDispatch();
@@ -109,7 +110,7 @@ export default function PitchDetail() {
                                 <div className="flex-grow-1">
                                   <p className="text-muted mb-1">Price :</p>
                                   <h5 className="mb-0">
-                                    {price === 0 ? pitch.times[0].price : price}{" "}
+                                    {price === 0 ? pitch.times.find(time => time.status === STATUS_PITCH_TIME_ACTIVE)?.price : price}{" "}
                                     VND
                                   </h5>
                                 </div>
@@ -132,7 +133,7 @@ export default function PitchDetail() {
                                 }}
                               >
                                 {pitch.times.map((time, index) => (
-                                  <option key={index} value={index}>
+                                  <option key={index} value={index} disabled={time.status !== STATUS_PITCH_TIME_ACTIVE}>
                                     {time.startTime} - {time.endTime}
                                   </option>
                                 ))}

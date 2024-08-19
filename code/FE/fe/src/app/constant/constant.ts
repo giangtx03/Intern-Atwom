@@ -1,0 +1,1 @@
+export const STATUS_PITCH_TIME_ACTIVE = "rảnh";

@@ -1,7 +1,5 @@
-import { stat } from "fs";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import { DecodedToken, UserDetails } from "../../model/User";
 import { TokenService } from "../../service/TokenService";
 import { UserService } from "../../service/UserService";
@@ -13,6 +11,7 @@ import { Dialog } from "primereact/dialog";
 import ChangePasswordForm from "./comp/ChangePasswordForm";
 import { decodeToken } from "react-jwt";
 import UpdateProfile from "./comp/UpdateProfile";
+import defaultAvatar from '../../../assets/image/avatar.jpg';
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -79,6 +78,9 @@ export default function UserProfile() {
                   alt="avatar"
                   className="rounded-circle img-fluid"
                   style={{ width: 150 }}
+                  onError={(e) => {
+                    e.currentTarget.src = defaultAvatar;
+                  }}
                 />
                 <h5 className="my-3">{user?.fullname}</h5>
                 <p className="text-muted mb-1">{user?.email}</p>

@@ -14,6 +14,7 @@ type TimeReponse = {
     startTime: number;
     endTime: string;
     price: number
+    status: string;
 }
 
 export type PitchResponse ={
