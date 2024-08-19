@@ -36,6 +36,20 @@ public class PitchController {
     }
 
     @PreAuthorize("ROLE_ADMIN")
+    @PutMapping("/admin")
+    ResponseEntity<BaseResponse> editPitch(@RequestBody PitchRequest request) {
+        PitchRequest pitchRequest = pitchService.editPitch(request);
+        BaseResponse response = BaseResponse
+                .builder()
+                .status(HttpStatus.ACCEPTED.value())
+                .data(pitchRequest)
+                .message("success")
+                .build();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin")
     ResponseEntity<BaseResponse> getPitchAll() {
         List<PitchDto> pitchDtos = pitchService.getPitchAll();

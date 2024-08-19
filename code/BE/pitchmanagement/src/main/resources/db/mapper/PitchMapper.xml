@@ -8,6 +8,12 @@
         VALUES (#{name}, #{address}, #{createAt}, #{pitchTypeId});
     </insert>
 
+    <update id="updatePitch" parameterType="com.pitchmanagement.model.request.PitchRequest">
+        UPDATE `pitch`
+        SET `name`=#{name}, `address`=#{address}, `update_at`=#{updateAt}
+        WHERE  `id`=#{id};
+    </update>
+
     <select id="selectPitchAll" resultType="com.pitchmanagement.dto.admin.PitchDto">
         SELECT p.id, p.name, address, create_at, update_at, pt.name AS `type`, COUNT(ptime.pitch_id) AS sum_time, COUNT(i.id) AS sum_img
         FROM pitch p

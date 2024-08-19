@@ -11,5 +11,7 @@ public interface PitchDao {
 
     void insertPitch(PitchRequest pitchRequest);
 
+    void updatePitch(PitchRequest pitchRequest);
+
     List<PitchDto> selectPitchAll();
 }

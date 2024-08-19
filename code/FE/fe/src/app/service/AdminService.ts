@@ -91,12 +91,25 @@ export const getEditPitch = async () => {
     }
 };
 
-// Lấy danh sách pitch
+// Thêm pitch
 export const postEditPitch = async (pitch: PitchModel) => {
     try {
 
         const url = `/pitch/admin`
-        await axiosCustom.post(url, pitch);
+        await axiosCustom.put(url, pitch);
+
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Thêm pitch
+export const putEditPitch = async (pitch: PitchModel) => {
+    try {
+
+        const url = `/pitch/admin`
+        await axiosCustom.put(url, pitch);
 
     } catch (error) {
         console.error('Error fetching data', error);

@@ -28,8 +28,20 @@ public class PitchServiceImpl implements PitchService {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         pitchRequest.setCreateAt(localDateTime);
+        pitchRequest.setUpdateAt(localDateTime);
 
         pitchDao.insertPitch(pitchRequest);
+
+        return pitchRequest;
+    }
+
+    @Override
+    public PitchRequest editPitch(PitchRequest pitchRequest) {
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        pitchRequest.setUpdateAt(localDateTime);
+
+        pitchDao.updatePitch(pitchRequest);
 
         return pitchRequest;
     }

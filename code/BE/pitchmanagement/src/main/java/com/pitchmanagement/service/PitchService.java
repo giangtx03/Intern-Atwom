@@ -9,5 +9,7 @@ public interface PitchService {
 
     PitchRequest addPitch(PitchRequest pitchRequest);
 
+    PitchRequest editPitch(PitchRequest pitchRequest);
+
     List<PitchDto> getPitchAll();
 }

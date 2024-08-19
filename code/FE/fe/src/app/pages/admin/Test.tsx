@@ -10,6 +10,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { Rating } from 'primereact/rating';
 import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { RadioButton, RadioButtonChangeEvent } from 'primereact/radiobutton';
@@ -18,8 +19,9 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import { EditPitchModel } from '../../model/EditPitchModel';
-import { getEditPitch } from '../../service/AdminService';
+import { getEditPitch, getPitchTypeAll, postEditPitch, putEditPitch } from '../../service/AdminService';
 import { PitchModel } from '../../model/PitchModel';
+import { PitchTypeModel } from '../../model/PitchTypeModel';
 
 interface Product {
     id: string | null;
@@ -37,7 +39,7 @@ interface Product {
 export default function Test() {
 
     let emptyPitch: PitchModel = {
-        id: 0,
+        id: undefined,
         name: '',
         address: '',
         pitchTypeId: 0,
@@ -52,6 +54,8 @@ export default function Test() {
     const [selectedPitches, setSelectedPitches] = useState<EditPitchModel[]>([]);
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [globalFilter, setGlobalFilter] = useState<string>('');
+    const [pitchTypes, setPitchTypes] = useState<PitchTypeModel[]>([]);
+    const [pitchType, setPitchType] = useState<PitchTypeModel>();
     const toast = useRef<Toast>(null);
     const dt = useRef<DataTable<EditPitchModel[]>>(null);
 
@@ -74,12 +78,29 @@ export default function Test() {
         window.scrollTo(0, 0);
     }, []);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await getPitchTypeAll();
+                setPitchTypes(result);
+                // setIsLoading(false);
+
+            } catch (error: any) {
+                // setIsLoading(false)
+                // setHttpError(error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     const formatCurrency = (value: number) => {
         // return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     };
 
     const openNew = () => {
         setPitch(emptyPitch);
+        setPitchType({ ...pitchType, id: emptyPitch.pitchTypeId });
         setSubmitted(false);
         setPitchDialog(true);
     };
@@ -97,21 +118,31 @@ export default function Test() {
         setDeletePitchesDialog(false);
     };
 
-    const savePitch = () => {
+    const savePitch = async () => {
         setSubmitted(true);
 
         if (pitch.name?.trim()) {
             let _pitches = [...pitches];
             let _pitch = { ...pitch };
 
-            if (pitch.id) {
-                const index = findIndexById(pitch.id);
+            console.log("_pitch", _pitch);
 
-                _pitches[index] = _pitch;
-                toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+            if (pitch.id) {
+
+                try {
+                    await putEditPitch(_pitch);
+                    toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+                } catch (error: any) {
+                    console.error('Error fetching data', error);
+                }
+
             } else {
-                _pitches.push(_pitch);
-                toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+                try {
+                    await postEditPitch(_pitch);
+                    toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+                } catch (error: any) {
+                    console.error('Error fetching data', error);
+                }
             }
 
             setPitches(_pitches);
@@ -120,8 +151,14 @@ export default function Test() {
         }
     };
 
-    const editProduct = (pitch: PitchModel) => {
-        setPitch({ ...pitch });
+    const editProduct = (temp: EditPitchModel) => {
+        const foundType = pitchTypes.find(e => e.name === temp.type);
+        if (foundType) {
+            setPitchType({ ...pitchType, id: foundType.id, name: foundType.name });
+            setPitch({ ...pitch, id: temp.id, name: temp.name, address: temp.address, pitchTypeId: foundType.id });
+        } else {
+            console.error("Pitch type not found");
+        }
         setPitchDialog(true);
     };
 
@@ -152,17 +189,6 @@ export default function Test() {
         return index;
     };
 
-    // const createId = (): string => {
-    //     let id = '';
-    //     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    //     for (let i = 0; i < 5; i++) {
-    //         id += chars.charAt(Math.floor(Math.random() * chars.length));
-    //     }
-
-    //     return id;
-    // };
-
     const exportCSV = () => {
         dt.current?.exportCSV();
     };
@@ -178,13 +204,6 @@ export default function Test() {
         setDeletePitchesDialog(false);
         setSelectedPitches([]);
         toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    };
-
-    const onCategoryChange = (e: RadioButtonChangeEvent) => {
-        let _pitch = { ...pitch };
-
-        _pitch['pitchTypeId'] = e.value;
-        setPitch(_pitch);
     };
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
@@ -209,6 +228,16 @@ export default function Test() {
 
     const onInputNumberChange = (e: InputNumberValueChangeEvent, name: string) => {
         const val = e.value ?? 0;
+        let _pitch = { ...pitch };
+
+        // @ts-ignore
+        _pitch[name] = val;
+
+        setPitch(_pitch);
+    };
+
+    const onDropdownChange = (e: DropdownChangeEvent, name: string) => {
+        const val = e.value.id ?? 0;
         let _pitch = { ...pitch };
 
         // @ts-ignore
@@ -246,7 +275,7 @@ export default function Test() {
         return <Tag value={rowData.inventoryStatus} severity={getSeverity(rowData)}></Tag>;
     };
 
-    const actionBodyTemplate = (rowData: PitchModel) => {
+    const actionBodyTemplate = (rowData: EditPitchModel) => {
         return (
             <React.Fragment>
                 <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editProduct(rowData)} />
@@ -317,68 +346,38 @@ export default function Test() {
                     selectionMode="multiple"
                 >
                     <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="code" header="Code" sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="name" header="Name" sortable style={{ minWidth: '16rem' }}></Column>
-                    <Column field="image" header="Image" body={imageBodyTemplate}></Column>
-                    {/* <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column> */}
-                    <Column field="category" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
-                    <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="inventoryStatus" header="Status" body={statusBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
+                    <Column field="id" header="Id" sortable style={{ minWidth: '' }}></Column>
+                    <Column field="name" header="Tên" sortable style={{ minWidth: '7rem' }}></Column>
+                    <Column field="address" header="Địa chỉ" sortable style={{ minWidth: '12rem' }}></Column>
+                    <Column field="createAt" header="Ngày tạo" sortable style={{ minWidth: '10rem' }}></Column>
+                    <Column field="updateAt" header="Ngày sửa" sortable style={{ minWidth: '10rem' }}></Column>
+                    <Column field="type" header="Loại sân" sortable style={{ minWidth: '8rem' }}></Column>
+                    <Column field="sumTime" header="Tổng giờ" sortable style={{ minWidth: '5rem' }}></Column>
+                    <Column field="sumImg" header="Tổng ảnh" sortable style={{ minWidth: '5rem' }}></Column>
                     <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
             </div>
 
             <Dialog visible={pitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                {/* {pitch.image && <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.image} className="product-image block m-auto pb-3" />} */}
-                <div className="field">
+                <div className="field mb-3">
                     <label htmlFor="name" className="font-bold">
-                        Name
+                        Tên sân
                     </label>
                     <InputText id="name" value={pitch.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !pitch.name })} />
                     {submitted && !pitch.name && <small className="p-error">Name is required.</small>}
                 </div>
-                {/* <div className="field">
-                    <label htmlFor="description" className="font-bold">
-                        Description
+                <div className="field mb-3">
+                    <label htmlFor="address" className="font-bold">
+                        Địa chỉ
                     </label>
-                    <InputTextarea id="description" value={product.description} onChange={(e: ChangeEvent<HTMLTextAreaElement>) => onInputTextAreaChange(e, 'description')} required rows={3} cols={20} />
-                </div> */}
-
-                <div className="field">
-                    <label className="mb-3 font-bold">Category</label>
-                    <div className="formgrid grid">
-                        {/* <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
-                            <label htmlFor="category1">Accessories</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
-                            <label htmlFor="category2">Clothing</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
-                            <label htmlFor="category3">Electronics</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
-                            <label htmlFor="category4">Fitness</label>
-                        </div> */}
-                    </div>
+                    <InputText id="address" value={pitch.address} onChange={(e) => onInputChange(e, 'address')} required autoFocus className={classNames({ 'p-invalid': submitted && !pitch.address })} />
+                    {submitted && !pitch.address && <small className="p-error">Địa chỉ is required.</small>}
                 </div>
 
-                <div className="formgrid grid">
-                    {/* <div className="field col">
-                        <label htmlFor="price" className="font-bold">
-                            Price
-                        </label>
-                        <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
-                    </div>
-                    <div className="field col">
-                        <label htmlFor="quantity" className="font-bold">
-                            Quantity
-                        </label>
-                        <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} />
-                    </div> */}
+                <div className="field">
+                    <label htmlFor="type">Loại sân</label>
+                    <Dropdown id="type" value={pitchType} onChange={(e) => { setPitchType(e.value); onDropdownChange(e, 'pitchTypeId') }} options={pitchTypes} optionLabel="name" required
+                        placeholder="Chọn loại sân" />
                 </div>
             </Dialog>
 
