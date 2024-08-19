@@ -203,7 +203,7 @@ export default function RegisterPage() {
         data-mdb-ripple-init
         className="btn btn-primary btn-block mb-3"
       >
-        Sign in
+        Register
       </button>
     </form>
   );

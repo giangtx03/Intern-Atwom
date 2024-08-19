@@ -55,8 +55,8 @@
         WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}
     </select>
 
-    <select id="selectPictTimeByPitchId" parameterType="int" resultMap="resultPitchId" >
-        SELECT ts.start_time, ts.end_time, pt.price
+    <select id="selectPictTimeByPitchId" parameterType="Long" resultMap="resultPitchId" >
+        SELECT ts.start_time, ts.end_time, pt.price, pt.status
         FROM pitch_time pt
         INNER JOIN time_slot ts ON ts.id = pt.time_slot_id
         WHERE pt.pitch_id = #{pitchId}
@@ -66,6 +66,7 @@
         <result property="start_time" column="startTime"/>
         <result property="end_time" column="endTime"/>
         <result property="price" column="price"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <resultMap id="result" type="com.pitchmanagement.model.request.PitchTimeRequest">

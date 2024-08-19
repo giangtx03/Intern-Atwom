@@ -189,34 +189,11 @@ export default function Test() {
         return index;
     };
 
-    const exportCSV = () => {
-        dt.current?.exportCSV();
-    };
-
     const confirmDeleteSelected = () => {
         setDeletePitchesDialog(true);
     };
 
-    const deleteSelectedProducts = () => {
-        let _pitches = pitches.filter((val) => !selectedPitches.includes(val));
-
-        setPitches(_pitches);
-        setDeletePitchesDialog(false);
-        setSelectedPitches([]);
-        toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    };
-
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
-        const val = (e.target && e.target.value) || '';
-        let _pitch = { ...pitch };
-
-        // @ts-ignore
-        _pitch[name] = val;
-
-        setPitch(_pitch);
-    };
-
-    const onInputTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>, name: string) => {
         const val = (e.target && e.target.value) || '';
         let _pitch = { ...pitch };
 
@@ -255,10 +232,6 @@ export default function Test() {
         );
     };
 
-    const rightToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
-    };
-
     const imageBodyTemplate = (rowData: Product) => {
         return <img src={`https://primefaces.org/cdn/primereact/images/product/${rowData.image}`} alt={rowData.image!} className="shadow-2 border-round" style={{ width: '64px' }} />;
     };
@@ -267,13 +240,6 @@ export default function Test() {
         return formatCurrency(rowData.price);
     };
 
-    const ratingBodyTemplate = (rowData: Product) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
-    };
-
-    const statusBodyTemplate = (rowData: Product) => {
-        return <Tag value={rowData.inventoryStatus} severity={getSeverity(rowData)}></Tag>;
-    };
 
     const actionBodyTemplate = (rowData: EditPitchModel) => {
         return (
@@ -282,22 +248,6 @@ export default function Test() {
                 <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteProduct(rowData)} />
             </React.Fragment>
         );
-    };
-
-    const getSeverity = (product: Product) => {
-        switch (product.inventoryStatus) {
-            case 'INSTOCK':
-                return 'success';
-
-            case 'LOWSTOCK':
-                return 'warning';
-
-            case 'OUTOFSTOCK':
-                return 'danger';
-
-            default:
-                return null;
-        }
     };
 
     const header = (
@@ -324,7 +274,6 @@ export default function Test() {
     const deleteProductsDialogFooter = (
         <React.Fragment>
             <Button label="No" icon="pi pi-times" outlined onClick={hideDeletePitchesDialog} />
-            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteSelectedProducts} />
         </React.Fragment>
     );
 
@@ -332,7 +281,6 @@ export default function Test() {
         <div>
             <Toast ref={toast} />
             <div className="card">
-                <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={pitches} selection={selectedPitches}
                     onSelectionChange={(e) => {
@@ -345,7 +293,6 @@ export default function Test() {
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" globalFilter={globalFilter} header={header}
                     selectionMode="multiple"
                 >
-                    <Column selectionMode="multiple" exportable={false}></Column>
                     <Column field="id" header="Id" sortable style={{ minWidth: '' }}></Column>
                     <Column field="name" header="Tên" sortable style={{ minWidth: '7rem' }}></Column>
                     <Column field="address" header="Địa chỉ" sortable style={{ minWidth: '12rem' }}></Column>

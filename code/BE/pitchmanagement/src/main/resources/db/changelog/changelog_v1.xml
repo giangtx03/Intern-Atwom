@@ -103,8 +103,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="start_time" type="timestamp"/>
-            <column name="end_time" type="timestamp"/>
+            <column name="start_time" type="time"/>
+            <column name="end_time" type="time"/>
         </createTable>
 
         <createTable tableName="pitch_time">

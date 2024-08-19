@@ -15,15 +15,13 @@ export class UserService {
   }
 
   public login(modelLogin: any) {
-    // console.log(process.env.REACT_APP_API_URL + '/login');
-    const url = ApiUrlUtil.buildQueryString('http://localhost:8080/public/api/v1/users/login');
+    const url = ApiUrlUtil.buildQueryString(process.env.REACT_APP_API_URL + '/users/login');
     const headers = HeadersUtil.getHeaders();
     return axios.post(url, modelLogin, {headers})
   }
 
   public register(modelRegister: any) {
-    // console.log(process.env.REACT_APP_API_URL + '/login');
-    const url = ApiUrlUtil.buildQueryString('http://localhost:8080/public/api/v1/users/register');
+    const url = ApiUrlUtil.buildQueryString( process.env.REACT_APP_API_URL + '/users/register');
     const headers = HeadersUtil.getHeaders();
     return axios.post(url, modelRegister, {headers})
   }
@@ -34,13 +32,11 @@ export class UserService {
   }
 
   public changePassword(modelChangePassword: any) {
-    // console.log(process.env.REACT_APP_API_URL + '/login');
     const url = ApiUrlUtil.buildQueryString('users/change_password');
     return axiosCustom.put(url, modelChangePassword);
   }
 
   public updateUserDetails(modelUpdateUserDetails: any) {
-    // console.log(process.env.REACT_APP_API_URL + '/login');
     const url = ApiUrlUtil.buildQueryString('users');
     return axiosCustom.put(url, modelUpdateUserDetails);
   }

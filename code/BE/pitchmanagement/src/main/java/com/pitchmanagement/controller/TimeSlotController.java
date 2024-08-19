@@ -45,7 +45,7 @@ public class TimeSlotController {
     //------------------------------------------------------------------
     @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin")
-    ResponseEntity<BaseResponse> getPitchAll(@RequestParam int pitchId) {
+    ResponseEntity<BaseResponse> getPitchAll(@RequestParam Long pitchId) {
         List<PitchTimeChildrenDto> pitchTimeChildrenDtos = pitchTimeService.getPitchTimeByPitchId(pitchId);
         BaseResponse response = BaseResponse
                 .builder()
