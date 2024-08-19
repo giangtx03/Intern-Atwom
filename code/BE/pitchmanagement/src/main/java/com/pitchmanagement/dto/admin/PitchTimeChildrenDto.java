@@ -13,4 +13,5 @@ public class PitchTimeChildrenDto {
     private LocalTime endTime;
     private Double price;
     private String status;
+    private Integer idTime;
 }

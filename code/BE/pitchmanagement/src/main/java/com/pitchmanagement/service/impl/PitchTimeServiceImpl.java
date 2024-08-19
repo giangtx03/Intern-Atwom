@@ -3,6 +3,7 @@ package com.pitchmanagement.service.impl;
 import java.util.List;
 
 import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
+import com.pitchmanagement.model.request.PitchTimeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,15 @@ public class PitchTimeServiceImpl implements PitchTimeService {
     @Override
     public List<PitchTimeChildrenDto> getPitchTimeByPitchId(Long pitchId) {
         return pitchTimeDAO.selectPictTimeByPitchId(pitchId);
+    }
+
+    @Override
+    public PitchTimeRequest addPitchTime(PitchTimeRequest pitchTime) {
+
+        pitchTime.setStatus("trong");
+
+        pitchTimeDAO.insertPitchTime(pitchTime);
+
+        return pitchTime;
     }
 }

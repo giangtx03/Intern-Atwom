@@ -20,6 +20,8 @@ public interface PitchTimeDAO {
             @Param("time_slot_id") Integer time_slot_id);
 
     //------------------------------------------------------------------
+    void insertPitchTime(PitchTimeRequest pitchTime);
+
     void updateStatusPitchTimeByIds(PitchTimeRequest pitchTime);
 
     PitchTimeRequest selectPitchTimeByIds(Map<String, Object> params);

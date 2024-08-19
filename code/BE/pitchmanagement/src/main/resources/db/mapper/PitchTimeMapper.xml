@@ -43,6 +43,11 @@
     </update>
 
     <!-- ........................................................... -->
+    <insert id="insertPitchTime" parameterType="com.pitchmanagement.model.request.PitchTimeRequest">
+        INSERT INTO `pitch_time` (`price`, `status`, `pitch_id`, `time_slot_id`)
+        VALUES (#{price}, #{status}, #{pitchId}, #{timeSlotId});
+    </insert>
+
     <update id="updateStatusPitchTimeByIds" parameterType="com.pitchmanagement.model.request.PitchTimeRequest">
         UPDATE pitch_time
         SET `status` = #{status}
@@ -56,7 +61,7 @@
     </select>
 
     <select id="selectPictTimeByPitchId" parameterType="Long" resultMap="resultPitchId" >
-        SELECT ts.start_time, ts.end_time, pt.price, pt.status
+        SELECT ts.start_time, ts.end_time, pt.price, pt.status, ts.id
         FROM pitch_time pt
         INNER JOIN time_slot ts ON ts.id = pt.time_slot_id
         WHERE pt.pitch_id = #{pitchId}
@@ -67,6 +72,7 @@
         <result property="end_time" column="endTime"/>
         <result property="price" column="price"/>
         <result property="status" column="status"/>
+        <result property="id" column="idTime"/>
     </resultMap>
 
     <resultMap id="result" type="com.pitchmanagement.model.request.PitchTimeRequest">
