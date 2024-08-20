@@ -26,6 +26,8 @@ public interface PitchTimeDAO {
 
     void updatePricePitchTimeByIds(PitchTimeRequest pitchTime);
 
+    void deletePitchTime(Map<String, Object> params);
+
     PitchTimeRequest selectPitchTimeByIds(Map<String, Object> params);
 
     List<PitchTimeChildrenDto> selectPictTimeByPitchId(Long pitchId);

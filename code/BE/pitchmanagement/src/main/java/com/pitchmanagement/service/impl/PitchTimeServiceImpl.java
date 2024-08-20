@@ -1,6 +1,8 @@
 package com.pitchmanagement.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
@@ -48,5 +50,15 @@ public class PitchTimeServiceImpl implements PitchTimeService {
         pitchTimeDAO.updatePricePitchTimeByIds(pitchTime);
 
         return pitchTime;
+    }
+
+    @Override
+    public void delPitchTime(int pitchId, int timeSlotId) {
+
+        Map<String, Object> pitchTimeMap = new HashMap<>();
+        pitchTimeMap.put("pitchId", pitchId);
+        pitchTimeMap.put("timeSlotId", timeSlotId);
+
+        pitchTimeDAO.deletePitchTime(pitchTimeMap);
     }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PitchTimeModel, PitchTimeRequest } from '../../../model/PitchTimeModel';
 import Spinner from '../../../comp/Spinner';
-import { getPitchTimeByPitchId, getTimeSlotAll, postPitchTime, putPitchTime } from '../../../service/AdminService';
+import { deletePitchTime, getPitchTimeByPitchId, getTimeSlotAll, postPitchTime, putPitchTime } from '../../../service/AdminService';
 import { DataTable, DataTableRowEditCompleteEvent } from 'primereact/datatable';
 import { Column, ColumnEditorOptions } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
@@ -110,27 +110,16 @@ export default function PitchTimeTable(props: Props) {
     };
 
     const deleteTime = async () => {
-        // try {
-        //     const result = await postPitchTime(pitchTime!);
-        //     console.log(result)
-        // } catch (error: any) {
-        //     setIsLoading(false);
-        //     setHttpError(error.message);
-        // }
+        try {
+            const result = await deletePitchTime(pitchTime?.pitchId!, pitchTime?.timeSlotId!);
+            console.log(result)
+        } catch (error: any) {
+            setIsLoading(false);
+            setHttpError(error.message);
+        }
+        console.log(pitchTime)
         setBtnSubmit(!btnSubmit);
         setDeletePitchTimeDialog(false);
-    }
-
-    if (isLoading) {
-        return <Spinner />;
-    }
-
-    if (httpError) {
-        return (
-            <div className="card">
-                <p>{httpError}</p>
-            </div>
-        );
     }
 
     const allowEdit = () => {
@@ -150,6 +139,18 @@ export default function PitchTimeTable(props: Props) {
         setTimeSlotResponse({ ...timeSlotResponse, id: temp.idTime!, time: `${temp.startTime} - ${temp.endTime}` })
         setDeletePitchTimeDialog(true);
     };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    if (httpError) {
+        return (
+            <div className="card">
+                <p>{httpError}</p>
+            </div>
+        );
+    }
 
     const deleteBtn = (rowData: PitchTimeModel) => {
         return (

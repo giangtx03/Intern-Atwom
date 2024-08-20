@@ -9,4 +9,9 @@
         FROM image
         WHERE pitch_id = #{pitchId}
     </select>
+
+    <insert id="insertImage" parameterType="com.pitchmanagement.model.request.ImageRequest">
+        INSERT INTO `image` (`name`, `pitch_id`)
+        VALUES (#{name}, #{pitchId});
+    </insert>
 </mapper>

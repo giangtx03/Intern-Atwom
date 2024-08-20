@@ -17,6 +17,7 @@ import { delEditPitch, getEditPitch, getPitchTypeAll, postEditPitch, putEditPitc
 import { PitchModel } from '../../model/PitchModel';
 import { PitchTypeModel } from '../../model/PitchTypeModel';
 import PitchTimeTable from './components/PitchTimeTable';
+import PitchImage from './components/PitchImage';
 
 interface Pitch {
     id: string | null;
@@ -44,6 +45,7 @@ export default function Test() {
     const [pitchDialog, setPitchDialog] = useState<boolean>(false);
     const [deletePitchDialog, setDeletePitchDialog] = useState<boolean>(false);
     const [visibleTime, setVisibleTime] = useState<boolean>(false);
+    const [visibleImg, setVisibleImg] = useState<boolean>(false);
     const [btnSubmit, setBtnSubmit] = useState<boolean>(false);
     const [pitch, setPitch] = useState<PitchModel>(emptyPitch);
     const [selectedPitches, setSelectedPitches] = useState<EditPitchModel[]>([]);
@@ -72,7 +74,7 @@ export default function Test() {
 
         fetchData();
         window.scrollTo(0, 0);
-    }, [btnSubmit, visibleTime]);
+    }, [btnSubmit, visibleTime, visibleImg]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -236,11 +238,25 @@ export default function Test() {
         setPitchId(rowData.id);
         setVisibleTime(true);
     };
+
+    const handleClickImg = (rowData: any) => {
+        setPitchId(rowData.id);
+        setVisibleImg(true);
+    };
+
     const sumTime = (rowData: any) => {
         return (
-            <span onClick={() => handleClickTime(rowData)} style={{ cursor: 'pointer', color: 'blue' }}>
+            <div className='text-center pt-2' onClick={() => handleClickTime(rowData)} style={{ height: '40px', width: '40px', borderRadius: '50%', cursor: 'pointer', background: 'var(--primary-color)', color: 'var(--primary-color-text)' }}>
                 {rowData.sumTime}
-            </span>
+            </div>
+        );
+    };
+
+    const sumImg = (rowData: any) => {
+        return (
+            <div className='text-center pt-2' onClick={() => handleClickImg(rowData)} style={{ height: '40px', width: '40px', borderRadius: '50%', cursor: 'pointer', background: 'var(--primary-color)', color: 'var(--primary-color-text)' }}>
+                {rowData.sumImg}
+            </div>
         );
     };
 
@@ -268,7 +284,7 @@ export default function Test() {
                     <Column field="updateAt" header="Ngày sửa" sortable style={{ minWidth: '10rem' }}></Column>
                     <Column field="type" header="Loại sân" sortable style={{ minWidth: '8rem' }}></Column>
                     <Column field="sumTime" header="Tổng giờ" sortable style={{ minWidth: '5rem' }} body={sumTime}></Column>
-                    <Column field="sumImg" header="Tổng ảnh" sortable style={{ minWidth: '5rem' }}></Column>
+                    <Column field="sumImg" header="Tổng ảnh" sortable style={{ minWidth: '5rem' }} body={sumImg}></Column>
                     <Column body={actionBodyTemplate} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
             </div>
@@ -309,6 +325,9 @@ export default function Test() {
 
             <Dialog header="Các giờ hoạt động" visible={visibleTime} style={{ width: '50vw' }} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
                 <PitchTimeTable pitchId={pitchId!} />
+            </Dialog>
+            <Dialog header="Ảnh sân" visible={visibleImg} style={{ width: '50vw' }} onHide={() => { if (!visibleImg) return; setVisibleImg(false); }}>
+                <PitchImage pitchId={pitchId!} />
             </Dialog>
         </div>
     );

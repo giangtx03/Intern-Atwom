@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class PitchTimeController {
         List<PitchTimeChildrenDto> pitchTimeChildrenDtos = pitchTimeService.getPitchTimeByPitchId(pitchId);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(pitchTimeChildrenDtos)
                 .message("success")
                 .build();
@@ -61,7 +62,7 @@ public class PitchTimeController {
         PitchTimeRequest pitchTime = pitchTimeService.addPitchTime(pitchTimeRequest);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(pitchTime)
                 .message("success")
                 .build();
@@ -75,8 +76,21 @@ public class PitchTimeController {
         PitchTimeRequest pitchTime = pitchTimeService.editPitchTime(pitchTimeRequest);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(pitchTime)
+                .message("success")
+                .build();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PreAuthorize("ROLE_ADMIN")
+    @DeleteMapping("/admin")
+    ResponseEntity<BaseResponse> delPitchTime(@RequestParam int pitchId, @RequestParam int timeSlotId) {
+        pitchTimeService.delPitchTime(pitchId, timeSlotId);
+        BaseResponse response = BaseResponse
+                .builder()
+                .status(HttpStatus.OK.value())
                 .message("success")
                 .build();
 

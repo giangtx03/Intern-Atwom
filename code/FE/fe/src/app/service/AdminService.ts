@@ -9,6 +9,7 @@ import { PitchTimeModel, PitchTimeRequest } from "../model/PitchTimeModel";
 import { PitchTypeModel } from "../model/PitchTypeModel";
 import { PitchModel } from "../model/PitchModel";
 import { TimeSlot } from "../model/TimeSlot";
+import { ImagePitch } from "../model/ImagePitch";
 
 
 
@@ -158,6 +159,20 @@ export const putPitchTime = async (pitchTime: PitchTimeRequest) => {
     }
 };
 
+// Xóa pitch_time
+export const deletePitchTime = async (pitchId: number, timeSlotId: number) => {
+
+
+    try {
+        const url = `/pitchtime/admin?pitchId=${pitchId}&timeSlotId=${timeSlotId}`
+        await axiosCustom.delete(url);
+
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
 // Lấy danh sách pitch_time
 export const getPitchTimeByPitchId = async (id: number) => {
     try {
@@ -200,4 +215,19 @@ export const getTimeSlotAll = async () => {
     }
 };
 
+// Thêm img
+export const postImagePitch = async (formData: FormData) => {
+    try {
+        const url = `/image/admin`;
+        const response = await axiosCustom.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw new Error('Error uploading image');
+    }
+};
 
