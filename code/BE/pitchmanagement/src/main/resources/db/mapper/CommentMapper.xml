@@ -25,6 +25,22 @@
         </choose>
     </select>
 
+    <select id="selectById" parameterType="map" resultType="com.pitchmanagement.dto.CommentDTO">
+        SELECT 
+        cm.id,
+        cm.star,
+        cm.content,
+        cm.create_at as createAt,
+        cm.update_at as updateAt,
+        cm.user_id as userId,
+        cm.pitch_id as pitchId,
+        u.fullname,
+        u.avatar
+    FROM comment cm
+    join user u on u.id = cm.user_id
+     where cm.id = #{id} ;
+    </select>
+
     <select id="total" parameterType="map" resultType="int">
         Select COUNT(id) from comment where pitch_id = #{pitch_id} group by pitch_id
     </select>

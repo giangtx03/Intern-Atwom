@@ -34,10 +34,11 @@ export default function History() {
   const [rows, setRows] = useState(search.limit);
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number | undefined>(undefined);
-  const [visible, setVisible] = useState<boolean>(false);
-  const [choseBookingId, setChoseBookingID] = useState<number | undefined>(
-    undefined
-  );
+  const navigate = useNavigate();
+
+  const handleRedirect = (path:string) => {
+    navigate(path); 
+  };
 
   const statusSearch: StatusSearch[] = [
     { name: "Tất cả", code: "" },
@@ -105,9 +106,8 @@ export default function History() {
           className={`p-button-success ${
             item.status == "cancel" || item.status == "finished" ? "" : "hide"
           }`}
-          onClick={() => {
-            setVisible(true);
-            setChoseBookingID(item.pitchId);
+          onClick={()=>{
+            handleRedirect(`/pitch/${item.pitchId}`)
           }}
         />
       </React.Fragment>
@@ -251,14 +251,6 @@ export default function History() {
             rowsPerPageOptions={[5, 10]}
             onPageChange={onPageChange}
           />
-          <BookingDialog
-            visible={visible}
-            setVisible={setVisible}
-            choseBookingId={choseBookingId}
-            setChoseBookingID={setChoseBookingID}
-            search={search}
-            setSearch={setSearch}
-          ></BookingDialog>
         </div>
       )}
     </>

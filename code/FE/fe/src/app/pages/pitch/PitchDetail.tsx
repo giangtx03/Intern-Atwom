@@ -7,6 +7,8 @@ import { PitchResponse } from "../../model/PitchModel";
 import { formatDate } from "../../utils/FormatDate";
 import { Carousel } from "primereact/carousel";
 import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
+import CommentDisplay from "../comment";
+import BookingDialog from "../BookingDialog";
 
 export default function PitchDetail() {
   const dispatch = useAppDispatch();
@@ -14,8 +16,12 @@ export default function PitchDetail() {
 
   const { id } = useParams<{ id: string }>();
 
+  console.log(id);
+
   const [pitch, setPitch] = useState<PitchResponse>();
   const [price, setPrice] = useState(0);
+  const [visible, setVisible] = useState<boolean>(false);
+
 
   useEffect(() => {
     if (id) {
@@ -94,9 +100,14 @@ export default function PitchDetail() {
                           <div className="flex-grow-1">
                             <h4>{pitch.name}</h4>
                           </div>
-                          <button className="btn btn-success">
+                          <button className="btn btn-success" onClick={(e)=>{setVisible(true)}}>
                             Đặt sân ngay
                           </button>
+                          <BookingDialog
+                            visible={visible}
+                            setVisible={setVisible}
+                            pitch_id={pitch}
+                          ></BookingDialog>
                         </div>
                         <div className="row mt-4">
                           <div className="col-lg-3 col-sm-6">
@@ -110,7 +121,13 @@ export default function PitchDetail() {
                                 <div className="flex-grow-1">
                                   <p className="text-muted mb-1">Price :</p>
                                   <h5 className="mb-0">
-                                    {price === 0 ? pitch.times.find(time => time.status === STATUS_PITCH_TIME_ACTIVE)?.price : price}{" "}
+                                    {price === 0
+                                      ? pitch.times.find(
+                                          (time) =>
+                                            time.status ===
+                                            STATUS_PITCH_TIME_ACTIVE
+                                        )?.price
+                                      : price}{" "}
                                     VND
                                   </h5>
                                 </div>
@@ -133,7 +150,13 @@ export default function PitchDetail() {
                                 }}
                               >
                                 {pitch.times.map((time, index) => (
-                                  <option key={index} value={index} disabled={time.status !== STATUS_PITCH_TIME_ACTIVE}>
+                                  <option
+                                    key={index}
+                                    value={index}
+                                    disabled={
+                                      time.status !== STATUS_PITCH_TIME_ACTIVE
+                                    }
+                                  >
                                     {time.startTime} - {time.endTime}
                                   </option>
                                 ))}
@@ -191,6 +214,7 @@ export default function PitchDetail() {
                 {/* end card body */}
               </div>
               {/* end card */}
+              <CommentDisplay pitch_id={pitch}></CommentDisplay>
             </div>
             {/* end col */}
           </div>

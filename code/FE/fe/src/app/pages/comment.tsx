@@ -63,7 +63,7 @@ export default function CommentDisplay(props: any) {
       try {
         const response = await CommentService.getInstance().getLstPitchTime(
           search,
-          1,
+          pitch_id.id,
           selectOrder?.type
         );
         const responseTotal = await CommentService.getInstance().getTotal(1);
@@ -146,7 +146,7 @@ export default function CommentDisplay(props: any) {
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
               {user_id && (
-                <AddAndUpdate search={search} setSearch={setSearch} />
+                <AddAndUpdate search={search} setSearch={setSearch}  pitch_id={pitch_id}/>
               )}
             </div>
             <br />
@@ -211,7 +211,7 @@ export default function CommentDisplay(props: any) {
                         </div>
                       </div>
                     </div>
-                    {item.userId == 1 && (
+                    {item.userId == user_id && (
                       <div>
                         <Button
                           label="Delete"
@@ -258,6 +258,7 @@ export default function CommentDisplay(props: any) {
                   setSearch={setSearch}
                   editComment={editComment}
                   setEditOn={setEditOn}
+                  pitch_id={pitch_id}
                 />
               </Dialog>
             </div>

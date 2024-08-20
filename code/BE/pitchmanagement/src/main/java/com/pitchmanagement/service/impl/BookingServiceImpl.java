@@ -9,6 +9,8 @@ import com.pitchmanagement.dto.admin.BookingDto;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +53,13 @@ public class BookingServiceImpl implements BookingService {
     public void update(BookingRequest bookingRequest) {
         bookingDAO.update(bookingRequest);
         PitchBookingDTO booking = bookingDAO.selectById(bookingRequest.getId());
+        if(booking == null){
+            try {
+                throw new NotFoundException("Không tìm thấy booking");
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         if (booking.getStatus() == "success") {
             pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());
         }

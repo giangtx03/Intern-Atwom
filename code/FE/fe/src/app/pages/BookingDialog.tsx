@@ -21,10 +21,7 @@ export default function BookingDialog(props: any) {
   let {
     visible,
     setVisible,
-    choseBookingId,
-    setChoseBookingID,
-    search,
-    setSearch,
+    pitch_id
   } = props;
   const [listPitchTime, setListPitchTime] = useState<[]>();
   const [selectTime, setSelectTime] = useState(Object);
@@ -45,7 +42,7 @@ export default function BookingDialog(props: any) {
       }).then(async (value) => {
         await BookingService.getInstance()
           .addBooking(
-            new Booking("wait", note, 1, choseBookingId, selectTime.timeSlotId)
+            new Booking("wait", note, user_id, pitch_id.id, selectTime.timeSlotId)
           )
           .then((response) => {
             if ((response.data.status = "OK")) {
@@ -57,10 +54,6 @@ export default function BookingDialog(props: any) {
                 icon: "warning",
               });
             }
-            setSearch({
-              ...search,
-              timer: new Date().getTime(),
-            });
             setVisible(false);
           })
           .catch((response) => {
@@ -75,9 +68,9 @@ export default function BookingDialog(props: any) {
 
   const fetchData = async () => {
     try {
-      if (choseBookingId != undefined) {
+      if (pitch_id != undefined) {
         await PitchTimeService.getInstance()
-          .getLstPitchTime(choseBookingId)
+          .getLstPitchTime(pitch_id.id)
           .then((response) => {
             if (response.data.status == 200) {
               setListPitchTime(response.data.data);
@@ -104,7 +97,7 @@ export default function BookingDialog(props: any) {
 
   useEffect(() => {
     fetchData();
-  }, [choseBookingId, visible]);
+  }, [visible]);
 
   return (
     <Dialog
@@ -114,7 +107,6 @@ export default function BookingDialog(props: any) {
       onHide={() => {
         if (!visible) return;
         setVisible(false);
-        setChoseBookingID(undefined);
       }}
     >
       <p className="w-full md:w-14rem">

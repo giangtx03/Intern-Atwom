@@ -8,9 +8,12 @@ import swal from "sweetalert";
 import { Toast } from "primereact/toast";
 import { useAppSelector } from "../store/hooks";
 import { Rating, RatingChangeEvent } from "primereact/rating";
+import { TokenService } from "../service/TokenService";
+import { decodeToken } from "react-jwt";
+import { DecodedToken } from "../model/User";
 
 export default function AddAndUpdate(props: any) {
-  const { search, setSearch, editComment, setEditOn } = props;
+  const { search, setSearch, editComment, setEditOn, pitch_id } = props;
 
   const [value, setValue] = useState(
     editComment != null ? editComment.content : ""
@@ -18,6 +21,10 @@ export default function AddAndUpdate(props: any) {
   const [rating, setRating] = useState<number>(
     editComment == null ? 0 : editComment.star
   );
+
+  const user_id = decodeToken<DecodedToken>(
+    TokenService.getInstance().getToken()
+  )?.user_id;
 
   const toast = useRef<Toast>(null);
 
@@ -41,7 +48,7 @@ export default function AddAndUpdate(props: any) {
   const addComment = async (e: any) => {
     if (editComment == null) {
       await CommentService.getInstance()
-        .AddComment(new Comment(0, rating, value, 1, 1))
+        .AddComment(new Comment(undefined, rating, value, user_id, pitch_id.id))
         .then((response) => {
           showSuccess(response.status);
         })
@@ -63,7 +70,7 @@ export default function AddAndUpdate(props: any) {
       }).then(async (vl) => {
         if (vl) {
           await CommentService.getInstance()
-            .Update(new Comment(editComment.id, rating, value, 1, 1))
+            .Update(new Comment(editComment.id, rating, value, user_id, pitch_id.id))
             .then(showSuccess)
             .catch(showError);
           setRating(0);

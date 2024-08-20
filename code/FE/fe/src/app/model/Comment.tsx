@@ -7,7 +7,7 @@ export default class Comment {
     userId?: number;
     pitchId?: number;
 
-    constructor(id:any, star:any, content: any,userId:number, pitchId: number){
+    constructor(id?:any, star?:any, content?: any,userId?:number, pitchId?: number){
         this.id = id;
         this.star = star;
         this.content = content;

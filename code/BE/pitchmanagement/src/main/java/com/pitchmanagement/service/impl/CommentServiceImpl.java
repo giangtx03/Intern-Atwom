@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +41,28 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void update(CommentRequest commentRequest) {
+    public void update(CommentRequest commentRequest)  {
+        CommentDTO comment = commentDAO.selectById(commentRequest.getId());
+        if(comment == null){
+            try {
+                throw new NotFoundException("Không tìm thấy comment");
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         commentDAO.update(commentRequest);
     }
 
     @Override
     public void delete(Integer id) {
+        CommentDTO comment = commentDAO.selectById(id);
+        if(comment == null){
+            try {
+                throw new NotFoundException("Không tìm thấy comment");
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         commentDAO.delete(id);
     }
 }
