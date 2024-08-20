@@ -198,4 +198,45 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
+    <changeSet id="2" author="Minh Quan">
+
+        <modifyDataType tableName="bill" columnName="create_at" newDataType="TIMESTAMP"/>
+
+        <dropForeignKeyConstraint baseTableName="pitch_time" constraintName="fk_pitch_time_slot_pitch"/>
+        <addForeignKeyConstraint baseTableName="pitch_time"
+                                 baseColumnNames="pitch_id"
+                                 constraintName="fk_pitch_time_slot_pitch"
+                                 referencedTableName="pitch"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+
+        <dropForeignKeyConstraint baseTableName="pitch_booking" constraintName="fk_pitch_pitch_booking"/>
+        <addForeignKeyConstraint baseTableName="pitch_booking"
+                                 baseColumnNames="pitch_time_pitch_id"
+                                 constraintName="fk_pitch_pitch_booking"
+                                 referencedTableName="pitch"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"
+        />
+
+        <dropForeignKeyConstraint baseTableName="bill" constraintName="fk_bill_pitch_booking"/>
+        <addForeignKeyConstraint baseTableName="bill"
+                                 baseColumnNames="pitch_booking_id"
+                                 constraintName="fk_bill_pitch_booking"
+                                 referencedTableName="pitch_booking"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"
+        />
+
+        <dropForeignKeyConstraint baseTableName="comment" constraintName="fk_pitch_comment"/>
+        <addForeignKeyConstraint baseTableName="comment"
+                                 baseColumnNames="pitch_id"
+                                 constraintName="fk_pitch_comment"
+                                 referencedTableName="pitch"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+    </changeSet>
+
 </databaseChangeLog>
