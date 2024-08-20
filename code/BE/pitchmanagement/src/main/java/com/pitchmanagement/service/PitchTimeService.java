@@ -12,4 +12,7 @@ public interface PitchTimeService {
     List<PitchTimeChildrenDto> getPitchTimeByPitchId(Long pitchId);
 
     PitchTimeRequest addPitchTime(PitchTimeRequest pitchTime);
+
+    PitchTimeRequest editPitchTime(PitchTimeRequest pitchTime);
+
 }

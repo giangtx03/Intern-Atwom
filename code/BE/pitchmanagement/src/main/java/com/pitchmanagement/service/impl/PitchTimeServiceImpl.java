@@ -41,4 +41,12 @@ public class PitchTimeServiceImpl implements PitchTimeService {
 
         return pitchTime;
     }
+
+    @Override
+    public PitchTimeRequest editPitchTime(PitchTimeRequest pitchTime) {
+
+        pitchTimeDAO.updatePricePitchTimeByIds(pitchTime);
+
+        return pitchTime;
+    }
 }

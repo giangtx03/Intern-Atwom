@@ -8,6 +8,7 @@ import { EditPitchModel } from "../model/EditPitchModel";
 import { PitchTimeModel, PitchTimeRequest } from "../model/PitchTimeModel";
 import { PitchTypeModel } from "../model/PitchTypeModel";
 import { PitchModel } from "../model/PitchModel";
+import { TimeSlot } from "../model/TimeSlot";
 
 
 
@@ -131,6 +132,19 @@ export const postPitchTime = async (pitchTime: PitchTimeRequest) => {
     }
 };
 
+// Thêm pitch_time
+export const putPitchTime = async (pitchTime: PitchTimeRequest) => {
+    try {
+
+        const url = `/pitchtime/admin`
+        await axiosCustom.put(url, pitchTime);
+
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
 // Lấy danh sách pitch_time
 export const getPitchTimeByPitchId = async (id: number) => {
     try {
@@ -152,6 +166,20 @@ export const getPitchTypeAll = async () => {
         const url = `/pitchtype/admin`
 
         const response: AxiosResponse<{ data: PitchTypeModel[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách time_slot
+export const getTimeSlotAll = async () => {
+    try {
+
+        const url = `/timeslot/admin`
+
+        const response: AxiosResponse<{ data: TimeSlot[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);

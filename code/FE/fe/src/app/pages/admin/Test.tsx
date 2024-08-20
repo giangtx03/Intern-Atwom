@@ -44,6 +44,7 @@ export default function Test() {
     const [pitchDialog, setPitchDialog] = useState<boolean>(false);
     const [deletePitchDialog, setDeletePitchDialog] = useState<boolean>(false);
     const [visibleTime, setVisibleTime] = useState<boolean>(false);
+    const [btnSubmit, setBtnSubmit] = useState<boolean>(false);
     const [pitch, setPitch] = useState<PitchModel>(emptyPitch);
     const [selectedPitches, setSelectedPitches] = useState<EditPitchModel[]>([]);
     const [submitted, setSubmitted] = useState<boolean>(false);
@@ -71,7 +72,7 @@ export default function Test() {
 
         fetchData();
         window.scrollTo(0, 0);
-    }, []);
+    }, [btnSubmit, visibleTime]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -88,10 +89,6 @@ export default function Test() {
 
         fetchData();
     }, []);
-
-    const formatCurrency = (value: number) => {
-        // return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
 
     const openNew = () => {
         setPitch(emptyPitch);
@@ -113,7 +110,6 @@ export default function Test() {
         setSubmitted(true);
 
         if (pitch.name?.trim()) {
-            let _pitches = [...pitches];
             let _pitch = { ...pitch };
 
             console.log("_pitch", _pitch);
@@ -135,8 +131,7 @@ export default function Test() {
                     console.error('Error fetching data', error);
                 }
             }
-
-            setPitches(_pitches);
+            setBtnSubmit(!btnSubmit);
             setPitchDialog(false);
             setPitch(emptyPitch);
         }
@@ -217,11 +212,6 @@ export default function Test() {
             </div>
         );
     };
-
-    const priceBodyTemplate = (rowData: Pitch) => {
-        return formatCurrency(rowData.price);
-    };
-
 
     const actionBodyTemplate = (rowData: EditPitchModel) => {
         return (

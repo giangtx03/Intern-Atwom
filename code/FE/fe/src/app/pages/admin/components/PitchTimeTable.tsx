@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { PitchTimeModel, PitchTimeRequest } from '../../../model/PitchTimeModel';
 import Spinner from '../../../comp/Spinner';
-import { getPitchTimeByPitchId } from '../../../service/AdminService';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { getPitchTimeByPitchId, getTimeSlotAll, postPitchTime, putPitchTime } from '../../../service/AdminService';
+import { DataTable, DataTableRowEditCompleteEvent } from 'primereact/datatable';
+import { Column, ColumnEditorOptions } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
+import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
+import { TimeSlot } from '../../../model/TimeSlot';
 
-interface TimeSlot {
+interface TimeSlotResponse {
     id: number;
     time: string;
 }
@@ -20,9 +22,11 @@ type Props = {
 export default function PitchTimeTable(props: Props) {
     const [pitchTimes, setPitchTimes] = useState<PitchTimeModel[]>([]);
     const [pitchTime, setPitchTime] = useState<PitchTimeRequest>();
-    const [timeSlot, setTimeSlot] = useState<TimeSlot>();
-    const [isLoading, setIsLoading] = useState(true);
+    const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+    const [timeSlotResponse, setTimeSlotResponse] = useState<TimeSlotResponse>();
     const [visibleTime, setVisibleTime] = useState<boolean>(false);
+    const [btnSubmit, setBtnSubmit] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -38,18 +42,71 @@ export default function PitchTimeTable(props: Props) {
         };
 
         fetchData();
-    }, [props.pitchId]);
+        setPitchTime({ ...pitchTime, pitchId: props.pitchId })
+    }, [props.pitchId, btnSubmit]);
 
-    // pitchTimes.map(data => )
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await getTimeSlotAll();
+                setTimeSlots(result);
+                setIsLoading(false);
+            } catch (error: any) {
+                setIsLoading(false);
+                setHttpError(error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
+    const timeSlotResponses: TimeSlotResponse[] = timeSlots.map(ts => ({
+        id: ts.id!,
+        time: `${ts.startTime} - ${ts.endTime}`
+    }));
 
     const openNew = () => {
         setVisibleTime(true);
     };
 
     const handleTimeSlot = (e: any) => {
-        setTimeSlot({ ...timeSlot, id: e.id, time: `${e.startTime} - ${e.endTime}` })
+        setTimeSlotResponse(e)
+        setPitchTime({ ...pitchTime, timeSlotId: e.id })
     }
 
+    const handleSubmit = async () => {
+        try {
+            const result = await postPitchTime(pitchTime!);
+            console.log(result)
+        } catch (error: any) {
+            setIsLoading(false);
+            setHttpError(error.message);
+        }
+        setBtnSubmit(!btnSubmit);
+        setVisibleTime(false);
+    }
+
+    const onRowEditComplete = async (e: DataTableRowEditCompleteEvent) => {
+        const { newData, index } = e;
+        const updatedPitchTime = {
+            ...pitchTime,
+            price: newData.price,
+            timeSlotId: newData.idTime,
+        };
+
+        try {
+            const result = await putPitchTime(updatedPitchTime);
+            console.log(result);
+
+            const updatedPitchTimes = [...pitchTimes];
+            updatedPitchTimes[index] = newData;
+            setPitchTimes(updatedPitchTimes);
+        } catch (error: any) {
+            setIsLoading(false);
+            setHttpError(error.message);
+        }
+    };
     if (isLoading) {
         return <Spinner />;
     }
@@ -62,26 +119,55 @@ export default function PitchTimeTable(props: Props) {
         );
     }
 
+    const allowEdit = (rowData: PitchTimeRequest) => {
+        return rowData.price !== 0;
+    };
+
+    const priceEditor = (options: ColumnEditorOptions) => {
+        return <InputNumber value={options.value} onValueChange={(e: InputNumberValueChangeEvent) => options.editorCallback!(e.value)} mode="currency" currency="VND" locale="vi-VN" />;
+    };
+
     return (
         <div className="">
             <div className="my-1">
                 <Button icon="pi pi-plus" severity="success" onClick={openNew} />
             </div>
-            <div className="card my-1">
-                <DataTable value={pitchTimes} selectionMode="single" tableStyle={{ minWidth: '50rem' }}>
+            <div className="card my-1"  >
+                <DataTable value={pitchTimes} selectionMode="single" tableStyle={{ minWidth: '50rem' }} editMode="row" onRowEditComplete={onRowEditComplete}>
                     <Column field="startTime" header="Giờ bắt đầu"></Column>
                     <Column field="endTime" header="Giờ kết thúc"></Column>
-                    <Column field="price" header="Giá"></Column>
+                    <Column field="price" header="Giá" editor={(options) => priceEditor(options)} style={{ width: '20%' }}></Column>
+                    <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                 </DataTable>
 
             </div>
-            <Dialog header="Sửa giờ sân" visible={visibleTime} style={{ width: '60vw' }} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
-
-                <div className="field">
-                    <label htmlFor="type">Loại sân</label>
-                    <Dropdown id="type" value={timeSlot} onChange={(e) => handleTimeSlot(e.value)} options={pitchTimes} optionLabel="id" required
-                        placeholder="Chọn giờ" />
+            <Dialog header="Sửa giờ sân" visible={visibleTime} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
+                <div className="d-flex justify-content-between align-items-center my-1">
+                    <div className="flex-grow-1 me-2">
+                        <Dropdown
+                            id="type"
+                            value={timeSlotResponse}
+                            onChange={(e) => handleTimeSlot(e.value)}
+                            options={timeSlotResponses}
+                            optionLabel="time"
+                            required
+                            placeholder="Chọn giờ"
+                        />
+                    </div>
+                    <div className="flex-grow-1 me-2">
+                        <InputNumber
+                            inputId="minmax"
+                            value={pitchTime?.price}
+                            onValueChange={(e: InputNumberValueChangeEvent) => setPitchTime({ ...pitchTime, price: e.target.value! })}
+                            min={0}
+                            placeholder='Giá sân'
+                        />
+                    </div>
+                    <div className="flex-shrink-0">
+                        <Button icon="pi pi-check" severity="success" onClick={handleSubmit} />
+                    </div>
                 </div>
+
             </Dialog>
         </div>
     );

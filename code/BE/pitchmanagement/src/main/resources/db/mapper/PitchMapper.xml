@@ -10,8 +10,8 @@
 
     <update id="updatePitch" parameterType="com.pitchmanagement.model.request.PitchRequest">
         UPDATE `pitch`
-        SET `name`=#{name}, `address`=#{address}, `update_at`=#{updateAt}
-        WHERE  `id`=#{id};
+        SET `name`=#{name}, `address`=#{address}, `update_at`=#{updateAt}, `pitch_type_id`=#{pitchTypeId}
+        WHERE `id`=#{id};
     </update>
 
     <select id="selectPitchAll" resultType="com.pitchmanagement.dto.admin.PitchDto">
