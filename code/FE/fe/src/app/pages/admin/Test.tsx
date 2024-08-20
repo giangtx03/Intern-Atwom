@@ -13,7 +13,7 @@ import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { EditPitchModel } from '../../model/EditPitchModel';
-import { getEditPitch, getPitchTypeAll, postEditPitch, putEditPitch } from '../../service/AdminService';
+import { delEditPitch, getEditPitch, getPitchTypeAll, postEditPitch, putEditPitch } from '../../service/AdminService';
 import { PitchModel } from '../../model/PitchModel';
 import { PitchTypeModel } from '../../model/PitchTypeModel';
 import PitchTimeTable from './components/PitchTimeTable';
@@ -148,45 +148,34 @@ export default function Test() {
         setPitchDialog(true);
     };
 
-    const confirmDeletePitch = (pitch: PitchModel) => {
-        setPitch(pitch);
+    const confirmDeletePitch = (temp: EditPitchModel) => {
+        const foundType = pitchTypes.find(e => e.name === temp.type);
+        if (foundType) {
+            setPitchType({ ...pitchType, id: foundType.id, name: foundType.name });
+            setPitch({ ...pitch, id: temp.id, name: temp.name, address: temp.address, pitchTypeId: foundType.id });
+        } else {
+            console.error("Pitch type not found");
+        }
         setDeletePitchDialog(true);
     };
 
-    const deletePitch = () => {
-        let _pitches = pitches.filter((val) => val.id !== pitch.id);
+    const deletePitch = async () => {
+        let _pitch = { ...pitch }
 
-        setPitches(_pitches);
-        setDeletePitchDialog(false);
-        setPitch(emptyPitch);
-        toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Pitch Deleted', life: 3000 });
-    };
-
-    const findIndexById = (id: number) => {
-        let index = -1;
-
-        for (let i = 0; i < pitches.length; i++) {
-            if (pitches[i].id === id) {
-                index = i;
-                break;
-            }
+        try {
+            await delEditPitch(_pitch.id!);
+            toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Pitch Deleted', life: 3000 });
+        } catch (error: any) {
+            console.error('Error fetching data', error);
         }
 
-        return index;
+        setBtnSubmit(!btnSubmit);
+        setDeletePitchDialog(false);
+        setPitch(emptyPitch);
     };
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
         const val = (e.target && e.target.value) || '';
-        let _pitch = { ...pitch };
-
-        // @ts-ignore
-        _pitch[name] = val;
-
-        setPitch(_pitch);
-    };
-
-    const onInputNumberChange = (e: InputNumberValueChangeEvent, name: string) => {
-        const val = e.value ?? 0;
         let _pitch = { ...pitch };
 
         // @ts-ignore
@@ -216,7 +205,7 @@ export default function Test() {
     const actionBodyTemplate = (rowData: EditPitchModel) => {
         return (
             <React.Fragment>
-                <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editPitch(rowData)} />
+                <Button icon="pi pi-pencil" rounded outlined className="me-2" onClick={() => editPitch(rowData)} />
                 <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeletePitch(rowData)} />
             </React.Fragment>
         );
@@ -280,7 +269,7 @@ export default function Test() {
                     <Column field="type" header="Loại sân" sortable style={{ minWidth: '8rem' }}></Column>
                     <Column field="sumTime" header="Tổng giờ" sortable style={{ minWidth: '5rem' }} body={sumTime}></Column>
                     <Column field="sumImg" header="Tổng ảnh" sortable style={{ minWidth: '5rem' }}></Column>
-                    <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
+                    <Column body={actionBodyTemplate} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
             </div>
 
@@ -318,7 +307,7 @@ export default function Test() {
                 </div>
             </Dialog>
 
-            <Dialog header="Các giờ hoạt động" visible={visibleTime} style={{ width: '60vw' }} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
+            <Dialog header="Các giờ hoạt động" visible={visibleTime} style={{ width: '50vw' }} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
                 <PitchTimeTable pitchId={pitchId!} />
             </Dialog>
         </div>

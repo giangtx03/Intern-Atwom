@@ -118,6 +118,19 @@ export const putEditPitch = async (pitch: PitchModel) => {
     }
 };
 
+// Xóa pitch
+export const delEditPitch = async (id: number) => {
+    try {
+
+        const url = `/pitch/admin?id=${id}`
+        await axiosCustom.delete(url);
+
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
 
 // Thêm pitch_time
 export const postPitchTime = async (pitchTime: PitchTimeRequest) => {
@@ -132,7 +145,7 @@ export const postPitchTime = async (pitchTime: PitchTimeRequest) => {
     }
 };
 
-// Thêm pitch_time
+// cập nhật pitch_time
 export const putPitchTime = async (pitchTime: PitchTimeRequest) => {
     try {
 

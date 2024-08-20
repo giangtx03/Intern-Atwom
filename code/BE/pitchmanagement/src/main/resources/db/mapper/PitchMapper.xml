@@ -14,6 +14,11 @@
         WHERE `id`=#{id};
     </update>
 
+    <delete id="deletePitch" parameterType="int">
+        DELETE FROM `pitch`
+        WHERE `id`= #{id};
+    </delete>
+
     <select id="selectPitchAll" resultType="com.pitchmanagement.dto.admin.PitchDto">
         SELECT
         p.id, p.name, address, create_at, update_at, pt.name AS `type`, COUNT(ptime.pitch_id) AS sum_time, COUNT(i.id) AS sum_img

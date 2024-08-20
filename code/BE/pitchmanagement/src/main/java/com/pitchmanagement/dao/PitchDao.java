@@ -15,6 +15,8 @@ public interface PitchDao {
 
     void updatePitch(PitchRequest pitchRequest);
 
+    void deletePitch(int id);
+
     List<PitchDto> selectPitchAll();
 
     //    <!-- ...................Giang...................................... -->

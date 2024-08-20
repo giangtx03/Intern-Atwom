@@ -26,6 +26,7 @@ export default function PitchTimeTable(props: Props) {
     const [timeSlotResponse, setTimeSlotResponse] = useState<TimeSlotResponse>();
     const [visibleTime, setVisibleTime] = useState<boolean>(false);
     const [btnSubmit, setBtnSubmit] = useState<boolean>(false);
+    const [deletePitchTimeDialog, setDeletePitchTimeDialog] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState<string | null>(null);
 
@@ -107,6 +108,19 @@ export default function PitchTimeTable(props: Props) {
             setHttpError(error.message);
         }
     };
+
+    const deleteTime = async () => {
+        // try {
+        //     const result = await postPitchTime(pitchTime!);
+        //     console.log(result)
+        // } catch (error: any) {
+        //     setIsLoading(false);
+        //     setHttpError(error.message);
+        // }
+        setBtnSubmit(!btnSubmit);
+        setDeletePitchTimeDialog(false);
+    }
+
     if (isLoading) {
         return <Spinner />;
     }
@@ -119,25 +133,52 @@ export default function PitchTimeTable(props: Props) {
         );
     }
 
-    const allowEdit = (rowData: PitchTimeRequest) => {
-        return rowData.price !== 0;
+    const allowEdit = () => {
+        return true;
     };
 
     const priceEditor = (options: ColumnEditorOptions) => {
         return <InputNumber value={options.value} onValueChange={(e: InputNumberValueChangeEvent) => options.editorCallback!(e.value)} mode="currency" currency="VND" locale="vi-VN" />;
     };
 
+    const hideDeletePitchTimeDialog = () => {
+        setDeletePitchTimeDialog(false);
+    };
+
+    const confirmDeletePitchTime = (temp: PitchTimeModel) => {
+        setPitchTime({ ...pitchTime, timeSlotId: temp.idTime, price: temp.price });
+        setTimeSlotResponse({ ...timeSlotResponse, id: temp.idTime!, time: `${temp.startTime} - ${temp.endTime}` })
+        setDeletePitchTimeDialog(true);
+    };
+
+    const deleteBtn = (rowData: PitchTimeModel) => {
+        return (
+            <React.Fragment>
+                {/* <Button icon="pi pi-times-circle" rounded outlined severity="danger" /> */}
+                <i className="pi pi-times-circle" onClick={() => confirmDeletePitchTime(rowData)}></i>
+            </React.Fragment>
+        );
+    }
+
+    const deletePitchTimeDialogFooter = (
+        <React.Fragment>
+            <Button label="No" icon="pi pi-times" className='me-2' outlined onClick={hideDeletePitchTimeDialog} />
+            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteTime} />
+        </React.Fragment>
+    );
+
     return (
         <div className="">
             <div className="my-1">
                 <Button icon="pi pi-plus" severity="success" onClick={openNew} />
             </div>
-            <div className="card my-1"  >
-                <DataTable value={pitchTimes} selectionMode="single" tableStyle={{ minWidth: '50rem' }} editMode="row" onRowEditComplete={onRowEditComplete}>
-                    <Column field="startTime" header="Giờ bắt đầu"></Column>
-                    <Column field="endTime" header="Giờ kết thúc"></Column>
-                    <Column field="price" header="Giá" editor={(options) => priceEditor(options)} style={{ width: '20%' }}></Column>
-                    <Column rowEditor={allowEdit} headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+            <div className="card my-1">
+                <DataTable value={pitchTimes} selectionMode="single" editMode="row" onRowEditComplete={onRowEditComplete}>
+                    <Column field="startTime" header="Giờ bắt đầu" style={{ width: '8rem' }}></Column>
+                    <Column field="endTime" header="Giờ kết thúc" style={{ width: '8rem' }}></Column>
+                    <Column field="price" header="Giá" editor={(options) => priceEditor(options)}></Column>
+                    <Column rowEditor={allowEdit} headerStyle={{ width: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+                    <Column style={{ width: '1rem', padding: 0, paddingRight: '1rem' }} body={deleteBtn}></Column>
                 </DataTable>
 
             </div>
@@ -167,7 +208,16 @@ export default function PitchTimeTable(props: Props) {
                         <Button icon="pi pi-check" severity="success" onClick={handleSubmit} />
                     </div>
                 </div>
-
+            </Dialog>
+            <Dialog visible={deletePitchTimeDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deletePitchTimeDialogFooter} onHide={hideDeletePitchTimeDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                    {timeSlotResponse && (
+                        <span>
+                            Are you sure you want to delete <b>{timeSlotResponse.time}</b>?
+                        </span>
+                    )}
+                </div>
             </Dialog>
         </div>
     );

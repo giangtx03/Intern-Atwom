@@ -27,7 +27,7 @@ public class PitchController {
         PitchRequest pitchRequest = pitchService.addPitch(request);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(pitchRequest)
                 .message("success")
                 .build();
@@ -41,8 +41,21 @@ public class PitchController {
         PitchRequest pitchRequest = pitchService.editPitch(request);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(pitchRequest)
+                .message("success")
+                .build();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PreAuthorize("ROLE_ADMIN")
+    @DeleteMapping("/admin")
+    ResponseEntity<BaseResponse> delPitch(@RequestParam int id) {
+        pitchService.delPitch(id);
+        BaseResponse response = BaseResponse
+                .builder()
+                .status(HttpStatus.OK.value())
                 .message("success")
                 .build();
 
@@ -55,7 +68,7 @@ public class PitchController {
         List<PitchDto> pitchDtos = pitchService.getPitchAll();
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(pitchDtos)
                 .message("success")
                 .build();

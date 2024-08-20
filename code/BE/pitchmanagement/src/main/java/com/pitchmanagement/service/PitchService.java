@@ -13,6 +13,8 @@ public interface PitchService {
 
     PitchRequest editPitch(PitchRequest pitchRequest);
 
+    void delPitch(int id);
+
     List<PitchDto> getPitchAll();
 
 //    <!-- ...................Giang...................................... -->

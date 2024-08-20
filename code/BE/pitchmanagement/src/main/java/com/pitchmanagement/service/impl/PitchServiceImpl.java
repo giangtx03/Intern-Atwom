@@ -57,6 +57,11 @@ public class PitchServiceImpl implements PitchService {
     }
 
     @Override
+    public void delPitch(int id) {
+        pitchDao.deletePitch(id);
+    }
+
+    @Override
     public List<PitchDto> getPitchAll() {
         return pitchDao.selectPitchAll();
     }
