@@ -63,5 +63,6 @@
             (#{pitchTypeId} IS NULL OR #{pitchTypeId} = 0 OR p.pitch_type_id = #{pitchTypeId})
             AND (#{keyword} IS NULL OR CONCAT(IFNULL(p.name, ''), IFNULL(p.address, '')) LIKE CONCAT('%', #{keyword}, '%'))
             AND (#{timeSlotId} IS NULL OR pt_time.time_slot_id = #{timeSlotId} OR #{timeSlotId} = 0 )
+            AND pt_time.status = "rảnh"
     </select>
 </mapper>

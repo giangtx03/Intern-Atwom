@@ -1,13 +1,11 @@
 package com.pitchmanagement.controller.publics;
 
 import com.pitchmanagement.model.response.BaseResponse;
-import com.pitchmanagement.model.response.ListResponse;
+import com.pitchmanagement.model.response.PageResponse;
 import com.pitchmanagement.model.response.PitchResponse;
 import com.pitchmanagement.service.PitchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +28,11 @@ public class PitchPublicController {
             @RequestParam(name = "sort_order",defaultValue = "asc") String sortOrder) {
         try {
 
-            ListResponse listResponse = pitchService.getAllPitch(keyword, pitchTypeId,timeSlotId,pageNumber,limit, sortBy, sortOrder);
+            PageResponse pageResponse = pitchService.getAllPitch(keyword, pitchTypeId,timeSlotId,pageNumber,limit, sortBy, sortOrder);
 
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.OK.value())
-                    .data(listResponse)
+                    .data(pageResponse)
                     .message("Danh sách sân bóng !")
                     .build();
             return ResponseEntity.ok().body(response);

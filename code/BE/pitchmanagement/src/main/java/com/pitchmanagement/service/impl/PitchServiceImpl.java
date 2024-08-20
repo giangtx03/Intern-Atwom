@@ -9,17 +9,14 @@ import com.pitchmanagement.dto.ImageDto;
 import com.pitchmanagement.dto.admin.PitchDto;
 import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
 import com.pitchmanagement.model.request.PitchRequest;
-import com.pitchmanagement.model.response.ListResponse;
+import com.pitchmanagement.model.response.PageResponse;
 import com.pitchmanagement.model.response.PitchResponse;
 import com.pitchmanagement.service.PitchService;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +74,7 @@ public class PitchServiceImpl implements PitchService {
     }
 
     @Override
-    public ListResponse getAllPitch(String keyword, Long pitchTypeId, Long timeSlotId, int pageNumber, int limit, String sortBy, String sortOrder) {
+    public PageResponse getAllPitch(String keyword, Long pitchTypeId, Long timeSlotId, int pageNumber, int limit, String sortBy, String sortOrder) {
         PageHelper.startPage(pageNumber, limit);
         PageHelper.orderBy(sortBy + " " + sortOrder);
         List<Map<String, Object>> list = pitchDao.getAllPitch(keyword, pitchTypeId, timeSlotId);
@@ -89,7 +86,7 @@ public class PitchServiceImpl implements PitchService {
                     return PitchResponse.fromSrc(src, imageDtos, timeDtos);
                 })
                 .toList();
-        return ListResponse.builder()
+        return PageResponse.builder()
                 .items(listPitch)
                 .totalItems(pageInfo.getTotal())
                 .totalPages(pageInfo.getPages())

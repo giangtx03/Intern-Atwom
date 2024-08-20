@@ -6,13 +6,11 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Builder
-public class ListResponse {
+public class PageResponse {
 
     @JsonProperty("items")
     private Object items;
