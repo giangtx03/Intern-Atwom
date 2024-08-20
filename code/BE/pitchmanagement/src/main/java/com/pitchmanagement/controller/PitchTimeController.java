@@ -20,25 +20,7 @@ public class PitchTimeController {
 
     private final PitchTimeService pitchTimeService;
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
-    @GetMapping("/{id}")
-    public ResponseEntity<?> GetPitchTime(@PathVariable("id") Integer id) {
-        try {
-            List<PitchTimeDTO> lst = pitchTimeService.FilterPitchByPitchId(id);
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.OK.value())
-                    .message("success")
-                    .data(lst)
-                    .build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .message("failed: " + e)
-                    .build();
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
+    
 
     //------------------------------------------------------------------
     @PreAuthorize("ROLE_ADMIN")

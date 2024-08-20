@@ -9,6 +9,9 @@ import { Carousel } from "primereact/carousel";
 import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
 import CommentDisplay from "../comment";
 import BookingDialog from "../BookingDialog";
+import { TokenService } from "../../service/TokenService";
+import { decodeToken } from "react-jwt";
+import { DecodedToken } from "../../model/User";
 
 export default function PitchDetail() {
   const dispatch = useAppDispatch();
@@ -16,12 +19,17 @@ export default function PitchDetail() {
 
   const { id } = useParams<{ id: string }>();
 
-  console.log(id);
-
   const [pitch, setPitch] = useState<PitchResponse>();
   const [price, setPrice] = useState(0);
   const [visible, setVisible] = useState<boolean>(false);
 
+  const handleRedirect = (path: string) => {
+    navigate(path);
+  };
+
+  const user_id = decodeToken<DecodedToken>(
+    TokenService.getInstance().getToken()
+  )?.user_id;
 
   useEffect(() => {
     if (id) {
@@ -100,7 +108,16 @@ export default function PitchDetail() {
                           <div className="flex-grow-1">
                             <h4>{pitch.name}</h4>
                           </div>
-                          <button className="btn btn-success" onClick={(e)=>{setVisible(true)}}>
+                          <button
+                            className="btn btn-success"
+                            onClick={(e) => {
+                              if (user_id) {
+                                setVisible(true);
+                              } else {
+                                handleRedirect("/login");
+                              }
+                            }}
+                          >
                             Đặt sân ngay
                           </button>
                           <BookingDialog

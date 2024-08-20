@@ -15,8 +15,8 @@ export default class PitchTimeService  {
     }
 
     public getLstPitchTime(pitch_id:number){
-        const url = ApiUrlUtil.buildQueryString(`/pitchtime/${pitch_id}`)
-        return axiosCustom.get(url,{
+        const url = ApiUrlUtil.buildQueryString(`http://localhost:8080/public/api/v1/pitch_time/${pitch_id}`)
+        return axios.get(url,{
             headers: HeadersUtil.getHeaders(),
         })
     }

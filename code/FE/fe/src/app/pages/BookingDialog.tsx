@@ -30,6 +30,11 @@ export default function BookingDialog(props: any) {
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
+  const navigate = useNavigate();
+  
+  const handleRedirect = (path: string) => {
+    navigate(path);
+  };
 
   const add = () => {
     if (selectTime.timeSlotId == undefined) {
