@@ -1,6 +1,10 @@
 package com.pitchmanagement.service.impl;
 
+import com.pitchmanagement.dao.ImageDao;
+import com.pitchmanagement.dto.ImageDto;
+import com.pitchmanagement.model.request.ImageRequest;
 import com.pitchmanagement.service.ImageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,10 +21,13 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
     @Value("${images.path}")
     private String path;
+
+    private final ImageDao imageDao;
 
 
     @Override
@@ -62,5 +69,13 @@ public class ImageServiceImpl implements ImageService {
     public void delete( String filename) throws IOException {
         Path fileSrc = Paths.get(path + "/" + filename);
         Files.deleteIfExists(fileSrc);
+    }
+
+    @Override
+    public ImageRequest  addImg(ImageRequest  image) {
+
+        imageDao.insertImage(image);
+
+        return image;
     }
 }

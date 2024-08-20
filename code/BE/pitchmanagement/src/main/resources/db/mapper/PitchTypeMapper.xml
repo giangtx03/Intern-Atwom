@@ -8,4 +8,10 @@
         FROM pitch_type
     </select>
 
+    <select id="getAll" resultType="com.pitchmanagement.dto.PitchTypeDto">
+        SELECT
+            id,
+            name
+        FROM pitch_type
+    </select>
 </mapper>

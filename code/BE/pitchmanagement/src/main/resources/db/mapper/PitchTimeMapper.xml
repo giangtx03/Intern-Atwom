@@ -60,6 +60,10 @@
         WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}
     </update>
 
+    <delete id="deletePitchTime" parameterType="map">
+        DELETE FROM `pitch_time`
+        WHERE  `pitch_id`=#{pitchId} AND `time_slot_id`=#{timeSlotId};
+    </delete>
 
     <select id="selectPitchTimeByIds" parameterType="map" resultMap="result">
         SELECT *
