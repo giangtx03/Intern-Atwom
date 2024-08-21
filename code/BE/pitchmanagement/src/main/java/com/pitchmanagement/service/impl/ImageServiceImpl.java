@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -72,10 +73,25 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageRequest  addImg(ImageRequest  image) {
+    public ImageRequest addImg(MultipartFile file, int pitchId) throws Exception {
 
-        imageDao.insertImage(image);
+        ImageRequest imageRequest = new ImageRequest();
+        imageRequest.setName(upload(file));
+        imageRequest.setPitchId(pitchId);
 
-        return image;
+        imageDao.insertImage(imageRequest);
+
+        return imageRequest;
+    }
+
+    @Override
+    public List<ImageDto> getImgByPitchId(Long pitchId) {
+        return imageDao.getImageByPitchId(pitchId);
+    }
+
+    @Override
+    public void deleteDB(Long id) throws IOException {
+        delete(imageDao.getImageById(id).getName());
+        imageDao.deleteImage(id);
     }
 }

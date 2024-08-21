@@ -12,6 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @RequestMapping("${api.prefix}/image")
 @RequiredArgsConstructor
@@ -23,16 +26,40 @@ public class ImageController {
     @PostMapping("/admin")
     ResponseEntity<BaseResponse> addImagePitch(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("pitchId") int pitchId) {
+            @RequestParam("pitchId") int pitchId) throws Exception {
 
-        // Xử lý việc lưu trữ file và các thao tác khác
-        ImageRequest imageRequest = new ImageRequest();
-        imageRequest.setName(file.getOriginalFilename());
-        imageRequest.setPitchId(pitchId);
+        ImageRequest img = imageService.addImg(file, pitchId);
 
+        BaseResponse response = BaseResponse
+                .builder()
+                .status(HttpStatus.OK.value())
+                .data(img)
+                .message("success")
+                .build();
 
-        ImageRequest img = imageService.addImg(imageRequest);
-        System.out.println(img);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PreAuthorize("ROLE_ADMIN")
+    @DeleteMapping("/admin")
+    ResponseEntity<BaseResponse> delImgById(@RequestParam Long id) throws IOException {
+
+        imageService.deleteDB(id);
+
+        BaseResponse response = BaseResponse
+                .builder()
+                .status(HttpStatus.OK.value())
+                .message("success")
+                .build();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PreAuthorize("ROLE_ADMIN")
+    @GetMapping("/admin")
+    ResponseEntity<BaseResponse> getImgByPitchId(@RequestParam Long pitchId)  {
+
+        List<ImageDto> img = imageService.getImgByPitchId(pitchId);
 
         BaseResponse response = BaseResponse
                 .builder()
