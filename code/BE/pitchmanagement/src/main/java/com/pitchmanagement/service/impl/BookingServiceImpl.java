@@ -34,9 +34,9 @@ public class BookingServiceImpl implements BookingService {
     private final PitchTimeDAO pitchTimeDAO;
 
     @Override
-    public List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit) {
+    public List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit, String order) {
         PageHelper.startPage(offset, limit);
-        List<PitchBookingDTO> pitchBookings = bookingDAO.SelectByUser(user_id, "%" +status +"%");
+        List<PitchBookingDTO> pitchBookings = bookingDAO.SelectByUser(user_id, "%" +status +"%", order);
         return pitchBookings;
     }
 

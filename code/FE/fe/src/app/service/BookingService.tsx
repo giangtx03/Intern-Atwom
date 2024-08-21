@@ -16,9 +16,9 @@ export class BookingService {
     return BookingService._bookingService;
   }
 
-  public getLstBooking(modelSearch: any, id?: number) {
+  public getLstBooking(modelSearch: any, id?: number, order?: string) {
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
-    const url = ApiUrlUtil.buildQueryString(`/booking/${id}`, params);
+    const url = ApiUrlUtil.buildQueryString(`/booking/${id}`, params) + `&order=${order}`;
     return axiosCustom.get(url, {
       headers: HeadersUtil.getHeaders(),
     });

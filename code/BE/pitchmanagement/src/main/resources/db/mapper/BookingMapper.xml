@@ -47,7 +47,14 @@
                 join pitch_type pt1 on p.pitch_type_id = pt1.id
                 join time_slot ts on pt.time_slot_id = ts.id
             where pb.user_id = #{user_id} and pb.status like #{status}
-            ORDER by pb.create_at DESC
+            <choose>
+                <when test="order == 'DESC'">
+                    ORDER by pb.create_at DESC
+                </when>
+                <otherwise>
+                    ORDER by pb.create_at ASC
+                </otherwise>
+            </choose>
     </select>
 
     <select id="total" parameterType="map" resultType="int">

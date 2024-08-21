@@ -23,6 +23,7 @@
                 ORDER BY  cm.star DESC, cm.update_at DESC
             </otherwise>
         </choose>
+        
     </select>
 
     <select id="selectById" parameterType="map" resultType="com.pitchmanagement.dto.CommentDTO">

@@ -28,6 +28,11 @@ interface StatusSearch {
   code: string;
 }
 
+interface Order {
+  name: string;
+  type: string;
+}
+
 export default function History() {
   const [booking, setBooking] = useState([]);
   const [search, setSearch] = useState(new Search("", 5, 1, 1, 100));
@@ -35,10 +40,16 @@ export default function History() {
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number | undefined>(undefined);
   const navigate = useNavigate();
+  const [selectOrder, setSelectOrder] = useState<Order>({ name: "mới nhất", type: "DESC" });
 
-  const handleRedirect = (path:string) => {
-    navigate(path); 
+  const handleRedirect = (path: string) => {
+    navigate(path);
   };
+
+  const order: Order[] = [
+    { name: "mới nhất", type: "DESC" },
+    { name: "lâu nhất", type: "ASC" },
+  ];
 
   const statusSearch: StatusSearch[] = [
     { name: "Tất cả", code: "" },
@@ -88,7 +99,7 @@ export default function History() {
   };
 
   const dateBodyTemplate = (item: any) => {
-    return dayjs(item.createAt).format("DD/MM/YYYY");
+    return dayjs(item.createAT).format("DD/MM/YYYY");
   };
 
   const actionBodyTemplate = (item: any) => {
@@ -106,8 +117,8 @@ export default function History() {
           className={`p-button-success ${
             item.status == "cancel" || item.status == "finished" ? "" : "hide"
           }`}
-          onClick={()=>{
-            handleRedirect(`/pitch/${item.pitchId}`)
+          onClick={() => {
+            handleRedirect(`/pitch/${item.pitchId}`);
           }}
         />
       </React.Fragment>
@@ -127,16 +138,18 @@ export default function History() {
     dispatch(showOrHindSpinner(true));
     try {
       await BookingService.getInstance()
-        .getLstBooking(search, user_id)
+        .getLstBooking(search, user_id, selectOrder.type)
         .then((response) => {
           if (response.data.status == 200) {
             setBooking(response.data.data);
             dispatch(showOrHindSpinner(false));
+            console.log(response.data.data);
           }
         })
         .catch((response) => {
           dispatch(showOrHindSpinner(false));
-          showError(response.data.message);
+          showError(response.data);
+          
         });
       await BookingService.getInstance()
         .total(search, user_id)
@@ -151,6 +164,8 @@ export default function History() {
         });
     } catch (error: any) {
       showError(error.message);
+      console.log(error)
+      dispatch(showOrHindSpinner(false));
     }
   };
 
@@ -206,19 +221,39 @@ export default function History() {
           <h2 className="h4" style={{ margin: "1.5%" }}>
             History
           </h2>
-          <Dropdown
-            value={search.keySearch}
-            options={statusSearch}
-            optionLabel="name"
-            onChange={(e: DropdownChangeEvent) => {
-              setSearch({
-                ...search,
-                timer: new Date().getTime(),
-                keySearch: e.value.code,
-                page: 1,
-              });
-            }}
-          ></Dropdown>
+          <div>
+            <Dropdown
+              value={search.keySearch}
+              options={statusSearch}
+              optionLabel="name"
+              style={{ width: "15%", margin: "2%" }}
+              onChange={(e: DropdownChangeEvent) => {
+                setSearch({
+                  ...search,
+                  timer: new Date().getTime(),
+                  keySearch: e.value.code,
+                  page: 1,
+                });
+                setFirst(1);
+              }}
+            ></Dropdown>
+            <Dropdown
+              value={selectOrder}
+              onChange={(e: DropdownChangeEvent) => {
+                setSelectOrder(e.value);
+                setSearch({
+                  ...search,
+                  timer: new Date().getTime(),
+                  page: 1,
+                });
+                setFirst(1);
+              }}
+              options={order}
+              optionLabel="name"
+              placeholder="Sắp xếp theo"
+              style={{ width: "15%", margin: "2%" }}
+            ></Dropdown>
+          </div>
           <DataTable
             value={booking}
             rows={5}
@@ -233,7 +268,7 @@ export default function History() {
               body={statusBodyTemplate}
             ></Column>
             <Column
-              field="createAt"
+              field="createAT"
               header="Create"
               body={dateBodyTemplate}
             ></Column>

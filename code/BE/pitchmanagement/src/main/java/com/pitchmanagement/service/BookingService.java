@@ -10,7 +10,7 @@ import com.pitchmanagement.dto.PitchBookingDTO;
 import com.pitchmanagement.model.request.BookingRequest;
 
 public interface BookingService {
-    List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit);
+    List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit, String order);
 
     Integer total( Integer user_id,  String status);
 

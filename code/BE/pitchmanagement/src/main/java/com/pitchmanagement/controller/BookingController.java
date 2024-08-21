@@ -35,10 +35,11 @@ public class BookingController {
     public ResponseEntity<?> Get(
             @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer user_id,
             @RequestParam(name = "keySearch", defaultValue = "", required = false) String search,
+            @RequestParam(name= "order", defaultValue = "DESC", required = false) String order,
             @RequestParam(name = "page", defaultValue = "1", required = false) Integer offset,
             @RequestParam(name = "limit", defaultValue = "5", required = false) Integer limit) {
         try {
-            List<PitchBookingDTO> lst = bookingService.SelectByUser(user_id,search, offset, limit);
+            List<PitchBookingDTO> lst = bookingService.SelectByUser(user_id,search, offset, limit,order);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.OK.value())
                     .message("success")
