@@ -142,13 +142,13 @@
 
     <resultMap id="result" type="com.pitchmanagement.dto.admin.BookingDto">
         <result property="id" column="id"/>
-        <result property="note" column="note"/>
-        <result property="status" column="status"/>
-        <result property="pitch_time_pitch_id" column="pitchId"/>
-        <result property="pitch_time_time_slot_id" column="timeSlotId"/>
-        <result property="user_id" column="userId"/>
         <result property="create_at" column="createAt"/>
         <result property="update_at" column="updateAt"/>
+        <result property="status" column="status"/>
+        <result property="user_id" column="userId"/>
+        <result property="pitch_time_pitch_id" column="pitchTimePitchId"/>
+        <result property="pitch_time_time_slot_id" column="pitchTimeTimeSlotId"/>
+        <result property="note" column="note"/>
     </resultMap>
 
     <!-- ........................................................... -->

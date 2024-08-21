@@ -25,7 +25,7 @@ import com.pitchmanagement.service.BookingService;
 
 import jakarta.transaction.Transactional;
 
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
@@ -76,7 +76,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) {
+    public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) throws Exception {
 
         int id = (int) statusMap.get("id");
         String status = (String) statusMap.get("status");
@@ -84,10 +84,16 @@ public class BookingServiceImpl implements BookingService {
         bookingDAO.updateStatusPitchBooking(statusMap);
 
         ConfirmPitchBookingDto tempConfirmPitchBookingDto = bookingDAO.selectConfirmPitchBookingById(id);
+
+        if (tempConfirmPitchBookingDto == null) {
+            throw new RuntimeException("ConfirmPitchBooking not found for id: " + id);
+        }
         tempConfirmPitchBookingDto.setStatusBook(status);
 
         // Truy vấn bảng pitch_time
         BookingDto pitchBooking = bookingDAO.selectPitchBookingById(id);
+
+        System.out.println(pitchBooking);
 
         if (pitchBooking == null) {
             throw new RuntimeException("PitchBooking not found for id: " + id);
