@@ -10,8 +10,21 @@
         WHERE pitch_id = #{pitchId}
     </select>
 
+    <select id="getImageById" parameterType="Long" resultType="com.pitchmanagement.dto.ImageDto">
+        SELECT
+        id,
+        name
+        FROM image
+        WHERE id = #{id}
+    </select>
+
     <insert id="insertImage" parameterType="com.pitchmanagement.model.request.ImageRequest">
         INSERT INTO `image` (`name`, `pitch_id`)
         VALUES (#{name}, #{pitchId});
     </insert>
+
+    <delete id="deleteImage" parameterType="Long">
+        DELETE FROM `image`
+        WHERE  `id`= #{id};
+    </delete>
 </mapper>

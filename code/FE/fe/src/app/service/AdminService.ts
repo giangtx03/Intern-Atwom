@@ -231,3 +231,30 @@ export const postImagePitch = async (formData: FormData) => {
     }
 };
 
+// Xóa img
+export const deleteImagePitch = async (id: number) => {
+
+    try {
+        const url = `/image/admin?id=${id}`
+        await axiosCustom.delete(url);
+
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Lấy danh sách img
+export const getImgByPitchId = async (pitchId: number) => {
+    try {
+
+        const url = `/image/admin?pitchId=${pitchId}`
+
+        const response: AxiosResponse<{ data: ImagePitch[] }> = await axiosCustom.get(url);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
