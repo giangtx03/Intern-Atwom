@@ -11,6 +11,8 @@ import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import { TimeSlotService } from "../../service/TimeSlotService";
 import { PitchTypeService } from "../../service/PitchTypeService";
+import { Button } from "primereact/button";
+import { Paginator } from "primereact/paginator";
 
 type SearchModel = {
   keyword: string;
@@ -41,8 +43,8 @@ export default function Pitch() {
   const [visible, setVisible] = useState(false);
   const [list, setList] = useState<PitchResponse[]>();
   const [listPitchType, setListPitchType] = useState<PitchType[]>();
-  const [listTimeSlot, setListTimeSlot] = useState<TimeSlot[]>();
-  const [prices, setPrices] = useState<{ [key: number]: number }>({});
+  // const [listTimeSlot, setListTimeSlot] = useState<TimeSlot[]>();
+  // const [prices, setPrices] = useState<{ [key: number]: number }>({});
   const [search, setSearch] = useState<SearchModel>({
     keyword: "",
     pitchType: {},
@@ -53,6 +55,8 @@ export default function Pitch() {
     sortOrder: "asc",
     timer: 0,
   });
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [first, setFirst] = useState<number>(0);
 
   useEffect(() => {
     dispatch(showOrHindSpinner(true));
@@ -71,7 +75,8 @@ export default function Pitch() {
           if (response.data.status === 200) {
             setList(response.data.data.items);
             // console.log(search);
-            // console.log(response.data.data.items);
+            console.log(response.data.data);
+            setTotalRecords(response.data.data.total_items);
             dispatch(showOrHindSpinner(false));
           }
         })
@@ -83,26 +88,26 @@ export default function Pitch() {
     }, 300);
   }, [search.timer]);
 
-  useEffect(() => {
-    TimeSlotService.getInstance()
-      .getAllTimeSlot()
-      .then((response: any) => {
-        if (response.data.status === 200) {
-          setListTimeSlot([{id: 0, start_time: '00:00:00', end_time: '23:59:59'}, ...response.data.data]);
-          // console.log(response.data.data)
-        }
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   TimeSlotService.getInstance()
+  //     .getAllTimeSlot()
+  //     .then((response: any) => {
+  //       if (response.data.status === 200) {
+  //         setListTimeSlot([{id: 0, start_time: '00:00:00', end_time: '23:59:59'}, ...response.data.data]);
+  //         // console.log(response.data.data)
+  //       }
+  //     })
+  //     .catch((error: any) => {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     PitchTypeService.getInstance()
       .getAllPitchType()
       .then((response: any) => {
         if (response.data.status === 200) {
-          setListPitchType([{id: 0, name: "ALL"}, ...response.data.data]);
+          setListPitchType([{ id: 0, name: "ALL" }, ...response.data.data]);
           // console.log(response.data.data)
         }
       })
@@ -111,17 +116,29 @@ export default function Pitch() {
       });
   }, []);
 
-  const handlePriceChange = (itemId: number, price: number) => {
-    setPrices((prevPrices) => ({
-      ...prevPrices,
-      [itemId]: price,
-    }));
-  };
+  // const handlePriceChange = (itemId: number, price: number) => {
+  //   setPrices((prevPrices) => ({
+  //     ...prevPrices,
+  //     [itemId]: price,
+  //   }));
+  // };
 
-  const formattedTimeSlots = listTimeSlot?.map((slot) => ({
-    ...slot,
-    label: `${slot.start_time} - ${slot.end_time}`,
-  }));
+  // const formattedTimeSlots = listTimeSlot?.map((slot) => ({
+  //   ...slot,
+  //   label: `${slot.start_time} - ${slot.end_time}`,
+  // }));
+
+  const onPageChange = (event: any) => {
+    setSearch({
+      ...search,
+      limit: event.rows,
+      pageNumber: event.first + 1,
+      timer: Date.now(),
+    });
+    setFirst(event.first);
+    console.log(search);
+    console.log(event);
+  };
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
@@ -151,9 +168,8 @@ export default function Pitch() {
                   }
                 }}
               />
-              <button
+              <Button
                 type="button"
-                className="btn btn-primary btn-lg"
                 onClick={() => {
                   setSearch({
                     ...search,
@@ -162,15 +178,15 @@ export default function Pitch() {
                 }}
               >
                 <FaSearch />
-              </button>
-              <button
-                className="btn btn-primary mx-3"
+              </Button>
+              <Button
+                className="mx-3"
                 onClick={() => {
                   setVisible(true);
                 }}
               >
                 Tìm kiếm nâng cao
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -192,8 +208,10 @@ export default function Pitch() {
                   />
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <p className="small">{item.pitch_type_name}</p>
-                      <p className="small text-danger">
+                      <p>
+                        <b>Kiểu sân:</b> {item.pitch_type_name}
+                      </p>
+                      <p className="text-danger">
                         <s>1099 VND</s>
                       </p>
                     </div>
@@ -202,20 +220,20 @@ export default function Pitch() {
                       className="d-flex justify-content-between mb-3"
                     >
                       <h5 className="text-dark mb-0">{item.name}</h5>
-                      <h5 className="text-dark mb-0">
+                      {/* <h5 className="text-dark mb-0">
                         {prices[item.id] ||
                           item.times.find(
                             (time) => time.status === STATUS_PITCH_TIME_ACTIVE
                           )?.price ||
                           0}{" "}
                         VND
-                      </h5>
+                      </h5> */}
                     </Link>
                     <div className="d-flex justify-content-between">
                       <p>Address : {item.address}</p>
                     </div>
                     <div className="d-flex justify-content-between mb-2">
-                      <div className="d-flex align-items-center w-100">
+                      {/* <div className="d-flex align-items-center w-100">
                         <p className="text-muted mb-0 me-2">Khung giờ:</p>
                         <select
                           className="form-select"
@@ -238,7 +256,7 @@ export default function Pitch() {
                             </option>
                           ))}
                         </select>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -279,7 +297,7 @@ export default function Pitch() {
             />
           </div>
         </div>
-        <div className="row justify-content-center align-items-center mb-3">
+        {/* <div className="row justify-content-center align-items-center mb-3">
           <div className="col-5">
             <label className="mx-3">Select time slot: </label>
           </div>
@@ -301,7 +319,7 @@ export default function Pitch() {
               className="w-full md:w-14rem"
             />
           </div>
-        </div>
+        </div> */}
         <div className="row justify-content-center align-items-center mb-3">
           <div className="col-5">
             <label className="mx-3">Select sort by: </label>
@@ -318,7 +336,7 @@ export default function Pitch() {
               }}
               style={{ width: "14rem" }}
               defaultValue={0}
-              options={["p.id", "pt_time.price", "p.create_at"]}
+              options={["p.id", "p.create_at"]}
               placeholder="Select sort by"
               className="w-full md:w-14rem"
             />
@@ -351,8 +369,8 @@ export default function Pitch() {
           onClick={() => {
             setSearch({
               ...search,
-              pitchType: { id: 0},
-              timeSlot: {id: 0},
+              pitchType: { id: 0 },
+              timeSlot: { id: 0 },
               sortBy: "p.id",
               timer: Date.now(),
             });
@@ -361,6 +379,15 @@ export default function Pitch() {
           Clear All
         </button>
       </Dialog>
+      <div className="mt-3">
+        <Paginator
+          first={0}
+          rows={search.limit}
+          totalRecords={totalRecords}
+          rowsPerPageOptions={[1, 2, 3]}
+          onPageChange={onPageChange}
+        />
+      </div>
     </section>
   );
 }

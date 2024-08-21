@@ -9,27 +9,31 @@ import { Carousel } from "primereact/carousel";
 import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
 import CommentDisplay from "../comment";
 import BookingDialog from "../BookingDialog";
-import { TokenService } from "../../service/TokenService";
-import { decodeToken } from "react-jwt";
-import { DecodedToken } from "../../model/User";
+import { useSelector } from "react-redux";
+import { Button } from "primereact/button";
+import { SelectButton } from "primereact/selectbutton";
+import { FaExclamationCircle  } from "react-icons/fa";
 
 export default function PitchDetail() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(
+    (state: any) => state.user.isAuthenticated
+  );
 
   const { id } = useParams<{ id: string }>();
 
   const [pitch, setPitch] = useState<PitchResponse>();
   const [price, setPrice] = useState(0);
   const [visible, setVisible] = useState<boolean>(false);
+  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+  const [options, setOptions] = useState<
+    { label: string; value: number; isReservation: boolean }[]
+  >([]);
 
   const handleRedirect = (path: string) => {
     navigate(path);
   };
-
-  const user_id = decodeToken<DecodedToken>(
-    TokenService.getInstance().getToken()
-  )?.user_id;
 
   useEffect(() => {
     if (id) {
@@ -64,6 +68,31 @@ export default function PitchDetail() {
     );
   };
 
+  useEffect(() => {
+    if (pitch) {
+      const newOptions = pitch.times.map((time, index) => ({
+        label: `${time.startTime} - ${time.endTime}`,
+        value: index,
+        isReservation: time.status !== STATUS_PITCH_TIME_ACTIVE,
+      }));
+      setOptions(newOptions);
+      if (selectedTime === null) {
+        setSelectedTime(0);
+        setPrice(pitch.times[0]?.price ?? 0);
+      }
+    }
+  }, [pitch?.times, selectedTime]);
+
+  const handleChange = (e: any) => {
+    if (pitch) {
+      const selectedIndex = e.value;
+      if (selectedIndex !== selectedTime && selectedIndex !== null) {
+        setSelectedTime(selectedIndex);
+        setPrice(pitch.times[selectedIndex]?.price ?? 0);
+      }
+    }
+  };
+
   return pitch ? (
     <div className="main-content">
       <div className="page-content">
@@ -72,15 +101,7 @@ export default function PitchDetail() {
           <div className="row">
             <div className="col-12">
               <div className="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                <h4 className="mb-sm-0">Pitch Details</h4>
-                <div className="page-title-right">
-                  <ol className="breadcrumb m-0">
-                    <li className="breadcrumb-item">
-                      <Link to="/home">Home</Link>
-                    </li>
-                    <li className="breadcrumb-item active">Pitch Details</li>
-                  </ol>
-                </div>
+                <h4 className="mb-sm-0 p-3">Pitch Details</h4>
               </div>
             </div>
           </div>
@@ -108,10 +129,9 @@ export default function PitchDetail() {
                           <div className="flex-grow-1">
                             <h4>{pitch.name}</h4>
                           </div>
-                          <button
-                            className="btn btn-success"
+                          <Button
                             onClick={(e) => {
-                              if (user_id) {
+                              if (isAuthenticated) {
                                 setVisible(true);
                               } else {
                                 handleRedirect("/login");
@@ -119,7 +139,7 @@ export default function PitchDetail() {
                             }}
                           >
                             Đặt sân ngay
-                          </button>
+                          </Button>
                           <BookingDialog
                             visible={visible}
                             setVisible={setVisible}
@@ -154,10 +174,28 @@ export default function PitchDetail() {
                           {/* end col */}
                         </div>
                         <div className="row">
-                          <div className="col-xl-6">
+                          <div className="col-12">
                             <div className="mt-4">
                               <h5 className="fs-14">Times :</h5>
-                              <select
+                              <SelectButton
+                                value={selectedTime}
+                                onChange={handleChange}
+                                options={options}
+                                itemTemplate={(option: any) => (
+                                  <div className="d-flex align-items-center">
+                                    {option.isReservation ? (
+                                      <span className="position-absolute top-0 end-0 bg-warning">
+                                        <FaExclamationCircle size={20} color="red" />
+                                        <span className="text-danger small">Đã đặt</span>
+                                      </span>
+                                    ) : (
+                                      <></>
+                                    )}
+                                    {option.label}
+                                  </div>
+                                )}
+                              />
+                              {/* <select
                                 className="form-select"
                                 onChange={(e) => {
                                   const selectedIndex = e.target.selectedIndex;
@@ -177,7 +215,7 @@ export default function PitchDetail() {
                                     {time.startTime} - {time.endTime}
                                   </option>
                                 ))}
-                              </select>
+                              </select> */}
                             </div>
                           </div>
                         </div>

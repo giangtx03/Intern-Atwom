@@ -1,24 +1,33 @@
-import React, { useEffect } from "react";
-import { TokenService } from "../service/TokenService";
-import { decodeToken, isExpired } from "react-jwt";
-import { DecodedToken } from "../model/User";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { showOrHindSpinner } from "../reduces/SpinnerSlice";
 
 export default function AuthGuard(props: any) {
   const navigate = useNavigate();
-  const token = TokenService.getInstance().getToken();
-  const decode = decodeToken<DecodedToken>(token);
-  const isTokenExpired = isExpired(token);
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
+  const isLoading = useSelector((state: any) => state.user.isLoading);
 
   useEffect(() => {
-    if (isTokenExpired || !decode || decode.user_id <= 0) {
-      TokenService.getInstance().removeToken();
-      navigate("/login");
+    if (isLoading) {
+      dispatch(showOrHindSpinner(true));
+    } else {
+      dispatch(showOrHindSpinner(false));
+
+      if (!isAuthenticated) {
+        navigate("/login");
+      }
     }
-  }, [isTokenExpired, decode, navigate]);
+  }, [isAuthenticated, isLoading, navigate, dispatch]);
 
+  if(isLoading) {
+    dispatch(showOrHindSpinner(true))
+    return null;
+  }
 
-  if (isTokenExpired || !decode || decode.user_id <= 0) {
+  if (!isAuthenticated) {
+    dispatch(showOrHindSpinner(false));
     return null;
   }
 

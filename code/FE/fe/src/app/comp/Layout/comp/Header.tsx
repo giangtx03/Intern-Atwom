@@ -12,6 +12,8 @@ import { isExpired, decodeToken } from "react-jwt";
 import { DecodedToken, UserDetails } from "../../../model/User";
 import { UserService } from "../../../service/UserService";
 import { error } from "console";
+import { useAppDispatch } from "../../../store/hooks";
+import { login, logout } from "../../../reduces/UserSlice";
 
 interface MenuItem {
   label: string;
@@ -24,6 +26,7 @@ interface MenuItem {
 
 export default function Header() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [user, setUser] = useState<UserDetails | null>(null);
 
@@ -37,11 +40,12 @@ export default function Header() {
         .then((response) => {
           if (response.data.status === 200) {
             setUser(response.data.data);
+            dispatch(login(response.data.data));
           }
         })
         .catch((error) => {
           console.log(error);
-          TokenService.getInstance().removeToken();
+          dispatch(logout());
           navigate("/login");
         });
     }
@@ -84,7 +88,7 @@ export default function Header() {
       label: "Logout",
       icon: "pi pi-sign-out",
       command: () => {
-        TokenService.getInstance().removeToken();
+        dispatch(logout());
         setUser(null);
         navigate("/login");
       },

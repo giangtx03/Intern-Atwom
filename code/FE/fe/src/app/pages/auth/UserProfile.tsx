@@ -12,13 +12,12 @@ import ChangePasswordForm from "./comp/ChangePasswordForm";
 import { decodeToken } from "react-jwt";
 import UpdateProfile from "./comp/UpdateProfile";
 import defaultAvatar from '../../../assets/image/avatar.jpg';
+import { useSelector } from "react-redux";
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const decode = decodeToken<DecodedToken>(
-    TokenService.getInstance().getToken()
-  );
+  const userDetail = useSelector((state: any) => state.user.userDetail);
 
   const [user, setUser] = useState<UserDetails>();
   const [visible, setVisible] = useState(false);
@@ -27,48 +26,14 @@ export default function UserProfile() {
   useEffect(() => {
     dispatch(showOrHindSpinner(true));
     setTimeout(() => {
-      if (decode) {
-        UserService.getInstance()
-          .getUserDetails(decode.user_id)
-          .then((response) => {
-            if (response.data.status === 200) {
-              setUser(response.data.data);
-              dispatch(showOrHindSpinner(false));
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            dispatch(showOrHindSpinner(false));
-            TokenService.getInstance().removeToken();
-            navigate("/login");
-          });
-      }
+      setUser(userDetail);
+      dispatch(showOrHindSpinner(false));
     }, 300);
   }, [navigate]);
 
   return user ? (
     <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
-        <div className="row">
-          <div className="col">
-            <nav
-              aria-label="breadcrumb"
-              className="bg-body-tertiary rounded-3 p-3 mb-4"
-            >
-              <ol className="breadcrumb mb-0">
-                <li className="breadcrumb-item">
-                  <a href="#">Home</a>
-                </li>
-                <li className="breadcrumb-item">
-                  <a href="#">User</a>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  User Profile
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
         <div className="row">
           <div className="col-lg-4">
             <div className="card mb-4">
