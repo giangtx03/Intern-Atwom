@@ -22,6 +22,7 @@ import { Column } from "primereact/column";
 import { Paginator } from "primereact/paginator";
 import { Tag } from "primereact/tag";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_CANCEL, STATUS_PITCH_BOOKING_REJECT, STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
 
 interface StatusSearch {
   name: string;
@@ -53,10 +54,11 @@ export default function History() {
 
   const statusSearch: StatusSearch[] = [
     { name: "Tất cả", code: "" },
-    { name: "Thành công", code: "success" },
-    { name: "chờ", code: "wait" },
+    { name: "Thành công", code: STATUS_PITCH_BOOKING_ACCESS },
+    { name: "chờ", code: STATUS_PITCH_BOOKING_WAIT },
     { name: "Đã thanh toán", code: "finished" },
-    { name: "Hủy", code: "cancel" },
+    { name: "Hủy", code: STATUS_PITCH_BOOKING_CANCEL },
+    { name: "Từ chối", code: STATUS_PITCH_BOOKING_REJECT },
   ];
   const toast = useRef<Toast>(null);
   const token = localStorage.getItem("access_token");
@@ -108,14 +110,14 @@ export default function History() {
         <Button
           label="Cancel"
           className={`p-button-danger ${
-            item.status == "success" || item.status == "wait" ? "" : "hide"
+            item.status == STATUS_PITCH_BOOKING_ACCESS || item.status == STATUS_PITCH_BOOKING_WAIT ? "" : "hide"
           }`}
           onClick={() => ChoseCancelBooking(item)}
         />
         <Button
           label="Order"
           className={`p-button-success ${
-            item.status == "cancel" || item.status == "finished" ? "" : "hide"
+            item.status == STATUS_PITCH_BOOKING_CANCEL || item.status == "finished" ? "" : "hide"
           }`}
           onClick={() => {
             handleRedirect(`/pitch/${item.pitchId}`);
@@ -143,7 +145,6 @@ export default function History() {
           if (response.data.status == 200) {
             setBooking(response.data.data);
             dispatch(showOrHindSpinner(false));
-            console.log(response.data.data);
           }
         })
         .catch((response) => {
@@ -180,7 +181,7 @@ export default function History() {
       dangerMode: true,
     }).then(async (value) => {
       if (value) {
-        bookChose.status = "cancel";
+        bookChose.status = STATUS_PITCH_BOOKING_CANCEL;
         await BookingService.getInstance()
           .CancelBooking(bookChose)
           .then((response) => {

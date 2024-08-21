@@ -14,7 +14,7 @@ public interface BookingService {
 
     Integer total( Integer user_id,  String status);
 
-    void insert(BookingRequest bookingRequest);
+    List<PitchBookingDTO> insert(BookingRequest bookingRequest);
 
     void update(BookingRequest bookingRequest);
 

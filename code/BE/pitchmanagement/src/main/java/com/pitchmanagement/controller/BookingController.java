@@ -97,14 +97,22 @@ public class BookingController {
     }
     @PreAuthorize("ROLE_USER")
     @PostMapping
-    public ResponseEntity<?> Booking(@Valid @RequestBody BookingRequest bookingRequest) {
+    public ResponseEntity<?> addBooking(@Valid @RequestBody BookingRequest bookingRequest) {
         try {
-            bookingService.insert(bookingRequest);
-            BaseResponse response = BaseResponse.builder()
-                    .status(HttpStatus.NO_CONTENT.value())
-                    .message("Cập nhật thành công")
-                    .build();
-            return ResponseEntity.ok().body(response);
+            List<PitchBookingDTO> check = bookingService.insert(bookingRequest);
+            if(check.isEmpty()){
+                BaseResponse response = BaseResponse.builder()
+                        .status(HttpStatus.NO_CONTENT.value())
+                        .message("Cập nhật thành công")
+                        .build();
+                return ResponseEntity.ok().body(response);
+            }else{
+                BaseResponse response = BaseResponse.builder()
+                .status(HttpStatus.FOUND.value())
+                .message("Bạn đã đặt thời gian trên")
+                .build();
+        return ResponseEntity.ok().body(response);
+            }
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.BAD_REQUEST.value())

@@ -26,6 +26,30 @@
         where pb.id  = #{id}
     </select>
 
+    <select id="selectByUserAndPitchAndTime" parameterType="map" resultType="com.pitchmanagement.dto.PitchBookingDTO">
+        SELECT  pb.id,
+                pb.create_at as createAt,
+                pb.update_at as updateAt,
+                pb.status,
+                pb.note,
+                pb.user_id as userId,
+                pt.price,
+                pt.pitch_id as pitchId,
+                pt.time_slot_id as timeSlotId,
+                p.name  as pitchName,
+                p.address,
+                pt1.name as type,
+                ts.start_time as startTime,
+                ts.end_time as endTime
+                FROM pitch_booking pb
+                    join pitch_time pt on pb.pitch_time_pitch_id = pt.pitch_id and pb.pitch_time_time_slot_id = pt.time_slot_id
+                    Join pitch p on p.id = pb.pitch_time_pitch_id
+                    join pitch_type pt1 on p.pitch_type_id = pt1.id
+                    join time_slot ts on pt.time_slot_id = ts.id
+        where pb.user_id = #{user_id} AND pt.pitch_id = ${pitch_id} AND pt.time_slot_id = #{time_slot_id} and pb.status = "wait"
+    </select>
+    
+
     <select id ="SelectByUser" parameterType="map" resultType="com.pitchmanagement.dto.PitchBookingDTO">
         SELECT  pb.id,
         pb.create_at as createAt,

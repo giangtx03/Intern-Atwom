@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 import { DecodedToken } from "../model/User";
 import { TokenService } from "../service/TokenService";
+import { STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
 
 export default function BookingDialog(props: any) {
   let {
@@ -47,12 +48,19 @@ export default function BookingDialog(props: any) {
       }).then(async (value) => {
         await BookingService.getInstance()
           .addBooking(
-            new Booking("wait", note, user_id, pitch_id.id, selectTime.timeSlotId)
+            new Booking(STATUS_PITCH_BOOKING_WAIT, note, user_id, pitch_id.id, selectTime.timeSlotId)
           )
           .then((response) => {
-            if ((response.data.status = "OK")) {
-              swal("Cancel success", {
+            
+            if ((response.data.status == 204)) {
+              swal("add success", {
                 icon: "success",
+                text: response.data.message,
+              });
+            }else if( response.data.status ==  302){
+              swal("add success", {
+                icon: "warning",
+                text: response.data.message,
               });
             } else {
               swal("An error occurred", {
@@ -83,7 +91,6 @@ export default function BookingDialog(props: any) {
               setNote("");
               setMessage(false);
             }else{
-              console.log(response)
             }
           });
       }

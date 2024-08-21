@@ -40,7 +40,6 @@ export default function Header() {
           }
         })
         .catch((error) => {
-          console.log(error);
           TokenService.getInstance().removeToken();
           navigate("/login");
         });
@@ -77,7 +76,6 @@ export default function Header() {
       label: "Settings",
       icon: "pi pi-cog",
       command: () => {
-        console.log(decodeToken(TokenService.getInstance().getToken()));
       },
     },
     {
