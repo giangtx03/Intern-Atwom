@@ -81,7 +81,6 @@ export default function Header() {
       label: "Settings",
       icon: "pi pi-cog",
       command: () => {
-        console.log(decodeToken(TokenService.getInstance().getToken()));
       },
     },
     {

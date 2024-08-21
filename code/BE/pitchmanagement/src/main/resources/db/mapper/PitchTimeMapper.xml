@@ -32,7 +32,7 @@
         join time_slot t on t.id = pt.time_slot_id
         join pitch p on p.id = pt.pitch_id
         join pitch_type pt1 on p.pitch_type_id = pt1.id
-    where pitch_id = #{pitch_id} and start_time >=now() and status = 'ranh';
+    where pitch_id = #{pitch_id} and start_time >=now() and status = 'enable';
     </select>
 
     <update id = "ChangeStatus" parameterType = "map">
@@ -65,7 +65,7 @@
         WHERE  `pitch_id`=#{pitchId} AND `time_slot_id`=#{timeSlotId};
     </delete>
 
-    <select id="selectPitchTimeByIds" parameterType="map" resultMap="result">
+    <select id="selectPitchTimeByIds" parameterType="map" resultType="com.pitchmanagement.model.request.PitchTimeRequest">
         SELECT *
         FROM pitch_time
         WHERE pitch_id = #{pitchId} AND time_slot_id = #{timeSlotId}

@@ -8,6 +8,7 @@ import java.util.Map;
 import com.pitchmanagement.dto.admin.BookingDto;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
+import com.pitchmanagement.constant.*;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.ibatis.javassist.NotFoundException;
@@ -25,7 +26,7 @@ import com.pitchmanagement.service.BookingService;
 
 import jakarta.transaction.Transactional;
 
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
@@ -34,38 +35,47 @@ public class BookingServiceImpl implements BookingService {
     private final PitchTimeDAO pitchTimeDAO;
 
     @Override
-    public List<PitchBookingDTO> SelectByUser(Integer user_id,String status, Integer offset, Integer limit, String order) {
+    public List<PitchBookingDTO> SelectByUser(Integer user_id, String status, Integer offset, Integer limit,
+            String order) {
         PageHelper.startPage(offset, limit);
-        List<PitchBookingDTO> pitchBookings = bookingDAO.SelectByUser(user_id, "%" +status +"%", order);
+        List<PitchBookingDTO> pitchBookings = bookingDAO.SelectByUser(user_id, "%" + status + "%", order);
         return pitchBookings;
     }
 
-    public Integer total( Integer user_id,  String status){
-        return bookingDAO.total(user_id,"%" +status +"%");
+    public Integer total(Integer user_id, String status) {
+        return bookingDAO.total(user_id, "%" + status + "%");
     }
 
     @Override
-    public void insert(BookingRequest bookingRequest) {
-        bookingDAO.insert(bookingRequest);
+    public List<PitchBookingDTO> insert(BookingRequest bookingRequest) {
+        List<PitchBookingDTO> check = bookingDAO.selectByUserAndPitchAndTime(bookingRequest.getUserId(),bookingRequest.getPitchId(),bookingRequest.getTimeSlotId());
+        System.out.println(check);
+        if (check.isEmpty()) {
+            bookingDAO.insert(bookingRequest);
+        }
+        return check;
     }
 
     @Override
     public void update(BookingRequest bookingRequest) {
-        bookingDAO.update(bookingRequest);
         PitchBookingDTO booking = bookingDAO.selectById(bookingRequest.getId());
-        if(booking == null){
+        if (booking == null) {
             try {
                 throw new NotFoundException("Không tìm thấy booking");
             } catch (NotFoundException e) {
                 e.printStackTrace();
             }
         }
-        if (booking.getStatus() == "success") {
-            pitchTimeDAO.ChangeStatus("ranh", bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());
+        bookingDAO.update(bookingRequest);
+        System.out.println(booking.getStatus());
+        if (booking.getStatus().equals(PitchBookingConstant.STATUS_PITCH_BOOKING_ACCESS)) {
+            System.out.println(123);
+            pitchTimeDAO.ChangeStatus(PitchTimeConstant.STATUS_PITCH_TIME_ACTIVE, bookingRequest.getPitchId(),
+                    bookingRequest.getTimeSlotId());
         }
     }
 
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
     @Override
     public List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(List<String> statuses) {
         System.out.println("Statuses: " + statuses);
@@ -76,7 +86,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) {
+    public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) throws Exception {
 
         int id = (int) statusMap.get("id");
         String status = (String) statusMap.get("status");
@@ -84,10 +94,16 @@ public class BookingServiceImpl implements BookingService {
         bookingDAO.updateStatusPitchBooking(statusMap);
 
         ConfirmPitchBookingDto tempConfirmPitchBookingDto = bookingDAO.selectConfirmPitchBookingById(id);
+
+        if (tempConfirmPitchBookingDto == null) {
+            throw new RuntimeException("ConfirmPitchBooking not found for id: " + id);
+        }
         tempConfirmPitchBookingDto.setStatusBook(status);
 
         // Truy vấn bảng pitch_time
         BookingDto pitchBooking = bookingDAO.selectPitchBookingById(id);
+
+        System.out.println(pitchBooking);
 
         if (pitchBooking == null) {
             throw new RuntimeException("PitchBooking not found for id: " + id);
@@ -116,5 +132,5 @@ public class BookingServiceImpl implements BookingService {
         return tempConfirmPitchBookingDto;
     }
 
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
 }

@@ -3,16 +3,18 @@ package com.pitchmanagement.dto.admin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 public class BookingDto {
 
-    private Integer id;
-    private String createAt;
-    private String updateAt;
+    private int id;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
     private String status;
+    private int userId;
+    private int pitchTimePitchId;
+    private int pitchTimeTimeSlotId;
     private String note;
-    private Integer pitchTimePitchId;
-    private Integer pitchTimeTimeSlotId;
-    private Integer userId;
 }

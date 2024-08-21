@@ -114,7 +114,6 @@ export default function Test() {
         if (pitch.name?.trim()) {
             let _pitch = { ...pitch };
 
-            console.log("_pitch", _pitch);
 
             if (pitch.id) {
 

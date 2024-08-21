@@ -14,12 +14,12 @@ public interface BookingService {
 
     Integer total( Integer user_id,  String status);
 
-    void insert(BookingRequest bookingRequest);
+    List<PitchBookingDTO> insert(BookingRequest bookingRequest);
 
     void update(BookingRequest bookingRequest);
 
     //------------------------------------------------------------------
     List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(List<String> statuses);
 
-    ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params);
+    ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params) throws Exception;
 }

@@ -16,16 +16,21 @@ import com.pitchmanagement.model.request.BookingRequest;
 public interface BookingDAO {
     PitchBookingDTO selectById(@Param("id") Integer id);
 
-    List<PitchBookingDTO> SelectByUser(@Param("user_id") Integer user_id,@Param("status") String status, @Param("order") String order);
+    List<PitchBookingDTO>  selectByUserAndPitchAndTime(@Param("user_id") Integer user_id, @Param("pitch_id") Integer pitch_id,
+            @Param("time_slot_id") Integer time_slot_id);
+
+    List<PitchBookingDTO> SelectByUser(@Param("user_id") Integer user_id, @Param("status") String status,
+            @Param("order") String order);
 
     Integer total(@Param("user_id") Integer user_id, @Param("status") String status);
+
     List<PitchBookingDTO> SelectByUser(@Param("user_id") Integer user_id);
 
     void insert(BookingRequest pitchBooking);
 
     void update(BookingRequest pitchBooking);
 
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
     List<ConfirmPitchBookingDto> selectConfirmPitchBookingByStatus(@Param("statuses") List<String> statuses);
 
     BookingDto selectPitchBookingById(int id);
@@ -34,5 +39,5 @@ public interface BookingDAO {
 
     void updateStatusPitchBooking(Map<String, Object> params);
 
-    //------------------------------------------------------------------
+    // ------------------------------------------------------------------
 }
