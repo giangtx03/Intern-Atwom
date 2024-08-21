@@ -129,7 +129,7 @@ public class BookingController {
         List<ConfirmPitchBookingDto> confirmPitchBookings = bookingService.getConfirmPitchBookingByStatus(status);
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(confirmPitchBookings)
                 .message("success")
                 .build();
@@ -139,11 +139,12 @@ public class BookingController {
 
     @PreAuthorize("ROLE_ADMIN")
     @PutMapping("/admin/confirm")
-    ResponseEntity<BaseResponse> updateStatusPitchBooking(@RequestBody Map<String, Object> statusMap) {
+    ResponseEntity<BaseResponse> updateStatusPitchBooking(@RequestBody Map<String, Object> statusMap) throws Exception {
         ConfirmPitchBookingDto tempConfirmPitchBooking = bookingService.updateStatusPitchBooking(statusMap);
+
         BaseResponse response = BaseResponse
                 .builder()
-                .status(HttpStatus.ACCEPTED.value())
+                .status(HttpStatus.OK.value())
                 .data(tempConfirmPitchBooking)
                 .message("success")
                 .build();

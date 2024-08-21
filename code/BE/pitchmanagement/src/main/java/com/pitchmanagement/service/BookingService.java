@@ -21,5 +21,5 @@ public interface BookingService {
     //------------------------------------------------------------------
     List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(List<String> statuses);
 
-    ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params);
+    ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params) throws Exception;
 }

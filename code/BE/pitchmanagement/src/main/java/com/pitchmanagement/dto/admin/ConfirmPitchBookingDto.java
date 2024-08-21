@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class ConfirmPitchBookingDto {
 
-    private Integer id;
+    private int id;
     private LocalDateTime createAt;
     private String statusBook;
     private String namePitch;
