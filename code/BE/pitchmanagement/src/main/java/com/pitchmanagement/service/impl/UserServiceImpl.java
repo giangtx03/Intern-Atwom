@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 
         String image = "";
         if(updateUserRequest.getAvatar() != null && !updateUserRequest.getAvatar().isEmpty()){
-            if(src.get("avatar") != null){
+            if(src.get("avatar") != null && !src.get("avatar").toString().isEmpty()){
                 imageService.delete(src.get("avatar").toString());
             }
             image = imageService.upload(updateUserRequest.getAvatar());

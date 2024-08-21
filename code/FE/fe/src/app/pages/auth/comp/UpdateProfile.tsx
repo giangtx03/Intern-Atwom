@@ -79,6 +79,7 @@ export default function UpdateProfile(props: any) {
               toast.error(error.response.data.message, {
                 position: "top-right",
               });
+              console.log(error)
               dispatch(showOrHindSpinner(false));
             });
         }, 300);

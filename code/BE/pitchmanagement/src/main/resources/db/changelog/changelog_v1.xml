@@ -238,5 +238,10 @@
                                  onDelete="CASCADE"
         />
     </changeSet>
+    <changeSet id="3" author="Phuc">
+        <addColumn tableName="pitch_booking">
+            <column name="note" type="varchar(255)"></column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
