@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "primereact/button";
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch();
@@ -197,14 +198,12 @@ export default function RegisterPage() {
           </label>
         </div> */}
 
-      <button
+      <Button
         type="submit"
-        data-mdb-button-init
-        data-mdb-ripple-init
-        className="btn btn-primary btn-block mb-3"
+        className="d-flex justify-content-center align-items-center"
       >
         Đăng ký
-      </button>
+      </Button>
       <div className="text-center">
         <p>
           Đã có tài khoản? <Link to={"/login"}>Đăng nhập ngay</Link>

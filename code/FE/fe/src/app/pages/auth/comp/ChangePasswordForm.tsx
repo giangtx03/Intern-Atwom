@@ -7,6 +7,7 @@ import { showOrHindSpinner } from "../../../reduces/SpinnerSlice";
 import { UserService } from "../../../service/UserService";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { Button } from "primereact/button";
 
 export default function ChangePasswordForm(props: any) {
   const { userId, handleUpdate } = props;
@@ -87,18 +88,18 @@ export default function ChangePasswordForm(props: any) {
       }}
     >
       <div className="text-center mb-3">
-        <h3>Change Password</h3>
+        <h3>Đổi mật khẩu</h3>
       </div>
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerPassword">
-          Password
+          Mật khẩu hiện tại
         </label>
         <input
           type="password"
           id="registerPassword"
           {...register("oldPassword", {
-            required: "Mật khẩu không được để trống",
+            required: "Mật khẩu hiện tại không được để trống",
           })}
           className="form-control"
         />
@@ -109,16 +110,16 @@ export default function ChangePasswordForm(props: any) {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerPassword">
-          New Password
+          Mật khẩu mới
         </label>
         <input
           type="password"
           id="registerPassword"
           {...register("newPassword", {
-            required: "Mật khẩu không được để trống",
+            required: "Mật khẩu mới không được để trống",
             minLength: {
               value: 8,
-              message: "Mật khẩu tối thiểu 8 ký tự",
+              message: "Mật khẩu mới tối thiểu 8 ký tự",
             },
           })}
           className="form-control"
@@ -130,7 +131,7 @@ export default function ChangePasswordForm(props: any) {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerRetypePassword">
-          Retype Password
+          Xác nhận mật khẩu
         </label>
         <input
           type="password"
@@ -147,14 +148,12 @@ export default function ChangePasswordForm(props: any) {
         <p className="text-danger">{errors.retypePassword.message}</p>
       )}
 
-      <button
+      <Button
         type="submit"
-        data-mdb-button-init
-        data-mdb-ripple-init
-        className="btn btn-primary btn-block mb-3"
+        className="d-flex justify-content-center align-items-center"
       >
-        Update
-      </button>
+        Cập nhật
+      </Button>
     </form>
   );
 }

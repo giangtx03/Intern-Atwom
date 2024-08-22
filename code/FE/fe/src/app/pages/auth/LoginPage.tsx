@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { TokenService } from "../../service/TokenService";
+import { Button } from "primereact/button";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
@@ -112,14 +113,12 @@ export default function LoginPage() {
         </div>
       </div> */}
 
-      <button
+      <Button
         type="submit"
-        data-mdb-button-init
-        data-mdb-ripple-init
-        className="btn btn-primary btn-block mb-4"
+        className="d-flex justify-content-center align-items-center"
       >
         Đăng nhập
-      </button>
+      </Button>
 
       <div className="text-center">
         <p>

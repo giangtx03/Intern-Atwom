@@ -178,36 +178,38 @@ export default function Pitch() {
           </div>
         </div>
         <div className="row">
-          {list?.map((item: PitchResponse) => {
-            return (
-              <div
-                key={item.id}
-                className="col-md-6 col-lg-4 mb-4 mb-lg-0 mt-3"
-              >
-                <div className="card">
-                  <img
-                    src={`http://localhost:8080/public/api/v1/image/${item.images[0]?.name}`}
-                    className="card-img-top"
-                    alt="Laptop"
-                    onError={(e) => {
-                      e.currentTarget.src = defaultAvatar;
-                    }}
-                  />
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between">
-                      <p>
-                        <b>Kiểu sân:</b> {item.pitch_type_name}
-                      </p>
-                      <p className="text-danger">
-                        <s>1099 VND</s>
-                      </p>
-                    </div>
-                    <Link
-                      to={`/pitch/${item.id}`}
-                      className="d-flex justify-content-between mb-3"
-                    >
-                      <h5 className="text-dark mb-0">{item.name}</h5>
-                      {/* <h5 className="text-dark mb-0">
+          {list && list.length > 0 ? (
+            <>
+              {list.map((item: PitchResponse) => {
+                return (
+                  <div
+                    key={item.id}
+                    className="col-md-6 col-lg-4 mb-4 mb-lg-0 mt-3"
+                  >
+                    <div className="card">
+                      <img
+                        src={`http://localhost:8080/public/api/v1/image/${item.images[0]?.name}`}
+                        className="card-img-top"
+                        alt="Laptop"
+                        onError={(e) => {
+                          e.currentTarget.src = defaultAvatar;
+                        }}
+                      />
+                      <div className="card-body">
+                        <div className="d-flex justify-content-between">
+                          <p>
+                            <b>Kiểu sân:</b> {item.pitch_type_name}
+                          </p>
+                          <p className="text-danger">
+                            <s>1099 VND</s>
+                          </p>
+                        </div>
+                        <Link
+                          to={`/pitch/${item.id}`}
+                          className="d-flex justify-content-between mb-3"
+                        >
+                          <h5 className="text-dark mb-0">{item.name}</h5>
+                          {/* <h5 className="text-dark mb-0">
                         {prices[item.id] ||
                           item.times.find(
                             (time) => time.status === STATUS_PITCH_TIME_ACTIVE
@@ -215,12 +217,12 @@ export default function Pitch() {
                           0}{" "}
                         VND
                       </h5> */}
-                    </Link>
-                    <div className="d-flex justify-content-between">
-                      <p>Address : {item.address}</p>
-                    </div>
-                    <div className="d-flex justify-content-between mb-2">
-                      {/* <div className="d-flex align-items-center w-100">
+                        </Link>
+                        <div className="d-flex justify-content-between">
+                          <p>Address : {item.address}</p>
+                        </div>
+                        <div className="d-flex justify-content-between mb-2">
+                          {/* <div className="d-flex align-items-center w-100">
                         <p className="text-muted mb-0 me-2">Khung giờ:</p>
                         <select
                           className="form-select"
@@ -244,12 +246,47 @@ export default function Pitch() {
                           ))}
                         </select>
                       </div> */}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                );
+              })}
+              <div className="mt-3 d-flex justify-content-around">
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className="page-item">
+                      <a className="page-link" href="#">
+                        Previous
+                      </a>
+                    </li>
+                    <li className="page-item">
+                      <a className="page-link" href="#">
+                        1
+                      </a>
+                    </li>
+                    <li className="page-item">
+                      <a className="page-link" href="#">
+                        2
+                      </a>
+                    </li>
+                    <li className="page-item">
+                      <a className="page-link" href="#">
+                        3
+                      </a>
+                    </li>
+                    <li className="page-item">
+                      <a className="page-link" href="#">
+                        Next
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
               </div>
-            );
-          })}
+            </>
+          ) : (
+            <h3 className="mt-3 text-danger">Không tồn tại sân bóng !</h3>
+          )}
         </div>
       </div>
       <Dialog
@@ -374,37 +411,6 @@ export default function Pitch() {
           Làm mới
         </Button>
       </Dialog>
-      <div className="mt-3 d-flex justify-content-around">
-        <nav aria-label="Page navigation example">
-          <ul className="pagination">
-            <li className="page-item">
-              <a className="page-link" href="#">
-                Previous
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                1
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                2
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                3
-              </a>
-            </li>
-            <li className="page-item">
-              <a className="page-link" href="#">
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
     </section>
   );
 }

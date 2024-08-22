@@ -8,14 +8,16 @@ import { AdminRouter } from "./admin/adminRouter";
 import { UserRouter } from "./user/userRouter";
 import { PitchRouter } from "./pitchRouters";
 import { Navigate } from "react-router-dom";
+import AuthGuard from "../guard/authGuard";
+import PublicGuard from "../guard/publicGuard";
 
 export const RoutersHook: any = {
   path: "/",
   element: <Layout />,
   children: [
-    { path: "/login", element: <LoginPage /> },
-    { path: "/register", element: <RegisterPage /> },
-    { path: "history", element: <History /> },
+    { path: "/login", element: <PublicGuard><LoginPage /></PublicGuard> },
+    { path: "/register", element: <PublicGuard><RegisterPage /> </PublicGuard> },
+    { path: "history", element: <AuthGuard> <History /> </AuthGuard> },
     { path: "comment", element: <CommentDisplay /> },
     { ...AdminRouter },
     { ...UserRouter },
