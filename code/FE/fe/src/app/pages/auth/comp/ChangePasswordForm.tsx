@@ -80,6 +80,7 @@ export default function ChangePasswordForm(props: any) {
       style={{
         width: "60%",
         maxWidth: "500px",
+        minWidth: "200px",
         margin: "auto",
         padding: "20px",
         border: "1px solid #ccc",

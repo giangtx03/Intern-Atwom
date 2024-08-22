@@ -9,6 +9,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Navigate, useRoutes } from 'react-router-dom';
 import { RoutersHook } from './app/routers/routers';
 import { ToastContainer } from 'react-toastify';
+import NotFound from "./app/pages/error/NotFound";
+import Forbidden from "./app/pages/error/Forbidden";
+import ErrNetWork from "./app/pages/error/ErrNetWork";
 
 export const spinner = (
   <div className="progress-spinner text-center">
@@ -19,11 +22,11 @@ export const spinner = (
 function App() {
 
   let router = useRoutes([
-    { path: 'not-permission' }, //403
-    { path: '/', element: <Navigate to="/pitch" replace /> },
+    { path: 'not-permission',element: <Forbidden/> }, //403
+    { path: '/', element: <Navigate to="/home" replace /> },
     RoutersHook,
-    { path: 'err-network' }, //500
-    { path: '*' }, //404
+    { path: 'err-network',  element: <ErrNetWork/> }, //500
+    { path: '*',  element: <NotFound/> }, //404
   ]);
 
   return (

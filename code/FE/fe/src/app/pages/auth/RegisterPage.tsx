@@ -204,7 +204,7 @@ export default function RegisterPage() {
       >
         Đăng ký
       </Button>
-      <div className="text-center">
+      <div className="text-center mt-3">
         <p>
           Đã có tài khoản? <Link to={"/login"}>Đăng nhập ngay</Link>
         </p>

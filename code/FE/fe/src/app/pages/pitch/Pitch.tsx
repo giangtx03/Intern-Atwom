@@ -5,7 +5,7 @@ import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { PitchService } from "../../service/PitchService";
 import { PitchResponse } from "../../model/PitchModel";
 import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
-import defaultAvatar from "../../../assets/image/avatar.jpg";
+import defaultSanBong from "../../../assets/image/defaultSanBong.jpeg";
 import { FaSearch } from "react-icons/fa";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
@@ -127,6 +127,16 @@ export default function Pitch() {
   //   label: `${slot.start_time} - ${slot.end_time}`,
   // }));
 
+  const onPageChange = (event: any) => {
+    setSearch({
+      ...search,
+      pageNumber: event.page + 1,
+      limit: event.rows,
+      timer: Date.now()
+    })
+  };
+
+
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
@@ -192,16 +202,13 @@ export default function Pitch() {
                         className="card-img-top"
                         alt="Laptop"
                         onError={(e) => {
-                          e.currentTarget.src = defaultAvatar;
+                          e.currentTarget.src = defaultSanBong;
                         }}
                       />
                       <div className="card-body">
                         <div className="d-flex justify-content-between">
                           <p>
                             <b>Kiểu sân:</b> {item.pitch_type_name}
-                          </p>
-                          <p className="text-danger">
-                            <s>1099 VND</s>
                           </p>
                         </div>
                         <Link
@@ -252,37 +259,14 @@ export default function Pitch() {
                   </div>
                 );
               })}
-              <div className="mt-3 d-flex justify-content-around">
-                <nav aria-label="Page navigation example">
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        Previous
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        Next
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+              <Paginator
+                first={(search.pageNumber - 1) * search.limit}
+                rows={search.limit}
+                totalRecords={totalRecords}
+                rowsPerPageOptions={[1, 12, 18, 24]}
+                onPageChange={onPageChange}
+                className="mt-3"
+              />
             </>
           ) : (
             <h3 className="mt-3 text-danger">Không tồn tại sân bóng !</h3>

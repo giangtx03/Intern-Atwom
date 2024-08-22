@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PitchService } from "../../service/PitchService";
 import { useAppDispatch } from "../../store/hooks";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
@@ -12,7 +12,8 @@ import BookingDialog from "../BookingDialog";
 import { useSelector } from "react-redux";
 import { Button } from "primereact/button";
 import { SelectButton } from "primereact/selectbutton";
-import { FaExclamationCircle  } from "react-icons/fa";
+import { FaExclamationCircle } from "react-icons/fa";
+import defaultSanBong from "../../../assets/image/defaultSanBong.jpeg";
 
 export default function PitchDetail() {
   const dispatch = useAppDispatch();
@@ -50,7 +51,7 @@ export default function PitchDetail() {
           .catch((error: any) => {
             console.log(error);
             dispatch(showOrHindSpinner(false));
-            navigate("/not-permission");
+            navigate("*");
           });
       }, 300);
     }
@@ -63,6 +64,9 @@ export default function PitchDetail() {
           className="d-block w-100"
           src={`http://localhost:8080/public/api/v1/image/${image.name}`}
           alt="Ảnh sân bóng"
+          onError={(e) => {
+            e.currentTarget.src = defaultSanBong;
+          }}
         />
       </div>
     );
@@ -101,7 +105,7 @@ export default function PitchDetail() {
           <div className="row">
             <div className="col-12">
               <div className="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                <h4 className="mb-sm-0 p-3">Pitch Details</h4>
+                <h4 className="mb-sm-0 p-3">Chi tiết sân bóng</h4>
               </div>
             </div>
           </div>
@@ -113,12 +117,26 @@ export default function PitchDetail() {
                   <div className="row gx-lg-5">
                     <div className="col-xl-4 col-md-8 mx-auto">
                       <div className="product-img-slider sticky-side-div carousel-inner">
-                        <Carousel
-                          value={pitch.images}
-                          numScroll={1}
-                          numVisible={1}
-                          itemTemplate={imageTemplate}
-                        />
+                        {pitch.images && pitch.images.length > 0 ? (
+                          <Carousel
+                            value={pitch.images}
+                            numScroll={1}
+                            numVisible={1}
+                            itemTemplate={imageTemplate}
+                          />
+                        ) : (
+                          <div className="carousel-item active">
+                            <img
+                              className="d-block w-100"
+                              src={defaultSanBong}
+                              alt="Ảnh sân bóng"
+                              onError={(e) => {
+                                e.currentTarget.src = defaultSanBong;
+                              }}
+                            />
+                          </div>
+                        )}
+
                         {/* end swiper nav slide */}
                       </div>
                     </div>
@@ -156,7 +174,7 @@ export default function PitchDetail() {
                                   </div>
                                 </div>
                                 <div className="flex-grow-1">
-                                  <p className="text-muted mb-1">Price :</p>
+                                  <p className="text-muted mb-1">Giá theo khung giờ:</p>
                                   <h5 className="mb-0">
                                     {price === 0
                                       ? pitch.times.find(
@@ -176,7 +194,7 @@ export default function PitchDetail() {
                         <div className="row">
                           <div className="col-12">
                             <div className="mt-4">
-                              <h5 className="fs-14">Times :</h5>
+                              <h5 className="fs-14">Khung giờ:</h5>
                               <SelectButton
                                 value={selectedTime}
                                 onChange={handleChange}
@@ -185,8 +203,13 @@ export default function PitchDetail() {
                                   <div className="d-flex align-items-center">
                                     {option.isReservation ? (
                                       <span className="position-absolute top-0 end-0 bg-warning">
-                                        <FaExclamationCircle size={20} color="red" />
-                                        <span className="text-danger small">Đã đặt</span>
+                                        <FaExclamationCircle
+                                          size={20}
+                                          color="red"
+                                        />
+                                        <span className="text-danger small">
+                                          Đã đặt
+                                        </span>
                                       </span>
                                     ) : (
                                       <></>
@@ -221,7 +244,7 @@ export default function PitchDetail() {
                         </div>
                         {/* end row */}
                         <div className="product-content mt-5">
-                          <h5 className="fs-14 mb-3">Pitch Description :</h5>
+                          <h5 className="fs-14 mb-3">Mô tả sân bóng:</h5>
                           <div
                             className="tab-content border border-top-0 p-4"
                             id="nav-tabContent"
@@ -237,20 +260,20 @@ export default function PitchDetail() {
                                   <tbody>
                                     <tr>
                                       <th scope="row" style={{ width: 200 }}>
-                                        Pitch Type
+                                        Kiểu sân
                                       </th>
                                       <td>{pitch.pitch_type_name}</td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Address</th>
+                                      <th scope="row">Địa chỉ</th>
                                       <td>{pitch.address}</td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Create At</th>
+                                      <th scope="row">Thời gian tạo</th>
                                       <td>{formatDate(pitch.create_at)}</td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Update At</th>
+                                      <th scope="row">Thời gian cập nhật</th>
                                       <td>{formatDate(pitch.update_at)}</td>
                                     </tr>
                                   </tbody>

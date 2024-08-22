@@ -65,6 +65,11 @@ export default function Header() {
       icon: "pi pi-home",
       command: () => navigate("/"),
     },
+    {
+      label: "Sân bóng",
+      icon: "pi pi-list",
+      command: () => navigate("/pitch"),
+    },
     ...(isAuthenticated
       ? [
           {
@@ -91,11 +96,11 @@ export default function Header() {
       icon: "pi pi-user",
       command: () => navigate("/user/profile"),
     },
-    {
-      label: "Cài đặt",
-      icon: "pi pi-cog",
-      command: () => {},
-    },
+    // {
+    //   label: "Cài đặt",
+    //   icon: "pi pi-cog",
+    //   command: () => {},
+    // },
     {
       label: "Đăng xuất",
       icon: "pi pi-sign-out",

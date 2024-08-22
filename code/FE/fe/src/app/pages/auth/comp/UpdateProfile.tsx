@@ -94,7 +94,7 @@ export default function UpdateProfile(props: any) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
-        <div className="col-4">
+        <div className="col-lg-4 col-md-12 mb-3">
           <div
             className="image-container"
             onClick={() => fileInputRef.current?.click()}
@@ -139,7 +139,7 @@ export default function UpdateProfile(props: any) {
             />
           </div>
         </div>
-        <div className="col-8">
+        <div className="col-lg-8 col-md-12">
           <div className="mb-4">
             <div className="card-body">
               <div className="row">

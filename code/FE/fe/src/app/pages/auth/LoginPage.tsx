@@ -120,7 +120,7 @@ export default function LoginPage() {
         Đăng nhập
       </Button>
 
-      <div className="text-center">
+      <div className="text-center mt-3">
         <p>
           Chưa có tài khoản? <Link to={"/register"}>Đăng ký ngay</Link>
         </p>
