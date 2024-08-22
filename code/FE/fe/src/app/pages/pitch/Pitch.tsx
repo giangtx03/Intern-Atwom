@@ -359,8 +359,7 @@ export default function Pitch() {
             />
           </div>
         </div>
-        <button
-          className="btn btn-primary"
+        <Button
           onClick={() => {
             setSearch({
               ...search,
@@ -372,8 +371,8 @@ export default function Pitch() {
             });
           }}
         >
-          Clear All
-        </button>
+          Làm mới
+        </Button>
       </Dialog>
       <div className="mt-3 d-flex justify-content-around">
         <nav aria-label="Page navigation example">
