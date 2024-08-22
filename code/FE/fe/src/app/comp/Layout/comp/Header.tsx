@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Menubar } from "primereact/menubar";
-import { InputText } from "primereact/inputtext";
 import { Avatar } from "primereact/avatar";
 import { Menu } from "primereact/menu";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,6 +13,10 @@ import { UserService } from "../../../service/UserService";
 import { error } from "console";
 import { useAppDispatch } from "../../../store/hooks";
 import { login, logout } from "../../../reduces/UserSlice";
+import { useSelector } from "react-redux";
+import { ROLE_ADMIN } from "../../../constant/constant";
+import { Button } from "primereact/button";
+import defaultAvatar from "../../../../assets/image/avatar.jpg";
 
 interface MenuItem {
   label: string;
@@ -28,6 +31,9 @@ export default function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const isAuthenticated = useSelector(
+    (state: any) => state.user.isAuthenticated
+  );
   const [user, setUser] = useState<UserDetails | null>(null);
 
   useEffect(() => {
@@ -55,36 +61,43 @@ export default function Header() {
 
   const items: MenuItem[] = [
     {
-      label: "Home",
+      label: "Trang chủ",
       icon: "pi pi-home",
       command: () => navigate("/"),
     },
-    {
-      label: "History",
-      icon: "pi pi-star",
-      command: () => navigate("/history"),
-    },
-    {
-      label: "admin",
-      icon: "pi pi-lock",
-      command: () => navigate("/admin"),
-    },
+    ...(isAuthenticated
+      ? [
+          {
+            label: "Lịch sử đặt sân",
+            icon: "pi pi-star",
+            command: () => navigate("/history"),
+          },
+          ...(user?.role === ROLE_ADMIN
+            ? [
+                {
+                  label: "admin",
+                  icon: "pi pi-lock",
+                  command: () => navigate("/admin"),
+                },
+              ]
+            : []),
+        ]
+      : []),
   ];
 
   const userMenuItems = [
     {
-      label: "Profile",
+      label: "Trang cá nhân",
       icon: "pi pi-user",
       command: () => navigate("/user/profile"),
     },
     {
-      label: "Settings",
+      label: "Cài đặt",
       icon: "pi pi-cog",
-      command: () => {
-      },
+      command: () => {},
     },
     {
-      label: "Logout",
+      label: "Đăng xuất",
       icon: "pi pi-sign-out",
       command: () => {
         dispatch(logout());
@@ -105,20 +118,37 @@ export default function Header() {
   const end = (
     <div className="flex align-items-center gap-2">
       {user ? (
-        <>
+        <div className="d-flex align-items-center">
           <Avatar
-            image={`http://localhost:8080/public/api/v1/image/${user?.avatar}`}
+            image={
+              user.avatar
+                ? `http://localhost:8080/public/api/v1/image/${user.avatar}`
+                : undefined
+            }
+            icon={!user.avatar ? "pi pi-user" : undefined}
             shape="circle"
-            className="cursor-pointer"
+            className="cursor-pointer mx-2"
             onClick={(e) => menu.current?.toggle(e)}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = defaultAvatar;
+            }}
           />
           <p className="m-0 font-semibold">{user.fullname}</p>
-          <Menu model={userMenuItems} popup ref={menu} />
-        </>
+          <Menu
+            model={userMenuItems}
+            style={{ width: "14rem" }}
+            popup
+            ref={menu}
+          />
+        </div>
       ) : (
-        <Link to="/login" className="btn btn-primary">
-          Login
-        </Link>
+        <Button
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          Đăng nhập
+        </Button>
       )}
     </div>
   );

@@ -5,7 +5,7 @@ import { UserService } from "../../service/UserService";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
   const dispatch = useAppDispatch();
@@ -80,7 +80,7 @@ export default function RegisterPage() {
       }}
     >
       <div className="text-center mb-3">
-        <h3>Sign up</h3>
+        <h3>Đăng ký</h3>
       </div>
 
       <div data-mdb-input-init className="form-outline mb-4">
@@ -106,7 +106,7 @@ export default function RegisterPage() {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerFullname">
-          Fullname
+          Họ và tên
         </label>
         <input
           type="text"
@@ -123,7 +123,7 @@ export default function RegisterPage() {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerPassword">
-          Password
+          Mật khẩu
         </label>
         <input
           type="password"
@@ -144,7 +144,7 @@ export default function RegisterPage() {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerRetypePassword">
-          Retype Password
+          Xác nhận mật khẩu
         </label>
         <input
           type="password"
@@ -163,7 +163,7 @@ export default function RegisterPage() {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="registerPhoneNumber">
-          PhoneNumber
+          Số điện thoại
         </label>
         <input
           type="text"
@@ -203,8 +203,13 @@ export default function RegisterPage() {
         data-mdb-ripple-init
         className="btn btn-primary btn-block mb-3"
       >
-        Register
+        Đăng ký
       </button>
+      <div className="text-center">
+        <p>
+          Đã có tài khoản? <Link to={"/login"}>Đăng nhập ngay</Link>
+        </p>
+      </div>
     </form>
   );
 }

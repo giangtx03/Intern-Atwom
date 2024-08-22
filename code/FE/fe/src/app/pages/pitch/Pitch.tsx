@@ -20,8 +20,8 @@ type SearchModel = {
   timeSlot: any;
   pageNumber: number;
   limit: number;
-  sortBy: string;
-  sortOrder: string;
+  sortBy: { name: string; value: string };
+  sortOrder: { name: string; value: string };
   timer: number;
 };
 
@@ -51,12 +51,11 @@ export default function Pitch() {
     timeSlot: {},
     pageNumber: 1,
     limit: 12,
-    sortBy: "p.id",
-    sortOrder: "asc",
+    sortBy: { name: "id", value: "p.id" },
+    sortOrder: { name: "Tăng dần", value: "asc" },
     timer: 0,
   });
   const [totalRecords, setTotalRecords] = useState<number>(0);
-  const [first, setFirst] = useState<number>(0);
 
   useEffect(() => {
     dispatch(showOrHindSpinner(true));
@@ -68,8 +67,8 @@ export default function Pitch() {
           time_slot_id: search.timeSlot.id,
           page_number: search.pageNumber,
           limit: search.limit,
-          sort_by: search.sortBy,
-          sort_order: search.sortOrder,
+          sort_by: search.sortBy.value,
+          sort_order: search.sortOrder.value,
         })
         .then((response: any) => {
           if (response.data.status === 200) {
@@ -107,7 +106,7 @@ export default function Pitch() {
       .getAllPitchType()
       .then((response: any) => {
         if (response.data.status === 200) {
-          setListPitchType([{ id: 0, name: "ALL" }, ...response.data.data]);
+          setListPitchType([{ id: 0, name: "Tất cả" }, ...response.data.data]);
           // console.log(response.data.data)
         }
       })
@@ -128,18 +127,6 @@ export default function Pitch() {
   //   label: `${slot.start_time} - ${slot.end_time}`,
   // }));
 
-  const onPageChange = (event: any) => {
-    setSearch({
-      ...search,
-      limit: event.rows,
-      pageNumber: event.first + 1,
-      timer: Date.now(),
-    });
-    setFirst(event.first);
-    console.log(search);
-    console.log(event);
-  };
-
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
@@ -150,7 +137,7 @@ export default function Pitch() {
                 type="search"
                 id="form1"
                 className="form-control"
-                placeholder="Search"
+                placeholder="Tìm kiếm"
                 aria-label="Search"
                 value={search.keyword}
                 onChange={(e) => {
@@ -276,7 +263,7 @@ export default function Pitch() {
       >
         <div className="row justify-content-center align-items-center mb-3">
           <div className="col-5">
-            <label className="mx-3">Select pitch type:</label>
+            <label className="mx-3">Chọn kiểu sân:</label>
           </div>
           <div className="col-7">
             <Dropdown
@@ -292,7 +279,7 @@ export default function Pitch() {
               options={listPitchType}
               style={{ width: "14rem" }}
               optionLabel="name"
-              placeholder="Select a pitch type"
+              placeholder="Chọn kiểu sân"
               className="w-full md:w-14rem"
             />
           </div>
@@ -322,7 +309,7 @@ export default function Pitch() {
         </div> */}
         <div className="row justify-content-center align-items-center mb-3">
           <div className="col-5">
-            <label className="mx-3">Select sort by: </label>
+            <label className="mx-3">Sắp xếp theo: </label>
           </div>
           <div className="col-7">
             <Dropdown
@@ -336,15 +323,19 @@ export default function Pitch() {
               }}
               style={{ width: "14rem" }}
               defaultValue={0}
-              options={["p.id", "p.create_at"]}
-              placeholder="Select sort by"
+              optionLabel="name"
+              placeholder="Sắp xếp theo"
+              options={[
+                { name: "Số thứ tự", value: "p.id" },
+                { name: "Ngày tạo", value: "p.create_at" },
+              ]}
               className="w-full md:w-14rem"
             />
           </div>
         </div>
         <div className="row justify-content-center align-items-center mb-3">
           <div className="col-5">
-            <label className="mx-3">Select sort by: </label>
+            <label className="mx-3">Thứ tự sắp xếp: </label>
           </div>
           <div className="col-7">
             <Dropdown
@@ -358,8 +349,12 @@ export default function Pitch() {
               }}
               style={{ width: "14rem" }}
               defaultValue={0}
-              options={["asc", "desc"]}
-              placeholder="Select sort order"
+              optionLabel="name"
+              placeholder="Thứ tự sắp xếp"
+              options={[
+                { name: "Tăng dần", value: "asc" },
+                { name: "Giảm dần", value: "desc" },
+              ]}
               className="w-full md:w-14rem"
             />
           </div>
@@ -371,7 +366,8 @@ export default function Pitch() {
               ...search,
               pitchType: { id: 0 },
               timeSlot: { id: 0 },
-              sortBy: "p.id",
+              sortBy: { name: "Số thứ tự", value: "p.id" },
+              sortOrder: { name: "Tăng dần", value: "asc" },
               timer: Date.now(),
             });
           }}
@@ -379,14 +375,36 @@ export default function Pitch() {
           Clear All
         </button>
       </Dialog>
-      <div className="mt-3">
-        <Paginator
-          first={0}
-          rows={search.limit}
-          totalRecords={totalRecords}
-          rowsPerPageOptions={[1, 2, 3]}
-          onPageChange={onPageChange}
-        />
+      <div className="mt-3 d-flex justify-content-around">
+        <nav aria-label="Page navigation example">
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#">
+                Previous
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                3
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" href="#">
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </section>
   );

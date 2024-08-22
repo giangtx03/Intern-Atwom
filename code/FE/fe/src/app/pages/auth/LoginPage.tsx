@@ -58,7 +58,7 @@ export default function LoginPage() {
       }}
     >
       <div className="text-center mb-3">
-        <h3>Sign in</h3>
+        <h3>Đăng nhập</h3>
       </div>
 
       <div data-mdb-input-init className="form-outline mb-4">
@@ -84,12 +84,12 @@ export default function LoginPage() {
 
       <div data-mdb-input-init className="form-outline mb-4">
         <label className="form-label" htmlFor="loginPassword">
-          Password
+          Mật khẩu
         </label>
         <input
           type="password"
           {...register("password", {
-            required: "Password không được để trống",
+            required: "Mật khẩu không được để trống",
           })}
           id="loginPassword"
           className="form-control"
@@ -118,12 +118,12 @@ export default function LoginPage() {
         data-mdb-ripple-init
         className="btn btn-primary btn-block mb-4"
       >
-        Sign in
+        Đăng nhập
       </button>
 
       <div className="text-center">
         <p>
-          Not a member? <Link to={"/register"}>Register</Link>
+          Chưa có tài khoản? <Link to={"/register"}>Đăng ký ngay</Link>
         </p>
       </div>
     </form>
