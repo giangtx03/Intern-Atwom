@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import Header from './comp/Header';
 
 export default function LayoutAdmin() {
   const navigate = useNavigate();
-  const [activeButton, setActiveButton] = useState<string>("messagebooks");
+  const location = useLocation();
+
+  // Lấy phần sau "/admin/"
+  const link = location.pathname.split("/admin/")[1];
+  const [activeButton, setActiveButton] = useState<string>(link);
+
+  // Cập nhật activeButton khi location.pathname thay đổi
+  useEffect(() => {
+    setActiveButton(link);
+  }, [location.pathname]);
+
+  // Điều hướng về trang khác nếu đường dẫn không bắt đầu bằng '/admin'
+  if (!location.pathname.startsWith('/admin')) {
+    return <Navigate to="/" />;
+  }
 
   const redirect = (url: string) => {
     setActiveButton(url);
     navigate(url);
   };
-
-  const location = useLocation();
-
-  // Nếu đường dẫn không phải admin thì điều hướng về trang khác (ví dụ '/')
-  if (!location.pathname.startsWith('/admin')) {
-    return <Navigate to="/" />;
-  }
 
   return (
     <div className='d-flex flex-column'>
@@ -25,23 +32,23 @@ export default function LayoutAdmin() {
         <div className="row" style={{ height: "629px" }}>
           <div className="col-2 bg-body-secondary pt-2">
             <Button
+              className={`w-100 rounded-2 my-2 text-start ${activeButton !== "revenue" ? 'p-button-text' : ''}`}
+              label="Dashboard"
+              onClick={() => redirect("revenue")}
+            />
+            <Button
               className={`w-100 rounded-2 my-2 text-start ${activeButton !== "messagebooks" ? 'p-button-text' : ''}`}
-              label="Message Books"
+              label="Duyệt sân"
               onClick={() => redirect("messagebooks")}
             />
             <Button
               className={`w-100 rounded-2 my-2 text-start ${activeButton !== "payments" ? 'p-button-text' : ''}`}
-              label="Payments"
+              label="Thanh toán"
               onClick={() => redirect("payments")}
             />
             <Button
-              className={`w-100 rounded-2 my-2 text-start ${activeButton !== "revenue" ? 'p-button-text' : ''}`}
-              label="Revenue"
-              onClick={() => redirect("revenue")}
-            />
-            <Button
               className={`w-100 rounded-2 my-2 text-start ${activeButton !== "editPitch" ? 'p-button-text' : ''}`}
-              label="Edit Pitch"
+              label="Quản lý sân"
               onClick={() => redirect("editPitch")}
             />
           </div>

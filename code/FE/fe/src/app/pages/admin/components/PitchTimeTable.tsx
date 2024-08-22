@@ -11,8 +11,8 @@ import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber
 import { TimeSlot } from '../../../model/TimeSlot';
 
 interface TimeSlotResponse {
-    id: number;
-    time: string;
+    id?: number;
+    time?: string;
 }
 
 type Props = {
@@ -29,6 +29,12 @@ export default function PitchTimeTable(props: Props) {
     const [deletePitchTimeDialog, setDeletePitchTimeDialog] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState<string | null>(null);
+
+    const _pitchTimeNew: PitchTimeRequest = {
+        pitchId: props.pitchId,
+        price: undefined,
+        timeSlotId: undefined
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,12 +68,16 @@ export default function PitchTimeTable(props: Props) {
     }, []);
 
 
-    const timeSlotResponses: TimeSlotResponse[] = timeSlots.map(ts => ({
-        id: ts.id!,
-        time: `${ts.startTime} - ${ts.endTime}`
-    }));
+    const timeSlotResponses: TimeSlotResponse[] = timeSlots
+        .filter(ts => !pitchTimes.some(data => data.startTime === ts.startTime))
+        .map(ts => ({
+            id: ts.id!,
+            time: `${ts.startTime} - ${ts.endTime}`
+        }));
 
     const openNew = () => {
+        setPitchTime(_pitchTimeNew);
+        setTimeSlotResponse({ id: undefined, time: undefined })
         setVisibleTime(true);
     };
 
@@ -174,40 +184,58 @@ export default function PitchTimeTable(props: Props) {
                 <Button icon="pi pi-plus" severity="success" onClick={openNew} />
             </div>
             <div className="card my-1">
-                <DataTable value={pitchTimes} selectionMode="single" editMode="row" onRowEditComplete={onRowEditComplete}>
-                    <Column field="startTime" header="Giờ bắt đầu" style={{ width: '8rem' }}></Column>
-                    <Column field="endTime" header="Giờ kết thúc" style={{ width: '8rem' }}></Column>
-                    <Column field="price" header="Giá" editor={(options) => priceEditor(options)}></Column>
-                    <Column rowEditor={allowEdit} headerStyle={{ width: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-                    <Column style={{ width: '1rem', padding: 0, paddingRight: '1rem' }} body={deleteBtn}></Column>
-                </DataTable>
+                {pitchTimes.length === 0
+                    ?
+                    <div className="text-center my-5">
+                        Chưa có khung giờ nào được thêm
+                    </div>
+                    :
+                    <>
+                        <DataTable value={pitchTimes} selectionMode="single" editMode="row" onRowEditComplete={onRowEditComplete}>
+                            <Column field="startTime" header="Giờ bắt đầu" style={{ width: '8rem' }}></Column>
+                            <Column field="endTime" header="Giờ kết thúc" style={{ width: '8rem' }}></Column>
+                            <Column field="price" header="Giá" editor={(options) => priceEditor(options)}></Column>
+                            <Column rowEditor={allowEdit} headerStyle={{ width: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+                            <Column style={{ width: '1rem', padding: 0, paddingRight: '1rem' }} body={deleteBtn}></Column>
+                        </DataTable>
+                    </>
+
+                }
 
             </div>
             <Dialog header="Sửa giờ sân" visible={visibleTime} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
                 <div className="d-flex justify-content-between align-items-center my-1">
-                    <div className="flex-grow-1 me-2">
-                        <Dropdown
-                            id="type"
-                            value={timeSlotResponse}
-                            onChange={(e) => handleTimeSlot(e.value)}
-                            options={timeSlotResponses}
-                            optionLabel="time"
-                            required
-                            placeholder="Chọn giờ"
-                        />
-                    </div>
-                    <div className="flex-grow-1 me-2">
-                        <InputNumber
-                            inputId="minmax"
-                            value={pitchTime?.price}
-                            onValueChange={(e: InputNumberValueChangeEvent) => setPitchTime({ ...pitchTime, price: e.target.value! })}
-                            min={0}
-                            placeholder='Giá sân'
-                        />
-                    </div>
-                    <div className="flex-shrink-0">
-                        <Button icon="pi pi-check" severity="success" onClick={handleSubmit} />
-                    </div>
+                    {timeSlotResponses.length === 0
+                        ?
+                        <div className="">Khung giờ sân đã đủ</div>
+                        :
+                        <>
+                            <div className="flex-grow-1 me-2">
+                                <Dropdown
+                                    id="type"
+                                    value={timeSlotResponse}
+                                    onChange={(e) => handleTimeSlot(e.value)}
+                                    options={timeSlotResponses}
+                                    optionLabel="time"
+                                    required
+                                    placeholder="Chọn giờ"
+                                />
+                            </div>
+                            <div className="flex-grow-1 me-2">
+                                <InputNumber
+                                    inputId="minmax"
+                                    value={pitchTime?.price}
+                                    onValueChange={(e: InputNumberValueChangeEvent) => setPitchTime({ ...pitchTime, price: e.target.value! })}
+                                    min={0}
+                                    placeholder='Giá sân'
+                                />
+                            </div>
+                            <div className="flex-shrink-0">
+                                <Button icon="pi pi-check" severity="success" onClick={handleSubmit} />
+                            </div>
+                        </>
+
+                    }
                 </div>
             </Dialog>
             <Dialog visible={deletePitchTimeDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deletePitchTimeDialogFooter} onHide={hideDeletePitchTimeDialog}>
