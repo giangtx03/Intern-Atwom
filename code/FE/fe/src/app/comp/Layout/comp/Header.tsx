@@ -63,7 +63,7 @@ export default function Header() {
     {
       label: "Trang chủ",
       icon: "pi pi-home",
-      command: () => navigate("/"),
+      command: () => navigate("/home"),
     },
     {
       label: "Sân bóng",

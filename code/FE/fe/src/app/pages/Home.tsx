@@ -72,16 +72,8 @@ export default function Home() {
             kiếm theo khu vực mong muốn
           </p>
         </div>
-        <div className="col-1">
-          <hr
-            style={{
-              width: "3px",
-              height: "50vh",
-              border: "none",
-              borderLeft: "3px solid #000",
-              margin: "0 20px",
-            }}
-          />
+        <div className="col-lg-1 col-12">
+          <hr className="separator d-none d-md-block" />
         </div>
         <div
           className="col-lg-5 col-md-12"

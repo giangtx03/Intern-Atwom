@@ -98,3 +98,27 @@ a {
 .image-container:hover .overlay {
   opacity: 1; /* Hiển thị lớp mờ và icon khi hover */
 }
+
+.separator {
+  width: 3px;
+  height: 50vh;
+  border: none;
+  border-left: 3px solid #000;
+  margin: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .separator {
+    width: 2px; /* Đặt lại độ rộng của thanh phân cách cho màn hình nhỏ hơn */
+    height: 30vh; /* Đặt lại chiều cao cho màn hình nhỏ hơn */
+    margin: 0 10px; /* Đặt lại khoảng cách bên trái và bên phải */
+  }
+}
+
+@media (max-width: 480px) {
+  .separator {
+    width: 1px; /* Đặt lại độ rộng của thanh phân cách cho màn hình rất nhỏ */
+    height: 20vh; /* Đặt lại chiều cao cho màn hình rất nhỏ */
+    margin: 0 5px; /* Đặt lại khoảng cách bên trái và bên phải */
+  }
+}
