@@ -1,5 +1,5 @@
 import { Button } from "primereact/button";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { UpdateUserDetailsRequest } from "../../../model/User";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../../../store/hooks";
@@ -7,12 +7,16 @@ import Swal from "sweetalert2";
 import { showOrHindSpinner } from "../../../reduces/SpinnerSlice";
 import { UserService } from "../../../service/UserService";
 import { toast } from "react-toastify";
+import defaultAvatar from "../../../../assets/image/defaultAvatar.jpg";
+import { FiUpload } from "react-icons/fi";
+import { Image } from "primereact/image";
 
 export default function UpdateProfile(props: any) {
   const { user, handleUpdate } = props;
   const dispatch = useAppDispatch();
 
   const [preview, setPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
     register,
@@ -79,7 +83,7 @@ export default function UpdateProfile(props: any) {
               toast.error(error.response.data.message, {
                 position: "top-right",
               });
-              console.log(error)
+              console.log(error);
               dispatch(showOrHindSpinner(false));
             });
         }, 300);
@@ -91,18 +95,33 @@ export default function UpdateProfile(props: any) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="row">
         <div className="col-4">
-          <div className="row">
-            <img
+          <div
+            className="image-container"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Image
               src={
                 preview ||
                 `http://localhost:8080/public/api/v1/image/${user?.avatar}`
               }
               alt="User Avatar"
-              width="250"
+              width="280"
+              height="280"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = defaultAvatar;
+              }}
+              style={{
+                borderRadius: "50%",
+                overflow: "hidden",
+                objectFit: "cover",
+              }}
             />
-          </div>
-          <div className="row">
-            <p className="mb-0">Chọn ảnh đại diện</p>
+            <div className="overlay">
+              <div className="icon-wrapper">
+                <FiUpload className="upload-icon" />
+              </div>
+            </div>
             <input
               type="file"
               {...register("avatar")}
@@ -112,16 +131,21 @@ export default function UpdateProfile(props: any) {
               }}
               accept="image/*"
               className="form-control"
+              ref={(e) => {
+                register("avatar").ref(e);
+                fileInputRef.current = e;
+              }}
+              hidden
             />
           </div>
         </div>
         <div className="col-8">
-          <div className="card mb-4">
+          <div className="mb-4">
             <div className="card-body">
               <div className="row">
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label className="form-label" htmlFor="registerFullname">
-                    Fullname
+                    Họ và tên
                   </label>
                   <input
                     type="text"
@@ -130,6 +154,7 @@ export default function UpdateProfile(props: any) {
                       required: "Tên không được để trống",
                     })}
                     className="form-control"
+                    placeholder="Nhập họ và tên"
                   />
                 </div>
                 {touchedFields.fullname && errors.fullname && (
@@ -140,7 +165,7 @@ export default function UpdateProfile(props: any) {
               <div className="row">
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label className="form-label" htmlFor="registerPhoneNumber">
-                    PhoneNumber
+                    Số điện thoại
                   </label>
                   <input
                     type="text"
@@ -154,6 +179,7 @@ export default function UpdateProfile(props: any) {
                     })}
                     onInput={handleInput}
                     className="form-control"
+                    placeholder="Nhập số điện thoại"
                   />
                 </div>
                 {touchedFields.phone_number && errors.phone_number && (
@@ -164,16 +190,18 @@ export default function UpdateProfile(props: any) {
               <div className="row">
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label className="form-label" htmlFor="registerAddress">
-                    Address
+                    Địa chỉ
                   </label>
                   <input
                     type="text"
                     id="registerAddress"
                     {...register("address")}
                     className="form-control"
+                    placeholder="Nhập địa chỉ"
                   />
                 </div>
               </div>
+              <hr />
             </div>
           </div>
           <div className="d-flex justify-content-center mb-2">

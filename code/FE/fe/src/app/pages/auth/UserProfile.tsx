@@ -11,8 +11,9 @@ import { Dialog } from "primereact/dialog";
 import ChangePasswordForm from "./comp/ChangePasswordForm";
 import { decodeToken } from "react-jwt";
 import UpdateProfile from "./comp/UpdateProfile";
-import defaultAvatar from '../../../assets/image/avatar.jpg';
+import defaultAvatar from "../../../assets/image/defaultAvatar.jpg";
 import { useSelector } from "react-redux";
+import { Image } from "primereact/image";
 
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -38,13 +39,19 @@ export default function UserProfile() {
           <div className="col-lg-4">
             <div className="card mb-4">
               <div className="card-body text-center">
-                <img
+                <Image
                   src={`http://localhost:8080/public/api/v1/image/${user?.avatar}`}
-                  alt="avatar"
-                  className="rounded-circle img-fluid"
-                  style={{ width: 150 }}
                   onError={(e) => {
-                    e.currentTarget.src = defaultAvatar;
+                    (e.target as HTMLImageElement).src = defaultAvatar;
+                  }}
+                  alt="Image"
+                  preview= {user.avatar ? true : false}
+                  width="200px"
+                  height="200px"
+                  style={{
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    objectFit: "cover",
                   }}
                 />
                 <h5 className="my-3">{user?.fullname}</h5>
@@ -75,7 +82,7 @@ export default function UserProfile() {
               <div className="card-body">
                 <div className="row">
                   <div className="col-sm-3">
-                    <p className="mb-0">Full Name</p>
+                    <p className="mb-0">Họ và tên</p>
                   </div>
                   <div className="col-sm-9">
                     <p className="text-muted mb-0">{user?.fullname}</p>
@@ -93,7 +100,7 @@ export default function UserProfile() {
                 <hr />
                 <div className="row">
                   <div className="col-sm-3">
-                    <p className="mb-0">Phone</p>
+                    <p className="mb-0">Số điện thoại</p>
                   </div>
                   <div className="col-sm-9">
                     <p className="text-muted mb-0">{user?.phone_number}</p>
@@ -102,7 +109,7 @@ export default function UserProfile() {
                 <hr />
                 <div className="row">
                   <div className="col-sm-3">
-                    <p className="mb-0">Address</p>
+                    <p className="mb-0">Địa chỉ</p>
                   </div>
                   <div className="col-sm-9">
                     <p className="text-muted mb-0">{user?.address}</p>
@@ -111,7 +118,7 @@ export default function UserProfile() {
                 <hr />
                 <div className="row">
                   <div className="col-sm-3">
-                    <p className="mb-0">Create At</p>
+                    <p className="mb-0">Thời gian tạo</p>
                   </div>
                   <div className="col-sm-9">
                     <p className="text-muted mb-0">
@@ -122,7 +129,7 @@ export default function UserProfile() {
                 <hr />
                 <div className="row">
                   <div className="col-sm-3">
-                    <p className="mb-0">Update At</p>
+                    <p className="mb-0">Thời gian cập nhật</p>
                   </div>
                   <div className="col-sm-9">
                     <p className="text-muted mb-0">
@@ -136,7 +143,7 @@ export default function UserProfile() {
         </div>
       </div>
       <Dialog
-        header={user.email}
+        header={`Email: ${user.email}`}
         visible={visible}
         style={{ width: "60vw", zIndex: 1000 }}
         onHide={() => {
