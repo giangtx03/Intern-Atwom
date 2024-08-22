@@ -141,7 +141,7 @@ export default function Pitch() {
     <section style={{ backgroundColor: "#eee" }}>
       <div className="container py-5">
         <div className="row justify-content-center ">
-          <div className="col-6 p-3 rounded shadow">
+          <div className="col-lg-6 col-md-12 p-3 rounded shadow">
             <div className="input-group" style={{ height: "45px" }}>
               <input
                 type="search"
@@ -263,7 +263,7 @@ export default function Pitch() {
                 first={(search.pageNumber - 1) * search.limit}
                 rows={search.limit}
                 totalRecords={totalRecords}
-                rowsPerPageOptions={[1, 12, 18, 24]}
+                rowsPerPageOptions={[6, 12, 18, 24]}
                 onPageChange={onPageChange}
                 className="mt-3"
               />
@@ -276,7 +276,7 @@ export default function Pitch() {
       <Dialog
         header="Tìm kiếm nâng cao"
         visible={visible}
-        style={{ width: "40vw", zIndex: 1000 }}
+        style={{ width: "40vw", minWidth: '450px', zIndex: 1000 }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);

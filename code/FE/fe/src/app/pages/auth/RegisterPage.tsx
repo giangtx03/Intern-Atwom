@@ -99,6 +99,7 @@ export default function RegisterPage() {
             },
           })}
           className="form-control"
+          placeholder="Nhập email"
         />
       </div>
       {touchedFields.email && errors.email && (
@@ -116,6 +117,7 @@ export default function RegisterPage() {
             required: "Tên không được để trống",
           })}
           className="form-control"
+          placeholder="Nhập họ và tên"
         />
       </div>
       {touchedFields.fullname && errors.fullname && (
@@ -137,6 +139,7 @@ export default function RegisterPage() {
             },
           })}
           className="form-control"
+          placeholder="Nhập mật khẩu"
         />
       </div>
       {touchedFields.password && errors.password && (
@@ -156,6 +159,7 @@ export default function RegisterPage() {
             validate: (value) =>
               value === watch("password") || "Mật khẩu không khớp",
           })}
+          placeholder="Nhập lại mật khẩu"
         />
       </div>
       {touchedFields.retypePassword && errors.retypePassword && (
@@ -178,6 +182,7 @@ export default function RegisterPage() {
           })}
           onInput={handleInput}
           className="form-control"
+          placeholder="Nhập số điện thoại"
         />
       </div>
       {touchedFields.phoneNumber && errors.phoneNumber && (

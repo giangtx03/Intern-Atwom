@@ -145,7 +145,7 @@ export default function UserProfile() {
       <Dialog
         header={`Email: ${user.email}`}
         visible={visible}
-        style={{ width: "60vw", zIndex: 1000 }}
+        style={{ width: "60vw", minWidth: '450px', zIndex: 1000 }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);

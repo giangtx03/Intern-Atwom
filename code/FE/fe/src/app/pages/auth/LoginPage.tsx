@@ -77,6 +77,7 @@ export default function LoginPage() {
             },
           })}
           className="form-control"
+          placeholder="Nhập email"
         />
       </div>
       {touchedFields.email && errors.email && (
@@ -94,6 +95,7 @@ export default function LoginPage() {
           })}
           id="loginPassword"
           className="form-control"
+          placeholder="Nhập mật khẩu"
         />
       </div>
       {touchedFields.password && errors.password && (
