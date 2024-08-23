@@ -1,6 +1,7 @@
 package com.pitchmanagement.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,20 +89,18 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) throws Exception {
 
-
-
         int id = (int) statusMap.get("id");
         String status = (String) statusMap.get("status");
-        LocalDateTime localDateTime = (LocalDateTime) statusMap.put("updateAt", LocalDateTime.now());
-
-        bookingDAO.updateStatusPitchBooking(statusMap);
+        statusMap.put("updateAt", LocalDateTime.now());
 
         ConfirmPitchBookingDto tempConfirmPitchBookingDto = bookingDAO.selectConfirmPitchBookingById(id);
 
         if (tempConfirmPitchBookingDto == null) {
             throw new RuntimeException("ConfirmPitchBooking not found for id: " + id);
         }
+
         tempConfirmPitchBookingDto.setStatusBook(status);
+
 
         // Truy vấn bảng pitch_time
         BookingDto pitchBooking = bookingDAO.selectPitchBookingById(id);
@@ -109,6 +108,17 @@ public class BookingServiceImpl implements BookingService {
         if (pitchBooking == null) {
             throw new RuntimeException("PitchBooking not found for id: " + id);
         }
+        // tạo map để từ chối các sân cùng ngày
+        Map<String, Object> rejectPitch = new HashMap<>();
+
+        rejectPitch.put("pitchTimePitchId", pitchBooking.getPitchTimePitchId());
+        rejectPitch.put("pitchTimeTimeSlotId", pitchBooking.getPitchTimeTimeSlotId());
+        rejectPitch.put("createAt", pitchBooking.getCreateAt().toLocalDate());
+
+        bookingDAO.updatePitchBookingToReject(rejectPitch);
+//        System.out.println(pitchBooking.getCreateAt().toLocalDate());
+        bookingDAO.updateStatusPitchBooking(statusMap);
+
 
         // tạo map để xác nhận sân đã đặt
         Map<String, Object> pitchTimeMap = new HashMap<>();

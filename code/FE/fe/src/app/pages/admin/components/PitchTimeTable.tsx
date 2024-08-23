@@ -29,6 +29,7 @@ export default function PitchTimeTable(props: Props) {
     const [deletePitchTimeDialog, setDeletePitchTimeDialog] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState<string | null>(null);
+    const [submitted, setSubmitted] = useState<boolean>(false);
 
     const _pitchTimeNew: PitchTimeRequest = {
         pitchId: props.pitchId,
@@ -49,7 +50,7 @@ export default function PitchTimeTable(props: Props) {
         };
 
         fetchData();
-        setPitchTime({ ...pitchTime, pitchId: props.pitchId })
+        setPitchTime({ ...pitchTime, pitchId: props.pitchId });
     }, [props.pitchId, btnSubmit]);
 
     useEffect(() => {
@@ -67,7 +68,6 @@ export default function PitchTimeTable(props: Props) {
         fetchData();
     }, []);
 
-
     const timeSlotResponses: TimeSlotResponse[] = timeSlots
         .filter(ts => !pitchTimes.some(data => data.startTime === ts.startTime))
         .map(ts => ({
@@ -76,20 +76,27 @@ export default function PitchTimeTable(props: Props) {
         }));
 
     const openNew = () => {
+        setSubmitted(false);
         setPitchTime(_pitchTimeNew);
-        setTimeSlotResponse({ id: undefined, time: undefined })
+        setTimeSlotResponse({ id: undefined, time: undefined });
         setVisibleTime(true);
     };
 
     const handleTimeSlot = (e: any) => {
-        setTimeSlotResponse(e)
-        setPitchTime({ ...pitchTime, timeSlotId: e.id })
+        setTimeSlotResponse(e);
+        setPitchTime({ ...pitchTime, timeSlotId: e.id });
     }
 
     const handleSubmit = async () => {
+        setSubmitted(true);
+
+        if (!pitchTime?.price || !pitchTime?.timeSlotId) {
+            return;
+        }
+
         try {
             const result = await postPitchTime(pitchTime!);
-            console.log(result)
+            console.log(result);
         } catch (error: any) {
             setIsLoading(false);
             setHttpError(error.message);
@@ -122,12 +129,12 @@ export default function PitchTimeTable(props: Props) {
     const deleteTime = async () => {
         try {
             const result = await deletePitchTime(pitchTime?.pitchId!, pitchTime?.timeSlotId!);
-            console.log(result)
+            console.log(result);
         } catch (error: any) {
             setIsLoading(false);
             setHttpError(error.message);
         }
-        console.log(pitchTime)
+        console.log(pitchTime);
         setBtnSubmit(!btnSubmit);
         setDeletePitchTimeDialog(false);
     }
@@ -146,7 +153,7 @@ export default function PitchTimeTable(props: Props) {
 
     const confirmDeletePitchTime = (temp: PitchTimeModel) => {
         setPitchTime({ ...pitchTime, timeSlotId: temp.idTime, price: temp.price });
-        setTimeSlotResponse({ ...timeSlotResponse, id: temp.idTime!, time: `${temp.startTime} - ${temp.endTime}` })
+        setTimeSlotResponse({ ...timeSlotResponse, id: temp.idTime!, time: `${temp.startTime} - ${temp.endTime}` });
         setDeletePitchTimeDialog(true);
     };
 
@@ -211,32 +218,40 @@ export default function PitchTimeTable(props: Props) {
                 }
 
             </div>
-            <Dialog header="Sửa giờ sân" visible={visibleTime} onHide={() => { if (!visibleTime) return; setVisibleTime(false); }}>
-                <div className="d-flex justify-content-between align-items-center my-1">
+            <Dialog header="Sửa giờ sân" visible={visibleTime} onHide={() => { if (!visibleTime) return; setVisibleTime(false); setSubmitted(false); }}>
+                <div className="d-flex justify-content-between align-items-start my-1">
                     {timeSlotResponses.length === 0
                         ?
                         <div className="">Khung giờ sân đã đủ</div>
                         :
                         <>
                             <div className="flex-grow-1 me-2">
-                                <Dropdown
-                                    id="type"
-                                    value={timeSlotResponse}
-                                    onChange={(e) => handleTimeSlot(e.value)}
-                                    options={timeSlotResponses}
-                                    optionLabel="time"
-                                    required
-                                    placeholder="Chọn giờ"
-                                />
+                                <div className="">
+                                    <Dropdown
+                                        id="type"
+                                        value={timeSlotResponse}
+                                        onChange={(e) => handleTimeSlot(e.value)}
+                                        options={timeSlotResponses}
+                                        optionLabel="time"
+                                        required
+                                        placeholder="Chọn giờ"
+                                        className={submitted && !timeSlotResponse?.id ? 'p-invalid' : ''}
+                                    />
+                                </div>
+                                {submitted && !timeSlotResponse?.id && <small className="p-error">Vui lòng chọn khung giờ.</small>}
                             </div>
                             <div className="flex-grow-1 me-2">
-                                <InputNumber
-                                    inputId="minmax"
-                                    value={pitchTime?.price}
-                                    onValueChange={(e: InputNumberValueChangeEvent) => setPitchTime({ ...pitchTime, price: e.target.value! })}
-                                    min={0}
-                                    placeholder='Giá sân'
-                                />
+                                <div className="">
+                                    <InputNumber
+                                        inputId="minmax"
+                                        value={pitchTime?.price}
+                                        onValueChange={(e: InputNumberValueChangeEvent) => setPitchTime({ ...pitchTime, price: e.target.value! })}
+                                        min={0}
+                                        placeholder='Giá sân'
+                                        className={submitted && !pitchTime?.price ? 'p-invalid' : ''}
+                                    />
+                                </div>
+                                {submitted && !pitchTime?.price && <small className="p-error">Vui lòng nhập giá.</small>}
                             </div>
                             <div className="flex-shrink-0">
                                 <Button icon="pi pi-check" severity="success" onClick={handleSubmit} />
@@ -251,7 +266,7 @@ export default function PitchTimeTable(props: Props) {
                     <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
                     {timeSlotResponse && (
                         <span>
-                            Are you sure you want to delete <b>{timeSlotResponse.time}</b>?
+                            Bạn có chắc muốn xóa <b>{timeSlotResponse.time}</b>?
                         </span>
                     )}
                 </div>
