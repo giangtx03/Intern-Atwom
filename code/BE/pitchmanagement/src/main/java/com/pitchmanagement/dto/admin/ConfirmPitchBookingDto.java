@@ -22,5 +22,7 @@ public class ConfirmPitchBookingDto {
     private LocalTime startTime;
     private LocalTime endTime;
     private Double price;
+    private LocalDateTime createBill;
+    private String noteBill;
 
 }

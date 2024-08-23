@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pitchmanagement.constant.PitchTimeConstant;
 import com.pitchmanagement.dto.admin.PitchTimeChildrenDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class PitchTimeServiceImpl implements PitchTimeService {
     @Override
     public PitchTimeRequest addPitchTime(PitchTimeRequest pitchTime) {
 
-        pitchTime.setStatus("trong");
+        pitchTime.setStatus(PitchTimeConstant.STATUS_PITCH_TIME_ACTIVE);
 
         pitchTimeDAO.insertPitchTime(pitchTime);
 

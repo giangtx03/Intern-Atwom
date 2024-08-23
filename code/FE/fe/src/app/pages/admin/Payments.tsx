@@ -5,6 +5,7 @@ import { createBill, getMessageAll } from '../../service/AdminService';
 import { BillModel } from '../../model/BillModel';
 import Spinner from '../../comp/Spinner';
 import Payment from './components/Payment';
+import { STATUS_PITCH_BOOKING_ACCESS } from '../../constant/constant';
 
 export default function Payments() {
 
@@ -18,7 +19,7 @@ export default function Payments() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await getMessageAll("chưa thanh toán", "đã thanh toán");
+                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS);
                 setMessages(result);
                 setIsLoading(false);
             } catch (error: any) {

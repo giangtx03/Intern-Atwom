@@ -4,6 +4,7 @@ import { getMessageAll, updateStatus } from '../../service/AdminService';
 import { MessageModel } from '../../model/MessageModel';
 import MessageBook from './components/MessageBook';
 import Spinner from '../../comp/Spinner';
+import { STATUS_PITCH_BOOKING_WAIT } from '../../constant/constant';
 
 export default function MessageBooks() {
 
@@ -17,7 +18,7 @@ export default function MessageBooks() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await getMessageAll("chờ");
+                const result = await getMessageAll(STATUS_PITCH_BOOKING_WAIT);
                 setMessages(result);
                 setIsLoading(false);
 

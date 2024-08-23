@@ -19,7 +19,7 @@ public interface BookingService {
     void update(BookingRequest bookingRequest);
 
     //------------------------------------------------------------------
-    List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(List<String> statuses);
+    List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(String status);
 
     ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params) throws Exception;
 }

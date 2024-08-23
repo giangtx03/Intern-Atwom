@@ -3,6 +3,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { MessageModel } from '../../../model/MessageModel';
 import { Dialog } from 'primereact/dialog';
+import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_REJECT } from '../../../constant/constant';
 
 type Props = {
     message: MessageModel;
@@ -45,11 +46,11 @@ export default function MessageBook(props: Props) {
     const footer = (
         <>
             <Button className='rounded-2' label="Chấp nhận" icon="pi pi-check" onClick={() => {
-                setCurrentAction("Chưa thanh toán");
+                setCurrentAction(STATUS_PITCH_BOOKING_ACCESS);
                 setVisible(true);
             }} />
             <Button className='rounded-2' label="Từ chối" severity="secondary" icon="pi pi-times" style={{ marginLeft: '0.5em' }} onClick={() => {
-                setCurrentAction("Từ chối");
+                setCurrentAction(STATUS_PITCH_BOOKING_REJECT);
                 setVisible(true);
             }} />
         </>
@@ -92,7 +93,7 @@ export default function MessageBook(props: Props) {
             </Card>
 
             <Dialog header="Xác nhận" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent}>
-                <p className="m-0">Bạn có chắc chắn muốn <b>{currentAction === "Chưa thanh toán" ? "chấp nhận" : "từ chối"}</b> đơn này?</p>
+                <p className="m-0">Bạn có chắc chắn muốn <b>{currentAction === STATUS_PITCH_BOOKING_ACCESS ? "chấp nhận" : "từ chối"}</b> đơn này?</p>
             </Dialog>
         </div>
     )

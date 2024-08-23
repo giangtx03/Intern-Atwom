@@ -108,7 +108,7 @@
     <!-- ........................................................... -->
     <update id="updateStatusPitchBooking" parameterType="map">
         UPDATE pitch_booking
-        SET `status` = #{status}
+        SET `status` = #{status}, `update_at` = #{updateAt}
         WHERE id = #{id}
     </update>
 
@@ -123,17 +123,16 @@
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
         ts.start_time, ts.end_time,
-        pt.price
+        pt.price,
+        b.create_at AS create_bill, b.note AS note_bill
         FROM pitch_booking pb
         INNER JOIN pitch p ON pb.pitch_time_pitch_id = p.id
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
         INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
-        WHERE pb.status IN
-        <foreach item="status" collection="statuses" open="(" separator="," close=")">
-            #{status}
-        </foreach>
-        ORDER BY pb.status ASC
+        LEFT JOIN bill b ON b.pitch_booking_id = pb.id
+        WHERE pb.`status` = #{status}
+        ORDER BY b.create_at ASC
     </select>
 
     <select id="selectConfirmPitchBookingById" parameterType="int" resultMap="adminResult">
@@ -141,12 +140,14 @@
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
         ts.start_time, ts.end_time,
-        pt.price
+        pt.price,
+        b.create_at AS create_bill, b.note AS note_bill
         FROM pitch_booking pb
         INNER JOIN pitch p ON pb.pitch_time_pitch_id = p.id
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
         INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
+        LEFT JOIN bill b ON b.pitch_booking_id = pb.id
         WHERE pb.id = #{id}
     </select>
 
@@ -162,6 +163,8 @@
         <result property="start_time" column="startTime"/>
         <result property="end_time" column="endTime"/>
         <result property="price" column="price"/>
+        <result property="create_bill" column="createBill"/>
+        <result property="note_bill" column="noteBill"/>
     </resultMap>
 
     <resultMap id="result" type="com.pitchmanagement.dto.admin.BookingDto">

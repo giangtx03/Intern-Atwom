@@ -125,7 +125,7 @@ public class BookingController {
     //------------------------------------------------------------------
     @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin/confirm")
-    ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(@RequestParam List<String> status) {
+    ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(@RequestParam String status) {
         List<ConfirmPitchBookingDto> confirmPitchBookings = bookingService.getConfirmPitchBookingByStatus(status);
         BaseResponse response = BaseResponse
                 .builder()

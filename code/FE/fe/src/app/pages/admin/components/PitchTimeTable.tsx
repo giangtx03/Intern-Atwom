@@ -178,6 +178,14 @@ export default function PitchTimeTable(props: Props) {
         </React.Fragment>
     );
 
+    const price = (rowData: any) => {
+        return (
+            <div>
+                {rowData.price?.toLocaleString()} VND
+            </div>
+        );
+    };
+
     return (
         <div className="">
             <div className="my-1">
@@ -194,7 +202,7 @@ export default function PitchTimeTable(props: Props) {
                         <DataTable value={pitchTimes} selectionMode="single" editMode="row" onRowEditComplete={onRowEditComplete}>
                             <Column field="startTime" header="Giờ bắt đầu" style={{ width: '8rem' }}></Column>
                             <Column field="endTime" header="Giờ kết thúc" style={{ width: '8rem' }}></Column>
-                            <Column field="price" header="Giá" editor={(options) => priceEditor(options)}></Column>
+                            <Column field="price" header="Giá" editor={(options) => priceEditor(options)} body={price}></Column>
                             <Column rowEditor={allowEdit} headerStyle={{ width: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                             <Column style={{ width: '1rem', padding: 0, paddingRight: '1rem' }} body={deleteBtn}></Column>
                         </DataTable>

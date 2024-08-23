@@ -68,8 +68,8 @@ export default function Payment(props: Props) {
     );
 
     const subtitle = (
-        <div className={props.message.statusBook === "Chưa thanh toán" ? "text-danger" : "text-success"}>
-            {props.message.statusBook} {props.message.statusBook === "Chưa thanh toán" ? "" : `(${handleDate(props.message.createAt)})`}
+        <div className={props.message.createBill === null ? "text-danger" : "text-success"}>
+            {props.message.createBill === null ? "Chưa thanh toán" : `Đã thanh toán (${handleDate(props.message.createBill)})`}
             <hr />
         </div>
     )
@@ -102,7 +102,7 @@ export default function Payment(props: Props) {
                     </div>
                     <div className="">
                         {
-                            props.message.statusBook === "Đã thanh toán"
+                            props.message.createBill !== null
                                 ?
                                 <div style={{ backgroundColor: 'var(--highlight-bg)', color: 'var(--highlight-text-color)', borderRadius: 'var(--border-radius)', padding: '1rem', fontWeight: 700 }}>
                                     {props.message.price?.toLocaleString()} VND

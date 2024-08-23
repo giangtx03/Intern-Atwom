@@ -4,8 +4,8 @@
 <mapper namespace="com.pitchmanagement.dao.PitchDao">
 
     <insert id="insertPitch" parameterType="com.pitchmanagement.model.request.PitchRequest">
-        INSERT INTO `pitch` (`name`, `address`, `create_at`, `pitch_type_id`)
-        VALUES (#{name}, #{address}, #{createAt}, #{pitchTypeId});
+        INSERT INTO `pitch` (`name`, `address`, `create_at`, `update_at`, `pitch_type_id`)
+        VALUES (#{name}, #{address}, #{createAt}, #{updateAt}, #{pitchTypeId});
     </insert>
 
     <update id="updatePitch" parameterType="com.pitchmanagement.model.request.PitchRequest">

@@ -77,19 +77,22 @@ public class BookingServiceImpl implements BookingService {
 
     // ------------------------------------------------------------------
     @Override
-    public List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(List<String> statuses) {
-        System.out.println("Statuses: " + statuses);
+    public List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(String status) {
+        System.out.println("Status: " + status);
 
-        List<ConfirmPitchBookingDto> confirmPitchBookings = bookingDAO.selectConfirmPitchBookingByStatus(statuses);
+        List<ConfirmPitchBookingDto> confirmPitchBookings = bookingDAO.selectConfirmPitchBookingByStatus(status);
 
-        return bookingDAO.selectConfirmPitchBookingByStatus(statuses);
+        return bookingDAO.selectConfirmPitchBookingByStatus(status);
     }
 
     @Override
     public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) throws Exception {
 
+
+
         int id = (int) statusMap.get("id");
         String status = (String) statusMap.get("status");
+        LocalDateTime localDateTime = (LocalDateTime) statusMap.put("updateAt", LocalDateTime.now());
 
         bookingDAO.updateStatusPitchBooking(statusMap);
 
@@ -103,8 +106,6 @@ public class BookingServiceImpl implements BookingService {
         // Truy vấn bảng pitch_time
         BookingDto pitchBooking = bookingDAO.selectPitchBookingById(id);
 
-        System.out.println(pitchBooking);
-
         if (pitchBooking == null) {
             throw new RuntimeException("PitchBooking not found for id: " + id);
         }
@@ -116,7 +117,6 @@ public class BookingServiceImpl implements BookingService {
 
         PitchTimeRequest pitchTime = pitchTimeDAO.selectPitchTimeByIds(pitchTimeMap);
 
-        System.out.println(" Pitch Booking: " + pitchBooking);
         if (pitchTime == null) {
             throw new RuntimeException("PitchTime not found for pitchId: " + pitchBooking.getPitchTimePitchId()
                     + " and timeSlotId: " + pitchBooking.getPitchTimeTimeSlotId()
@@ -124,8 +124,8 @@ public class BookingServiceImpl implements BookingService {
         }
 
         // Nếu admin chấp nhận thì chuyển status thành "bận"
-        if (status.equals("Chưa thanh toán")) {
-            pitchTime.setStatus("ban");
+        if (status.equals(PitchBookingConstant.STATUS_PITCH_BOOKING_ACCESS)) {
+            pitchTime.setStatus(PitchTimeConstant.STATUS_PITCH_TIME_NONACTIVE);
             pitchTimeDAO.updateStatusPitchTimeByIds(pitchTime);
         }
 

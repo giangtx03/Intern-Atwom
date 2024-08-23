@@ -10,4 +10,6 @@ export class MessageModel {
     startTime?: String;
     endTime?: String;
     price?: number;
+    createBill?: String;
+    noteBill?: String;
 }

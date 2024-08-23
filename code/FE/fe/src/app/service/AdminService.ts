@@ -14,15 +14,10 @@ import { ImagePitch } from "../model/ImagePitch";
 
 
 // List các thông báo
-export const getMessageAll = async (status1: string, status2?: string) => {
+export const getMessageAll = async (status: string) => {
     try {
-        let url;
-        if (status2) {
-            url = `/booking/admin/confirm?status=${status1}&status=${status2}`
-        } else {
-            url = `/booking/admin/confirm?status=${status1}`
-        }
 
+        const url = `/booking/admin/confirm?status=${status}`
         const response: AxiosResponse<{ data: MessageModel[] }> = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {

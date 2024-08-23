@@ -198,7 +198,7 @@ export default function EditPitches() {
     const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
+                <Button label="Thêm" icon="pi pi-plus" severity="success" onClick={openNew} />
             </div>
         );
     };
@@ -223,14 +223,14 @@ export default function EditPitches() {
     );
     const pitchDialogFooter = (
         <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" onClick={savePitch} />
+            <Button className='me-2' label="Hủy" icon="pi pi-times" outlined onClick={hideDialog} />
+            <Button label="Lưu" icon="pi pi-check" onClick={savePitch} />
         </React.Fragment>
     );
     const deletePitchDialogFooter = (
         <React.Fragment>
-            <Button label="No" icon="pi pi-times" outlined onClick={hideDeletePitchDialog} />
-            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deletePitch} />
+            <Button className='me-2' label="Không" icon="pi pi-times" outlined onClick={hideDeletePitchDialog} />
+            <Button label="Có" icon="pi pi-check" severity="danger" onClick={deletePitch} />
         </React.Fragment>
     );
     const handleClickTime = (rowData: any) => {
@@ -241,6 +241,31 @@ export default function EditPitches() {
     const handleClickImg = (rowData: any) => {
         setPitchId(rowData.id);
         setVisibleImg(true);
+    };
+
+    const handleDate = (date: any) => {
+        if (typeof date === 'string') {
+            date = date.substring(0, date.length - 3).replace("T", " ");
+        } else {
+            console.error('Date is not a string:', date);
+        }
+        return date;
+    }
+
+    const createAt = (rowData: any) => {
+        return (
+            <div>
+                {handleDate(rowData.createAt)}
+            </div>
+        );
+    };
+
+    const updateAt = (rowData: any) => {
+        return (
+            <div>
+                {handleDate(rowData.updateAt)}
+            </div>
+        );
     };
 
     const sumTime = (rowData: any) => {
@@ -259,6 +284,8 @@ export default function EditPitches() {
         );
     };
 
+
+
     return (
         <div>
             <Toast ref={toast} />
@@ -274,8 +301,8 @@ export default function EditPitches() {
                     <Column field="id" header="Id" sortable style={{ minWidth: '' }}></Column>
                     <Column field="name" header="Tên" style={{ minWidth: '7rem' }}></Column>
                     <Column field="address" header="Địa chỉ" style={{ minWidth: '12rem' }}></Column>
-                    <Column field="createAt" header="Ngày tạo" sortable style={{ minWidth: '10rem' }}></Column>
-                    <Column field="updateAt" header="Ngày sửa" style={{ minWidth: '10rem' }}></Column>
+                    <Column field="createAt" header="Ngày tạo" sortable style={{ minWidth: '10rem' }} body={createAt}></Column>
+                    <Column field="updateAt" header="Ngày sửa" style={{ minWidth: '10rem' }} body={updateAt}></Column>
                     <Column field="type" header="Loại sân" style={{ minWidth: '8rem' }}></Column>
                     <Column field="sumTime" header="Tổng giờ" style={{ minWidth: '5rem' }} body={sumTime}></Column>
                     <Column field="sumImg" header="Tổng ảnh" style={{ minWidth: '5rem' }} body={sumImg}></Column>
@@ -283,7 +310,7 @@ export default function EditPitches() {
                 </DataTable>
             </div>
 
-            <Dialog visible={pitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Pitch Details" modal className="p-fluid" footer={pitchDialogFooter} onHide={hideDialog}>
+            <Dialog visible={pitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Thông tin sân" modal className="p-fluid" footer={pitchDialogFooter} onHide={hideDialog}>
                 <div className="field mb-3">
                     <label htmlFor="name" className="font-bold">
                         Tên sân
@@ -306,12 +333,12 @@ export default function EditPitches() {
                 </div>
             </Dialog>
 
-            <Dialog visible={deletePitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deletePitchDialogFooter} onHide={hideDeletePitchDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+            <Dialog visible={deletePitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Xác nhận" modal footer={deletePitchDialogFooter} onHide={hideDeletePitchDialog}>
+                <div className="d-flex align-items-center">
+                    <i className="pi pi-exclamation-triangle me-3" style={{ fontSize: '2rem' }} />
                     {pitch && (
                         <span>
-                            Are you sure you want to delete <b>{pitch.name}</b>?
+                            Bạn có chắc muốn xóa <b>{pitch.name}</b>?
                         </span>
                     )}
                 </div>

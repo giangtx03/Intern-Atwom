@@ -1,12 +1,16 @@
 package com.pitchmanagement.service.impl;
 
+import com.pitchmanagement.constant.PitchBookingConstant;
+import com.pitchmanagement.constant.PitchTimeConstant;
 import com.pitchmanagement.dao.BillDao;
 import com.pitchmanagement.dao.BookingDAO;
 import com.pitchmanagement.dao.PitchTimeDAO;
+import com.pitchmanagement.dto.admin.BookingDto;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.BillRequest;
 import com.pitchmanagement.dto.admin.BillDayDto;
 import com.pitchmanagement.dto.admin.BillPitchDto;
+import com.pitchmanagement.model.request.PitchTimeRequest;
 import com.pitchmanagement.service.BillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +27,37 @@ import java.util.Map;
 public class BillServiceImpl implements BillService {
 
     private final BillDao billDao;
-    private final BookingDAO pitchBookingDao;
+    private final BookingDAO bookingDAO;
+    private final PitchTimeDAO pitchTimeDAO;
 
     @Override
     public BillRequest addBill(BillRequest bill) {
 
-        ConfirmPitchBookingDto confirmPitchBookingDto = pitchBookingDao.selectConfirmPitchBookingById(bill.getPitchBookingId());
+        // Truy vấn bảng pitch_time
+        BookingDto pitchBooking = bookingDAO.selectPitchBookingById(bill.getPitchBookingId());
+
+        if (pitchBooking == null) {
+            throw new RuntimeException("PitchBooking not found for id: " + bill.getPitchBookingId());
+        }
 
         // tạo map để xác nhận sân đã đặt
-        Map<String, Object> PitchBookingMap = new HashMap<>();
-        PitchBookingMap.put("id", confirmPitchBookingDto.getId());
-        PitchBookingMap.put("status", "Đã thanh toán");
+        Map<String, Object> pitchTimeMap = new HashMap<>();
+        pitchTimeMap.put("pitchId", pitchBooking.getPitchTimePitchId());
+        pitchTimeMap.put("timeSlotId", pitchBooking.getPitchTimeTimeSlotId());
 
-        pitchBookingDao.updateStatusPitchBooking(PitchBookingMap);
+        PitchTimeRequest pitchTime = pitchTimeDAO.selectPitchTimeByIds(pitchTimeMap);
+
+        if (pitchTime == null) {
+            throw new RuntimeException("PitchTime not found for pitchId: " + pitchBooking.getPitchTimePitchId()
+                    + " and timeSlotId: " + pitchBooking.getPitchTimeTimeSlotId()
+                    + " Pitch Booking: " + pitchBooking);
+        }
+
+        // Chuyển status thành "rảnh"
+        pitchTime.setStatus(PitchTimeConstant.STATUS_PITCH_TIME_ACTIVE);
+        pitchTimeDAO.updateStatusPitchTimeByIds(pitchTime);
+
+
 
         billDao.insertBill(bill);
 

@@ -105,8 +105,8 @@ export default function PitchImage(props: Props) {
                 {previewUrl === null
                     &&
                     <Button
-                        icon="pi pi-upload"
-                        label="Choose"
+                        icon="pi pi-plus"
+                        label="Chọn"
                         className="p-button-primary"
                         onClick={handleButtonClick}
                     />
@@ -117,7 +117,10 @@ export default function PitchImage(props: Props) {
                     </div>
                 )}
                 <div className="">
-                    <Button label="Upload" icon="pi pi-upload" onClick={onUpload} />
+                    {previewUrl !== null
+                        &&
+                        <Button label="Tải lên" icon="pi pi-upload" onClick={onUpload} />
+                    }
                 </div>
             </div>
 
