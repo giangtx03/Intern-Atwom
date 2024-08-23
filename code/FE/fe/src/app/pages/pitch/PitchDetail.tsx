@@ -67,6 +67,7 @@ export default function PitchDetail() {
           onError={(e) => {
             e.currentTarget.src = defaultSanBong;
           }}
+          style={{ height: "380px", width: "500px", objectFit: "cover" }}
         />
       </div>
     );
@@ -174,7 +175,9 @@ export default function PitchDetail() {
                                   </div>
                                 </div>
                                 <div className="flex-grow-1">
-                                  <p className="text-muted mb-1">Giá theo khung giờ:</p>
+                                  <p className="text-muted mb-1">
+                                    Giá theo khung giờ:
+                                  </p>
                                   <h5 className="mb-0">
                                     {price === 0
                                       ? pitch.times.find(

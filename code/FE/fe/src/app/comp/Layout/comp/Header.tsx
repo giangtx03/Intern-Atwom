@@ -16,7 +16,7 @@ import { login, logout } from "../../../reduces/UserSlice";
 import { useSelector } from "react-redux";
 import { ROLE_ADMIN } from "../../../constant/constant";
 import { Button } from "primereact/button";
-import defaultAvatar from "../../../../assets/image/avatar.jpg";
+import defaultAvatar from "../../../../assets/image/defaultAvatar.jpg";
 
 interface MenuItem {
   label: string;
@@ -130,7 +130,7 @@ export default function Header() {
                 ? `http://localhost:8080/public/api/v1/image/${user.avatar}`
                 : undefined
             }
-            icon={!user.avatar ? "pi pi-user" : undefined}
+            icon={!user.avatar || user.avatar.length === 0 ? "pi pi-user" : undefined}
             shape="circle"
             className="cursor-pointer mx-2"
             onClick={(e) => menu.current?.toggle(e)}

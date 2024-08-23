@@ -4,12 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { PitchService } from "../../service/PitchService";
 import { PitchResponse } from "../../model/PitchModel";
-import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
 import defaultSanBong from "../../../assets/image/defaultSanBong.jpeg";
 import { FaSearch } from "react-icons/fa";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
-import { TimeSlotService } from "../../service/TimeSlotService";
 import { PitchTypeService } from "../../service/PitchTypeService";
 import { Button } from "primereact/button";
 import { Paginator } from "primereact/paginator";
@@ -43,8 +41,6 @@ export default function Pitch() {
   const [visible, setVisible] = useState(false);
   const [list, setList] = useState<PitchResponse[]>();
   const [listPitchType, setListPitchType] = useState<PitchType[]>();
-  // const [listTimeSlot, setListTimeSlot] = useState<TimeSlot[]>();
-  // const [prices, setPrices] = useState<{ [key: number]: number }>({});
   const [search, setSearch] = useState<SearchModel>({
     keyword: "",
     pitchType: {},
@@ -67,14 +63,14 @@ export default function Pitch() {
           time_slot_id: search.timeSlot.id,
           page_number: search.pageNumber,
           limit: search.limit,
-          sort_by: search.sortBy.value,
-          sort_order: search.sortOrder.value,
+          sort_by: search.sortBy.value ? search.sortBy.value :search.sortBy ,
+          sort_order: search.sortOrder.value ? search.sortOrder.value : search.sortOrder,
         })
         .then((response: any) => {
           if (response.data.status === 200) {
             setList(response.data.data.items);
-            // console.log(search);
-            console.log(response.data.data);
+            console.log(search);
+            // console.log(response.data.data);
             setTotalRecords(response.data.data.total_items);
             dispatch(showOrHindSpinner(false));
           }
@@ -86,20 +82,6 @@ export default function Pitch() {
         });
     }, 300);
   }, [search.timer]);
-
-  // useEffect(() => {
-  //   TimeSlotService.getInstance()
-  //     .getAllTimeSlot()
-  //     .then((response: any) => {
-  //       if (response.data.status === 200) {
-  //         setListTimeSlot([{id: 0, start_time: '00:00:00', end_time: '23:59:59'}, ...response.data.data]);
-  //         // console.log(response.data.data)
-  //       }
-  //     })
-  //     .catch((error: any) => {
-  //       console.log(error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     PitchTypeService.getInstance()
@@ -115,27 +97,14 @@ export default function Pitch() {
       });
   }, []);
 
-  // const handlePriceChange = (itemId: number, price: number) => {
-  //   setPrices((prevPrices) => ({
-  //     ...prevPrices,
-  //     [itemId]: price,
-  //   }));
-  // };
-
-  // const formattedTimeSlots = listTimeSlot?.map((slot) => ({
-  //   ...slot,
-  //   label: `${slot.start_time} - ${slot.end_time}`,
-  // }));
-
   const onPageChange = (event: any) => {
     setSearch({
       ...search,
       pageNumber: event.page + 1,
       limit: event.rows,
-      timer: Date.now()
-    })
+      timer: Date.now(),
+    });
   };
-
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
@@ -204,6 +173,10 @@ export default function Pitch() {
                         onError={(e) => {
                           e.currentTarget.src = defaultSanBong;
                         }}
+                        style={{
+                          height: "300px",
+                          objectFit: "cover",
+                        }}
                       />
                       <div className="card-body">
                         <div className="d-flex justify-content-between">
@@ -216,43 +189,11 @@ export default function Pitch() {
                           className="d-flex justify-content-between mb-3"
                         >
                           <h5 className="text-dark mb-0">{item.name}</h5>
-                          {/* <h5 className="text-dark mb-0">
-                        {prices[item.id] ||
-                          item.times.find(
-                            (time) => time.status === STATUS_PITCH_TIME_ACTIVE
-                          )?.price ||
-                          0}{" "}
-                        VND
-                      </h5> */}
                         </Link>
                         <div className="d-flex justify-content-between">
                           <p>Address : {item.address}</p>
                         </div>
                         <div className="d-flex justify-content-between mb-2">
-                          {/* <div className="d-flex align-items-center w-100">
-                        <p className="text-muted mb-0 me-2">Khung giờ:</p>
-                        <select
-                          className="form-select"
-                          onChange={(e) => {
-                            const selectedIndex = e.target.selectedIndex;
-                            const selectedTime = item.times[selectedIndex];
-                            handlePriceChange(item.id, selectedTime.price);
-                          }}
-                          style={{ width: "60%" }}
-                        >
-                          {item.times.map((time, index) => (
-                            <option
-                              key={index}
-                              value={index}
-                              disabled={
-                                time.status !== STATUS_PITCH_TIME_ACTIVE
-                              }
-                            >
-                              {time.startTime} - {time.endTime}
-                            </option>
-                          ))}
-                        </select>
-                      </div> */}
                         </div>
                       </div>
                     </div>
@@ -276,7 +217,7 @@ export default function Pitch() {
       <Dialog
         header="Tìm kiếm nâng cao"
         visible={visible}
-        style={{ width: "40vw", minWidth: '450px', zIndex: 1000 }}
+        style={{ width: "40vw", minWidth: "450px", zIndex: 1000 }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);
@@ -305,29 +246,6 @@ export default function Pitch() {
             />
           </div>
         </div>
-        {/* <div className="row justify-content-center align-items-center mb-3">
-          <div className="col-5">
-            <label className="mx-3">Select time slot: </label>
-          </div>
-          <div className="col-7">
-            <Dropdown
-              value={search.timeSlot}
-              onChange={(e) => {
-                setSearch({
-                  ...search,
-                  timeSlot: e.target.value,
-                  timer: Date.now(),
-                });
-              }}
-              style={{ width: "14rem" }}
-              defaultValue={0}
-              options={formattedTimeSlots}
-              optionLabel="label"
-              placeholder="Select a time slot"
-              className="w-full md:w-14rem"
-            />
-          </div>
-        </div> */}
         <div className="row justify-content-center align-items-center mb-3">
           <div className="col-5">
             <label className="mx-3">Sắp xếp theo: </label>
