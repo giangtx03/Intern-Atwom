@@ -20,15 +20,16 @@ import { decodeToken } from "react-jwt";
 import { Rating, RatingChangeEvent } from "primereact/rating";
 import { Paginator } from "primereact/paginator";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import defaultAvatar from "../../assets/image/defaultAvatar.jpg";
 
 interface Options {
   select: string;
   values: string;
 }
 
-interface Order{
-  name: string,
-  type: string,
+interface Order {
+  name: string;
+  type: string;
 }
 
 export default function CommentDisplay(props: any) {
@@ -42,8 +43,8 @@ export default function CommentDisplay(props: any) {
   const [rows, setRows] = useState(search.limit);
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number>(0);
-  const [selectOption, setSelectOption] = useState<Options|null>(null)
-  const [selectOrder, setSelectOrder] = useState<Order|null>(null)
+  const [selectOption, setSelectOption] = useState<Options | null>(null);
+  const [selectOrder, setSelectOrder] = useState<Order | null>(null);
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
@@ -53,10 +54,10 @@ export default function CommentDisplay(props: any) {
     { select: "Tất cả comment", values: "" },
     { select: "Comment của bạn", values: `${user_id}` },
   ];
-  const order :Order[]=[
-    {name:"Tốt nhất", type:"DESC"},
-    {name:"Tệ nhất", type:"ASC"},
-  ]
+  const order: Order[] = [
+    { name: "Tốt nhất", type: "DESC" },
+    { name: "Tệ nhất", type: "ASC" },
+  ];
 
   useEffect(() => {
     const fetchComment = async () => {
@@ -69,6 +70,7 @@ export default function CommentDisplay(props: any) {
         const responseTotal = await CommentService.getInstance().getTotal(1);
         if (response.data.status == 200) {
           setLstComment(response.data.data);
+          console.log(response.data);
         }
         if (responseTotal.data.status == 200) {
           setTotal(responseTotal.data.data);
@@ -127,16 +129,6 @@ export default function CommentDisplay(props: any) {
       })
       .catch();
   };
-  const onPageChange = (e: any) => {
-    setFirst(e.first);
-    setRows(e.rows);
-    setSearch({
-      ...search,
-      page: e.page + 1,
-      limit: e.rows,
-      timer: new Date().getTime(),
-    });
-  };
 
   return (
     <>
@@ -146,7 +138,11 @@ export default function CommentDisplay(props: any) {
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
               {user_id && (
-                <AddAndUpdate search={search} setSearch={setSearch}  pitch_id={pitch_id}/>
+                <AddAndUpdate
+                  search={search}
+                  setSearch={setSearch}
+                  pitch_id={pitch_id}
+                />
               )}
             </div>
             <br />
@@ -154,20 +150,20 @@ export default function CommentDisplay(props: any) {
               <h3 style={{ margin: "1%" }}> Các đánh giá khác</h3>
               {user_id && (
                 <Dropdown
-                value={selectOption}
-                onChange={(e: DropdownChangeEvent) => {
-                  setSelectOption(e.value);
-                  setSearch({
-                    ...search,
-                    timer: new Date().getTime(),
-                    keySearch : e.value.values
-                  });
-                }}
-                options={options}
-                optionLabel="select"
-                placeholder="Tất cả comment"
-                style={{width:"18%",margin:"2%"}}
-              ></Dropdown>
+                  value={selectOption}
+                  onChange={(e: DropdownChangeEvent) => {
+                    setSelectOption(e.value);
+                    setSearch({
+                      ...search,
+                      timer: new Date().getTime(),
+                      keySearch: e.value.values,
+                    });
+                  }}
+                  options={options}
+                  optionLabel="select"
+                  placeholder="Tất cả comment"
+                  style={{ width: "18%", margin: "2%" }}
+                ></Dropdown>
               )}
               <Dropdown
                 value={selectOrder}
@@ -175,16 +171,19 @@ export default function CommentDisplay(props: any) {
                   setSelectOrder(e.value);
                   setSearch({
                     ...search,
-                    timer: new Date().getTime()
+                    timer: new Date().getTime(),
                   });
                 }}
                 options={order}
                 optionLabel="name"
                 placeholder="Sắp xếp theo"
-                style={{width:"15%",margin:"2%"}}
+                style={{ width: "15%", margin: "2%" }}
               ></Dropdown>
             </div>
             <div className="card text-body">
+              <div className={lstComment.length == 0 ?"" : "hide"}>
+                <h4 className="center">Chưa có đánh giá nào</h4>
+              </div>
               {lstComment.map((item: any) => {
                 return (
                   <>
@@ -192,7 +191,10 @@ export default function CommentDisplay(props: any) {
                       <div className="d-flex flex-start">
                         <Image
                           className="rounded-circle shadow-1-strong me-3"
-                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
+                          src={`http://localhost:8080/public/api/v1/image/${item?.avatar}`}
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = defaultAvatar;
+                          }}
                           alt="avatar"
                           width="60"
                           height="60"
@@ -265,13 +267,19 @@ export default function CommentDisplay(props: any) {
           </div>
         </div>
         <div className="center">
-          <Paginator
-            first={first}
-            rows={search.limit}
-            totalRecords={total}
-            rowsPerPageOptions={[3, 5]}
-            onPageChange={onPageChange}
+          <Button
+            icon="pi pi-plus"
+            label="Xem thêm"
+            onClick={(e)=>{
+              setSearch({
+                ...search,
+                limit: search.limit +3,
+                timer: new Date().getTime()
+              })
+            }}
+            style={{margin: '1%'}}
           />
+          
         </div>
       </div>
     </>

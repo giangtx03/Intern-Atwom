@@ -22,7 +22,7 @@ import { Column } from "primereact/column";
 import { Paginator } from "primereact/paginator";
 import { Tag } from "primereact/tag";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_CANCEL, STATUS_PITCH_BOOKING_REJECT, STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
+import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_CANCEL, STATUS_PITCH_BOOKING_REJECT, STATUS_PITCH_BOOKING_SUCCESS, STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
 
 interface StatusSearch {
   name: string;
@@ -40,6 +40,7 @@ export default function History() {
   const [rows, setRows] = useState(search.limit);
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number | undefined>(undefined);
+  const [statusBooking,setStatusBooking] = useState<StatusSearch>({name:"Tất cả", code:""})
   const navigate = useNavigate();
   const [selectOrder, setSelectOrder] = useState<Order>({ name: "mới nhất", type: "DESC" });
 
@@ -108,16 +109,16 @@ export default function History() {
     return (
       <React.Fragment>
         <Button
-          label="Cancel"
+          label="Hủy"
           className={`p-button-danger ${
-            item.status == STATUS_PITCH_BOOKING_ACCESS || item.status == STATUS_PITCH_BOOKING_WAIT ? "" : "hide"
+            item.status == STATUS_PITCH_BOOKING_SUCCESS || item.status == STATUS_PITCH_BOOKING_WAIT ? "" : "hide"
           }`}
           onClick={() => ChoseCancelBooking(item)}
         />
         <Button
-          label="Order"
+          label="Đặt lại"
           className={`p-button-success ${
-            item.status == STATUS_PITCH_BOOKING_CANCEL || item.status == "finished" ? "" : "hide"
+            item.status == STATUS_PITCH_BOOKING_CANCEL || item.status == STATUS_PITCH_BOOKING_REJECT || item.status == STATUS_PITCH_BOOKING_ACCESS ? "" : "hide"
           }`}
           onClick={() => {
             handleRedirect(`/pitch/${item.pitchId}`);
@@ -224,11 +225,12 @@ export default function History() {
           </h2>
           <div>
             <Dropdown
-              value={search.keySearch}
+              value={statusBooking}
               options={statusSearch}
               optionLabel="name"
               style={{ width: "15%", margin: "2%" }}
               onChange={(e: DropdownChangeEvent) => {
+                setStatusBooking(e.value);
                 setSearch({
                   ...search,
                   timer: new Date().getTime(),
@@ -259,27 +261,29 @@ export default function History() {
             value={booking}
             rows={5}
             tableStyle={{ minWidth: "50rem" }}
+            emptyMessage="Không có đơn"
           >
-            <Column field="pitchName" header="Name"></Column>
-            <Column field="address" header="Address"></Column>
-            <Column field="type" header="Type"></Column>
+            <Column field="pitchName" header="Tên sân"></Column>
+            <Column field="address" header="Địa chỉ"></Column>
+            <Column field="type" header="Loại sân"></Column>
             <Column
               field="status"
-              header="Status"
+              header="Trạng thái"
               body={statusBodyTemplate}
             ></Column>
             <Column
               field="createAT"
-              header="Create"
+              header="Ngày tạo"
               body={dateBodyTemplate}
             ></Column>
             <Column
               field="timeFrame"
-              header="Time Frame"
+              header="Khung giờ"
               body={timeFrameBodyTemplate}
             ></Column>
-            <Column header="Action" body={actionBodyTemplate}></Column>
+            <Column header="Lựa chọn" body={actionBodyTemplate}></Column>
           </DataTable>
+          
           <Paginator
             first={first}
             rows={search.limit}

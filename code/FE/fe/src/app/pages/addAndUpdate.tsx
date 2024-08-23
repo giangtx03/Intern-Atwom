@@ -110,7 +110,7 @@ export default function AddAndUpdate(props: any) {
             style={{ width: "95%", margin: "1%" }}
           />
           <Button
-            label="Submit"
+            label="Xác nhận"
             style={{ left: "85%", margin: "1%" }}
             onClick={addComment}
           />

@@ -62,6 +62,7 @@ public class AppController {
                     .message("success")
                     .data(lst)
                     .build();
+                    System.out.println(lst.get(0).getCreateAt());
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()

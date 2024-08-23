@@ -51,11 +51,15 @@
             (
             star,
             content,
+            create_at,
+            update_at,
             user_id,
             pitch_id)
             VALUES
                 (#{star},
                 #{content},
+                now(),
+                now(),
                 #{userId},
                 #{pitchId});
     </insert>

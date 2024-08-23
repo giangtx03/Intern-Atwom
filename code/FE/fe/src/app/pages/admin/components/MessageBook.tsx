@@ -3,7 +3,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { MessageModel } from '../../../model/MessageModel';
 import { Dialog } from 'primereact/dialog';
-import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_REJECT } from '../../../constant/constant';
+import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_REJECT, STATUS_PITCH_BOOKING_SUCCESS } from '../../../constant/constant';
 
 type Props = {
     message: MessageModel;
@@ -46,7 +46,7 @@ export default function MessageBook(props: Props) {
     const footer = (
         <>
             <Button className='rounded-2' label="Chấp nhận" icon="pi pi-check" onClick={() => {
-                setCurrentAction(STATUS_PITCH_BOOKING_ACCESS);
+                setCurrentAction(STATUS_PITCH_BOOKING_SUCCESS);
                 setVisible(true);
             }} />
             <Button className='rounded-2' label="Từ chối" severity="secondary" icon="pi pi-times" style={{ marginLeft: '0.5em' }} onClick={() => {

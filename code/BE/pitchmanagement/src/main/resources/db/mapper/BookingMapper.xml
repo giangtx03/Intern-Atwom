@@ -89,10 +89,12 @@
         insert into pitch_booking 
                 (status,
                 note,
+                create_at,
+                update_at,
                 pitch_time_pitch_id,
                 pitch_time_time_slot_id,
                 user_id) 
-        value(#{status},#{note},#{pitchId},#{timeSlotId},#{userId}) 
+        value(#{status},#{note},now(),now(),#{pitchId},#{timeSlotId},#{userId}) 
     </insert>
     <update id = "update" parameterType = "com.pitchmanagement.model.request.BookingRequest">
         UPDATE pitch_booking
