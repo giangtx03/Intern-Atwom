@@ -62,7 +62,7 @@ export default function Payment(props: Props) {
 
     const header = (
         <div className="d-flex justify-content-between me-5">
-            <div className="">{props.message.namePitch}</div>
+            <div className={props.message.namePitch === null ? "text-danger" : ""}>{props.message.namePitch === null ? "Sân bóng không tồn tại" : props.message.namePitch}</div>
             <div className="">{handleDate(props.message.startTime)} - {handleDate(props.message.endTime)}</div>
         </div>
     );
@@ -117,7 +117,6 @@ export default function Payment(props: Props) {
             <Dialog header={headerDialog} visible={visible} style={{}} onHide={() => setVisible(false)} footer={footerDialog}>
                 <div className="d-flex">
                     <div className="me-3">
-                        {/* <div className="mb-1"><b>Ngày: </b></div> */}
                         <div className="mb-1"><b>Họ và tên: </b></div>
                         <div className="mb-3"><b>SĐT: </b></div>
                         <div className="mb-1"><b>Sân: </b></div>
@@ -125,7 +124,6 @@ export default function Payment(props: Props) {
                         <div className="mb-1"><b>Lúc: </b></div>
                     </div>
                     <div className="">
-                        {/* <div className="mb-1">{handleDate(handleDateTime)}</div> */}
                         <div className="mb-1">{props.message.fullname}</div>
                         <div className="mb-3">{props.message.phoneNumber}</div>
                         <div className="mb-1">{props.message.namePitch}</div>

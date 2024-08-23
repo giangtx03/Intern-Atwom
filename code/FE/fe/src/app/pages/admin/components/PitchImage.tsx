@@ -5,6 +5,7 @@ import { Button } from 'primereact/button';
 import { deleteImagePitch, getImgByPitchId, postImagePitch } from '../../../service/AdminService';
 import { ImagePitch } from '../../../model/ImagePitch';
 import defaultAvatar from "../../../../assets/image/avatar.jpg";
+import Spinner from '../../../comp/Spinner';
 
 type Props = {
     pitchId: number
@@ -14,6 +15,9 @@ export default function PitchImage(props: Props) {
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [imgPitches, setImgPitches] = useState<ImagePitch[]>([]);
+    const [btnSubmit, setBtnSubmit] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [httpError, setHttpError] = useState<string | null>(null);
     const toast = useRef<Toast>(null);
 
     useEffect(() => {
@@ -21,15 +25,18 @@ export default function PitchImage(props: Props) {
             try {
                 const result = await getImgByPitchId(props.pitchId);
                 setImgPitches(result);
+                setIsLoading(false);
             } catch (error: any) {
                 if (toast.current) {
-                    toast.current.show({ severity: 'error', summary: 'Error', detail: error.message });
+                    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: error.message });
                 }
+                setIsLoading(false);
+                setHttpError(error.message);
             }
         };
 
         fetchData();
-    }, [props.pitchId]);
+    }, [props.pitchId, btnSubmit]);
 
     useEffect(() => {
         if (image) {
@@ -48,16 +55,37 @@ export default function PitchImage(props: Props) {
             formData.append('pitchId', props.pitchId.toString());
 
             try {
-                const result = await postImagePitch(formData);
-                console.log(result);
+                await postImagePitch(formData);
                 if (toast.current) {
-                    toast.current.show({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+                    toast.current.show({ severity: 'success', summary: 'Thành công', detail: 'File Uploaded' });
                 }
+                setPreviewUrl(null);
+                setBtnSubmit(!btnSubmit);
+                setIsLoading(false);
             } catch (error: any) {
                 if (toast.current) {
-                    toast.current.show({ severity: 'error', summary: 'Error', detail: error.message });
+                    toast.current.show({ severity: 'error', summary: 'Lỗi', detail: error.message });
                 }
+                setIsLoading(false);
+                setHttpError(error.message);
             }
+        }
+    };
+
+    const handleDel = async (id: number) => {
+        try {
+            await deleteImagePitch(id);
+            if (toast.current) {
+                toast.current.show({ severity: 'success', summary: 'Thành công', detail: 'File Uploaded' });
+            }
+            setBtnSubmit(!btnSubmit);
+            setIsLoading(false);
+        } catch (error: any) {
+            if (toast.current) {
+                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: error.message });
+            }
+            setIsLoading(false);
+            setHttpError(error.message);
         }
     };
 
@@ -67,21 +95,12 @@ export default function PitchImage(props: Props) {
             setImage(selectedFile);
         } else {
             if (toast.current) {
-                toast.current.show({ severity: 'error', summary: 'Error', detail: 'Only image files are allowed' });
+                toast.current.show({ severity: 'error', summary: 'Lỗi', detail: 'Chỉ được chọn ảnh' });
             }
         }
     };
 
-    const handleDel = async (id: number) => {
-        try {
-            const result = await deleteImagePitch(id);
-            console.log(result)
-        } catch (error: any) {
-            if (toast.current) {
-                toast.current.show({ severity: 'error', summary: 'Error', detail: error.message });
-            }
-        }
-    };
+
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -90,6 +109,18 @@ export default function PitchImage(props: Props) {
             fileInputRef.current.click();
         }
     };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    if (httpError) {
+        return (
+            <div className="card">
+                <p>{httpError}</p>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -168,16 +199,3 @@ export default function PitchImage(props: Props) {
         </div>
     );
 }
-
-
-
-{/* <FileUpload
-mode="basic"
-name="demo"
-accept="image/*"
-maxFileSize={1000000}
-customUpload
-auto={false}
-onSelect={onSelect}
-chooseLabel="Choose"
-/> */}

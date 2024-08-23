@@ -238,10 +238,31 @@
                                  onDelete="CASCADE"
         />
     </changeSet>
+
     <changeSet id="3" author="Phuc">
         <addColumn tableName="pitch_booking">
             <column name="note" type="varchar(255)"></column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="4" author="Minh Quan">
+        <dropForeignKeyConstraint baseTableName="pitch_booking" constraintName="fk_pitch_pitch_booking"/>
+        <addForeignKeyConstraint baseTableName="pitch_booking"
+                                 baseColumnNames="pitch_time_pitch_id"
+                                 constraintName="fk_pitch_pitch_booking"
+                                 referencedTableName="pitch"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+
+        <dropForeignKeyConstraint baseTableName="bill" constraintName="fk_bill_pitch_booking"/>
+        <addForeignKeyConstraint baseTableName="bill"
+                                 baseColumnNames="pitch_booking_id"
+                                 constraintName="fk_bill_pitch_booking"
+                                 referencedTableName="pitch_booking"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
     </changeSet>
 
 </databaseChangeLog>

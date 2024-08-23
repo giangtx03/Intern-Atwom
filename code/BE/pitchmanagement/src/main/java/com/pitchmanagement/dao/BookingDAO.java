@@ -39,5 +39,8 @@ public interface BookingDAO {
 
     void updateStatusPitchBooking(Map<String, Object> params);
 
+    void updatePitchBookingToReject(Map<String, Object> params);
+
+
     // ------------------------------------------------------------------
 }

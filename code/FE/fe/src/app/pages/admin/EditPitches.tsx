@@ -18,6 +18,7 @@ import { PitchModel } from '../../model/PitchModel';
 import { PitchTypeModel } from '../../model/PitchTypeModel';
 import PitchTimeTable from './components/PitchTimeTable';
 import PitchImage from './components/PitchImage';
+import Spinner from '../../comp/Spinner';
 
 interface Pitch {
     id: string | null;
@@ -48,12 +49,13 @@ export default function EditPitches() {
     const [visibleImg, setVisibleImg] = useState<boolean>(false);
     const [btnSubmit, setBtnSubmit] = useState<boolean>(false);
     const [pitch, setPitch] = useState<PitchModel>(emptyPitch);
-    const [selectedPitches, setSelectedPitches] = useState<EditPitchModel[]>([]);
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [globalFilter, setGlobalFilter] = useState<string>('');
     const [pitchTypes, setPitchTypes] = useState<PitchTypeModel[]>([]);
     const [pitchType, setPitchType] = useState<PitchTypeModel>();
     const [pitchId, setPitchId] = useState<number>();
+    const [isLoading, setIsLoading] = useState(true);
+    const [httpError, setHttpError] = useState(null);
     const toast = useRef<Toast>(null);
     const dt = useRef<DataTable<EditPitchModel[]>>(null);
 
@@ -63,12 +65,10 @@ export default function EditPitches() {
             try {
                 const result = await getEditPitch();
                 setPitches(result);
-                // setIsLoading(false);
-                // setBtnSubmit(false);
+                setIsLoading(false);
             } catch (error: any) {
-                // setIsLoading(false)
-                // setHttpError(error.message);
-                // setBtnSubmit(false);
+                setIsLoading(false)
+                setHttpError(error.message);
             }
         };
 
@@ -81,11 +81,11 @@ export default function EditPitches() {
             try {
                 const result = await getPitchTypeAll();
                 setPitchTypes(result);
-                // setIsLoading(false);
+                setIsLoading(false);
 
             } catch (error: any) {
-                // setIsLoading(false)
-                // setHttpError(error.message);
+                setIsLoading(false)
+                setHttpError(error.message);
             }
         };
 
@@ -111,31 +111,38 @@ export default function EditPitches() {
     const savePitch = async () => {
         setSubmitted(true);
 
-        if (pitch.name?.trim()) {
-            let _pitch = { ...pitch };
-
-
-            if (pitch.id) {
-
-                try {
-                    await putEditPitch(_pitch);
-                    toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Pitch Updated', life: 3000 });
-                } catch (error: any) {
-                    console.error('Error fetching data', error);
-                }
-
-            } else {
-                try {
-                    await postEditPitch(_pitch);
-                    toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Pitch Created', life: 3000 });
-                } catch (error: any) {
-                    console.error('Error fetching data', error);
-                }
-            }
-            setBtnSubmit(!btnSubmit);
-            setPitchDialog(false);
-            setPitch(emptyPitch);
+        // Validation
+        if (!pitch.name?.trim() || !pitch.address?.trim() || !pitch.pitchTypeId) {
+            toast.current?.show({ severity: 'error', summary: 'Lỗi', detail: 'Tất cả thông tin phải được điền.', life: 3000 });
+            return;
         }
+
+        let _pitch = { ...pitch };
+
+
+        if (pitch.id) {
+
+            try {
+                setSubmitted(false);
+                await putEditPitch(_pitch);
+                toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Sân đã được cập nhật', life: 3000 });
+            } catch (error: any) {
+                console.error('Đã có lỗi xảy ra', error);
+            }
+
+        } else {
+            try {
+                setSubmitted(false);
+                await postEditPitch(_pitch);
+                toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Sân đã được tạo', life: 3000 });
+            } catch (error: any) {
+                console.error('Đã có lỗi xảy ra', error);
+            }
+        }
+        setBtnSubmit(!btnSubmit);
+        setPitchDialog(false);
+        setPitch(emptyPitch);
+
     };
 
     const editPitch = (temp: EditPitchModel) => {
@@ -165,7 +172,7 @@ export default function EditPitches() {
 
         try {
             await delEditPitch(_pitch.id!);
-            toast.current?.show({ severity: 'success', summary: 'Successful', detail: 'Pitch Deleted', life: 3000 });
+            toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Sân đã được xóa', life: 3000 });
         } catch (error: any) {
             console.error('Error fetching data', error);
         }
@@ -284,7 +291,17 @@ export default function EditPitches() {
         );
     };
 
+    if (isLoading) {
+        return <Spinner />;
+    };
 
+    if (httpError) {
+        return (
+            <div className="container m-5">
+                <p>{httpError}</p>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -316,20 +333,20 @@ export default function EditPitches() {
                         Tên sân
                     </label>
                     <InputText id="name" value={pitch.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !pitch.name })} />
-                    {submitted && !pitch.name && <small className="p-error">Name is required.</small>}
+                    {submitted && !pitch.name && <small className="p-error">Tên sân không được để trống.</small>}
                 </div>
                 <div className="field mb-3">
                     <label htmlFor="address" className="font-bold">
                         Địa chỉ
                     </label>
                     <InputText id="address" value={pitch.address} onChange={(e) => onInputChange(e, 'address')} required autoFocus className={classNames({ 'p-invalid': submitted && !pitch.address })} />
-                    {submitted && !pitch.address && <small className="p-error">Địa chỉ is required.</small>}
+                    {submitted && !pitch.address && <small className="p-error">Địa chỉ không được để trống.</small>}
                 </div>
 
                 <div className="field">
-                    <label htmlFor="type">Loại sân</label>
-                    <Dropdown id="type" value={pitchType} onChange={(e) => { setPitchType(e.value); onDropdownChange(e, 'pitchTypeId') }} options={pitchTypes} optionLabel="name" required
-                        placeholder="Chọn loại sân" />
+                    <label htmlFor="pitchTypeId">Loại sân</label>
+                    <Dropdown value={pitchTypes.find(e => e.id === pitch.pitchTypeId)} onChange={(e) => onDropdownChange(e, 'pitchTypeId')} options={pitchTypes} optionLabel="name" placeholder="Chọn loại sân" className={classNames({ 'p-invalid': submitted && !pitch.pitchTypeId })} />
+                    {submitted && !pitch.pitchTypeId && <small className="p-error">Vui lòng chọn loại sân.</small>}
                 </div>
             </Dialog>
 

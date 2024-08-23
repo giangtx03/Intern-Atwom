@@ -126,10 +126,10 @@
         pt.price,
         b.create_at AS create_bill, b.note AS note_bill
         FROM pitch_booking pb
-        INNER JOIN pitch p ON pb.pitch_time_pitch_id = p.id
+        LEFT JOIN pitch p ON p.id = pb.pitch_time_pitch_id
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
-        INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
+        LEFT JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
         LEFT JOIN bill b ON b.pitch_booking_id = pb.id
         WHERE pb.`status` = #{status}
         ORDER BY b.create_at ASC
@@ -143,12 +143,21 @@
         pt.price,
         b.create_at AS create_bill, b.note AS note_bill
         FROM pitch_booking pb
-        INNER JOIN pitch p ON pb.pitch_time_pitch_id = p.id
+        LEFT JOIN pitch p ON p.id = pb.pitch_time_pitch_id
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
-        INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
+        LEFT JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
         LEFT JOIN bill b ON b.pitch_booking_id = pb.id
         WHERE pb.id = #{id}
+    </select>
+    
+    <select id="updatePitchBookingToReject" parameterType="map">
+        UPDATE `pitch_booking`
+        SET `status` = "reject"
+        WHERE pitch_time_pitch_id = #{pitchTimePitchId}
+        AND pitch_time_time_slot_id = #{pitchTimeTimeSlotId}
+        AND DATE(create_at) = #{createAt}
+        AND `status` = "wait"
     </select>
 
     <resultMap id="adminResult" type="com.pitchmanagement.dto.admin.ConfirmPitchBookingDto">
