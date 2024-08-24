@@ -127,7 +127,7 @@ public class BookingController {
     @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin/confirm")
     public ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(
-            @RequestParam String status,
+            @RequestParam List<String> status,
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer limit) {
 

@@ -5,7 +5,7 @@ import { createBill, getMessageAll } from '../../service/AdminService';
 import { BillModel } from '../../model/BillModel';
 import Spinner from '../../comp/Spinner';
 import Payment from './components/Payment';
-import { STATUS_PITCH_BOOKING_ACCESS } from '../../constant/constant';
+import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_SUCCESS } from '../../constant/constant';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 
 export default function Payments() {
@@ -23,7 +23,7 @@ export default function Payments() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS, first, rows);
+                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_SUCCESS, first, rows);
                 setMessages(result.items);
                 setTotalRecords(result.total_items);
                 setIsLoading(false);

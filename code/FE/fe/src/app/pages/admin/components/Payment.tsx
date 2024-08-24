@@ -6,6 +6,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { FloatLabel } from "primereact/floatlabel";
 import { BillModel } from '../../../model/BillModel';
+import { STATUS_PITCH_BOOKING_ACCESS } from '../../../constant/constant';
 
 type Props = {
     message: MessageModel;
@@ -13,6 +14,7 @@ type Props = {
 }
 
 export default function Payment(props: Props) {
+
 
     const [bill, setBill] = useState<BillModel>()
 
@@ -62,14 +64,14 @@ export default function Payment(props: Props) {
 
     const header = (
         <div className="d-flex justify-content-between me-5">
-            <div className={props.message.namePitch === null ? "text-danger" : ""}>{props.message.namePitch === null ? "Sân bóng không tồn tại" : props.message.namePitch}</div>
+            <div>{props.message.namePitch}</div>
             <div className="">{handleDate(props.message.startTime)} - {handleDate(props.message.endTime)}</div>
         </div>
     );
 
     const subtitle = (
-        <div className={props.message.createBill === null ? "text-danger" : "text-success"}>
-            {props.message.createBill === null ? "Chưa thanh toán" : `Đã thanh toán (${handleDate(props.message.createBill)})`}
+        <div className={props.message.statusBook === STATUS_PITCH_BOOKING_ACCESS ? "text-danger" : "text-success"}>
+            {props.message.statusBook === STATUS_PITCH_BOOKING_ACCESS ? "Chưa thanh toán" : `Đã thanh toán (${handleDate(props.message.createBill)})`}
             <hr />
         </div>
     )
@@ -102,7 +104,7 @@ export default function Payment(props: Props) {
                     </div>
                     <div className="">
                         {
-                            props.message.createBill !== null
+                            props.message.statusBook !== STATUS_PITCH_BOOKING_ACCESS
                                 ?
                                 <div style={{ backgroundColor: 'var(--highlight-bg)', color: 'var(--highlight-text-color)', borderRadius: 'var(--border-radius)', padding: '1rem', fontWeight: 700 }}>
                                     {props.message.price?.toLocaleString()} VND

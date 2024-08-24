@@ -57,6 +57,8 @@ export default function Revenue() {
         window.scrollTo(0, 0);
     }, [month, year]);
 
+    const sumPrice = billDays.reduce((acc, data) => acc + data.totalPrice!, 0);
+
     if (isLoading) {
         return <Spinner />;
     };
@@ -72,6 +74,7 @@ export default function Revenue() {
     return (
         <div className="d-flex justify-content-between align-items-center h-100">
             <div className='container'>
+                <h3>Tổng doanh thu: {sumPrice.toLocaleString()} VND</h3>
                 <div className="row">
                     <div className="col-8">
                         <RevenueBar billDays={billDays} month={month!} year={year!} />

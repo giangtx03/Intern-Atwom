@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,13 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public BillRequest addBill(BillRequest bill) {
+
+        Map<String, Object> updateStatusMap = new HashMap<>();
+        updateStatusMap.put("id", bill.getPitchBookingId());
+        updateStatusMap.put("status", PitchBookingConstant.STATUS_PITCH_BOOKING_SUCCESS);
+        updateStatusMap.put("updateAt", bill.getCreateAt());
+
+        bookingDAO.updateStatusPitchBooking(updateStatusMap);
 
         // Truy vấn bảng pitch_time
         BookingDto pitchBooking = bookingDAO.selectPitchBookingById(bill.getPitchBookingId());
@@ -56,8 +64,6 @@ public class BillServiceImpl implements BillService {
         // Chuyển status thành "rảnh"
         pitchTime.setStatus(PitchTimeConstant.STATUS_PITCH_TIME_ACTIVE);
         pitchTimeDAO.updateStatusPitchTimeByIds(pitchTime);
-
-
 
         billDao.insertBill(bill);
 

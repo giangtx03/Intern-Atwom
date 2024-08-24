@@ -79,7 +79,7 @@ public class BookingServiceImpl implements BookingService {
 
     // ------------------------------------------------------------------
     @Override
-    public PageResponse getConfirmPitchBookingByStatus(String status, Integer offset, Integer limit) {
+    public PageResponse getConfirmPitchBookingByStatus(List<String> status, Integer offset, Integer limit) {
 
         // Kiểm tra nếu offset và limit là null hoặc không hợp lệ, thì lấy toàn bộ bản ghi
         List<ConfirmPitchBookingDto> pitchBookingDtos;

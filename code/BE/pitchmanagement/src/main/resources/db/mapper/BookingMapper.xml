@@ -133,8 +133,11 @@
         INNER JOIN user u ON pb.user_id = u.id
         LEFT JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
         LEFT JOIN bill b ON b.pitch_booking_id = pb.id
-        WHERE pb.`status` = #{status}
-        ORDER BY b.create_at ASC
+        WHERE pb.status IN
+        <foreach item="status" collection="statuses" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        ORDER BY pb.status ASC , b.create_at DESC
     </select>
 
     <select id="selectConfirmPitchBookingById" parameterType="int" resultMap="adminResult">
