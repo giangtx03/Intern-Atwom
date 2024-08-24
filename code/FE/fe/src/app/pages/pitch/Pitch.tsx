@@ -63,13 +63,15 @@ export default function Pitch() {
           time_slot_id: search.timeSlot.id,
           page_number: search.pageNumber,
           limit: search.limit,
-          sort_by: search.sortBy.value ? search.sortBy.value :search.sortBy ,
-          sort_order: search.sortOrder.value ? search.sortOrder.value : search.sortOrder,
+          sort_by: search.sortBy.value ? search.sortBy.value : search.sortBy,
+          sort_order: search.sortOrder.value
+            ? search.sortOrder.value
+            : search.sortOrder,
         })
         .then((response: any) => {
           if (response.data.status === 200) {
             setList(response.data.data.items);
-            console.log(search);
+            // console.log(search);
             // console.log(response.data.data);
             setTotalRecords(response.data.data.total_items);
             dispatch(showOrHindSpinner(false));
@@ -193,8 +195,7 @@ export default function Pitch() {
                         <div className="d-flex justify-content-between">
                           <p>Address : {item.address}</p>
                         </div>
-                        <div className="d-flex justify-content-between mb-2">
-                        </div>
+                        <div className="d-flex justify-content-between mb-2"></div>
                       </div>
                     </div>
                   </div>
@@ -234,7 +235,6 @@ export default function Pitch() {
                 setSearch({
                   ...search,
                   pitchType: e.target.value,
-                  timer: Date.now(),
                 })
               }
               defaultValue={0}
@@ -257,7 +257,6 @@ export default function Pitch() {
                 setSearch({
                   ...search,
                   sortBy: e.target.value,
-                  timer: Date.now(),
                 });
               }}
               style={{ width: "14rem" }}
@@ -283,7 +282,6 @@ export default function Pitch() {
                 setSearch({
                   ...search,
                   sortOrder: e.target.value,
-                  timer: Date.now(),
                 });
               }}
               style={{ width: "14rem" }}
@@ -298,20 +296,38 @@ export default function Pitch() {
             />
           </div>
         </div>
-        <Button
-          onClick={() => {
-            setSearch({
-              ...search,
-              pitchType: { id: 0 },
-              timeSlot: { id: 0 },
-              sortBy: { name: "Số thứ tự", value: "p.id" },
-              sortOrder: { name: "Tăng dần", value: "asc" },
-              timer: Date.now(),
-            });
-          }}
-        >
-          Làm mới
-        </Button>
+        <div className="row">
+          <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+            <Button
+              onClick={() => {
+                setSearch({
+                  ...search,
+                  pitchType: { id: 0 },
+                  timeSlot: { id: 0 },
+                  sortBy: { name: "Số thứ tự", value: "p.id" },
+                  sortOrder: { name: "Tăng dần", value: "asc" },
+                  timer: Date.now(),
+                });
+                setVisible(false);
+              }}
+            >
+              Làm mới
+            </Button>
+          </div>
+          <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+            <Button
+              onClick={() => {
+                setSearch({
+                  ...search,
+                  timer: Date.now(),
+                });
+                setVisible(false);
+              }}
+            >
+              Tìm kiếm
+            </Button>
+          </div>
+        </div>
       </Dialog>
     </section>
   );

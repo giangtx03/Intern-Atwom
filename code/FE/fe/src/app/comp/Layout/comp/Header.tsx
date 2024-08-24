@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menubar } from "primereact/menubar";
 import { Avatar } from "primereact/avatar";
 import { Menu } from "primereact/menu";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "primereact/resources/themes/bootstrap4-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { TokenService } from "../../../service/TokenService";
-import { isExpired, decodeToken } from "react-jwt";
+import { decodeToken } from "react-jwt";
 import { DecodedToken, UserDetails } from "../../../model/User";
 import { UserService } from "../../../service/UserService";
-import { error } from "console";
 import { useAppDispatch } from "../../../store/hooks";
 import { login, logout } from "../../../reduces/UserSlice";
 import { useSelector } from "react-redux";
@@ -55,7 +54,7 @@ export default function Header() {
           navigate("/login");
         });
     }
-  }, [navigate]);
+  }, [TokenService.getInstance().getToken()]);
 
   const menu = useRef<Menu>(null);
 

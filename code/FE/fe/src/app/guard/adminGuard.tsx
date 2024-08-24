@@ -1,38 +1,31 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 import { showOrHindSpinner } from "../reduces/SpinnerSlice";
+import { useEffect } from "react";
 
-export default function AuthGuard(props: any) {
+export default function AdminGuard(props: any) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: any) => state.user.isAuthenticated
   );
   const isLoading = useSelector((state: any) => state.user.isLoading);
+  const user = useSelector((state: any) => state.user.userDetail);
 
   useEffect(() => {
     if (isLoading) {
       dispatch(showOrHindSpinner(true));
-      if (!isAuthenticated) {
-        dispatch(showOrHindSpinner(false));
-        navigate("/login");
-        return;
-      }
     } else {
       dispatch(showOrHindSpinner(false));
       if (!isAuthenticated) {
         navigate("/login");
+      } else if (user.role !== "ADMIN") {
+        navigate("/not-permission");
       }
     }
-  }, [isAuthenticated, isLoading, navigate, dispatch]);
+  }, [isAuthenticated, isLoading, navigate, dispatch, user?.role]);
 
-  if (isLoading) {
-    dispatch(showOrHindSpinner(true));
-    return null;
-  }
-
-  if (!isAuthenticated) {
+  if (!isLoading && (!isAuthenticated || user?.role !== "ADMIN")) {
     dispatch(showOrHindSpinner(false));
     return null;
   }

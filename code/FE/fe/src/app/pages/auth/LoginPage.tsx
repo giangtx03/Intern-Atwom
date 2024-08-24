@@ -16,7 +16,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, touchedFields },
   } = useForm<LoginRequest>({ mode: "onTouched" });
 

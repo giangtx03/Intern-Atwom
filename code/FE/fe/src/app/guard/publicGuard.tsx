@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export default function PublicGuard(props: any) {
-    const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
-  
-    return !isAuthenticated ? <>{props.children}</> : <Navigate to="/pitch"/>;
-  }
+  const isAuthenticated = useSelector(
+    (state: any) => state.user.isAuthenticated
+  );
+
+  return !isAuthenticated ? <>{props.children}</> : <Navigate to="/pitch" />;
+}
