@@ -4,7 +4,7 @@ import { PitchService } from "../../service/PitchService";
 import { useAppDispatch } from "../../store/hooks";
 import { showOrHindSpinner } from "../../reduces/SpinnerSlice";
 import { PitchResponse } from "../../model/PitchModel";
-import { formatDate } from "../../utils/FormatDate";
+import { formatDate, formatTime } from "../../utils/FormatDate";
 import { Carousel } from "primereact/carousel";
 import { STATUS_PITCH_TIME_ACTIVE } from "../../constant/constant";
 import CommentDisplay from "../comment";
@@ -76,7 +76,7 @@ export default function PitchDetail() {
   useEffect(() => {
     if (pitch) {
       const newOptions = pitch.times.map((time, index) => ({
-        label: `${time.startTime} - ${time.endTime}`,
+        label: `${formatTime(time.startTime.toString())} - ${formatTime(time.endTime.toString())}`,
         value: index,
         isReservation: time.status !== STATUS_PITCH_TIME_ACTIVE,
       }));
@@ -205,14 +205,14 @@ export default function PitchDetail() {
                                 itemTemplate={(option: any) => (
                                   <div className="d-flex align-items-center">
                                     {option.isReservation ? (
-                                      <span className="position-absolute top-0 end-0 bg-warning">
+                                      <span className="position-absolute top-0 end-0 bg-warning small">
                                         <FaExclamationCircle
-                                          size={20}
+                                          size={16}
                                           color="red"
                                         />
-                                        <span className="text-danger small">
+                                        <small className="text-danger">
                                           Đã đặt
-                                        </span>
+                                        </small>
                                       </span>
                                     ) : (
                                       <></>
