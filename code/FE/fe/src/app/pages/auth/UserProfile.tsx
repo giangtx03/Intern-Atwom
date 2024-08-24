@@ -34,7 +34,14 @@ export default function UserProfile() {
 
   return user ? (
     <section style={{ backgroundColor: "#eee" }}>
-      <div className="container py-5">
+      <div className="container-fluid py-1">
+        <div className="row">
+          <div className="col-12">
+            <div className="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+              <h4 className="mb-sm-0 p-3">Trang cá nhân</h4>
+            </div>
+          </div>
+        </div>
         <div className="row">
           <div className="col-lg-4">
             <div className="card mb-4">
@@ -45,7 +52,7 @@ export default function UserProfile() {
                     (e.target as HTMLImageElement).src = defaultAvatar;
                   }}
                   alt="Image"
-                  preview= {user.avatar ? true : false}
+                  preview={user.avatar ? true : false}
                   width="200px"
                   height="200px"
                   style={{
@@ -145,7 +152,7 @@ export default function UserProfile() {
       <Dialog
         header={`Email: ${user.email}`}
         visible={visible}
-        style={{ width: "60vw", minWidth: '450px', zIndex: 1000 }}
+        style={{ width: "60vw", minWidth: "450px", zIndex: 1000 }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);
