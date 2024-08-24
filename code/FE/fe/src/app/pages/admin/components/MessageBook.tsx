@@ -46,7 +46,7 @@ export default function MessageBook(props: Props) {
     const footer = (
         <>
             <Button className='rounded-2' label="Chấp nhận" icon="pi pi-check" onClick={() => {
-                setCurrentAction(STATUS_PITCH_BOOKING_SUCCESS);
+                setCurrentAction(STATUS_PITCH_BOOKING_ACCESS);
                 setVisible(true);
             }} />
             <Button className='rounded-2' label="Từ chối" severity="secondary" icon="pi pi-times" style={{ marginLeft: '0.5em' }} onClick={() => {

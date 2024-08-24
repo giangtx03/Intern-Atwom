@@ -6,12 +6,16 @@ import { BillModel } from '../../model/BillModel';
 import Spinner from '../../comp/Spinner';
 import Payment from './components/Payment';
 import { STATUS_PITCH_BOOKING_ACCESS } from '../../constant/constant';
+import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 
 export default function Payments() {
 
     const [messages, setMessages] = useState<MessageModel[]>([]);
 
     const [btnSubmit, setBtnSubmit] = useState(false);
+    const [first, setFirst] = useState(0);
+    const [rows, setRows] = useState(5);
+    const [totalRecords, setTotalRecords] = useState<number>();
 
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
@@ -19,8 +23,9 @@ export default function Payments() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS);
-                setMessages(result);
+                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS, first, rows);
+                setMessages(result.items);
+                setTotalRecords(result.total_items);
                 setIsLoading(false);
             } catch (error: any) {
                 setIsLoading(false);
@@ -43,6 +48,11 @@ export default function Payments() {
         setBtnSubmit(!btnSubmit);
     }
 
+    const onPageChange = (event: PaginatorPageChangeEvent) => {
+        setFirst(event.first);
+        setRows(event.rows);
+    };
+
     if (isLoading) {
         return (
             <Spinner />
@@ -62,9 +72,14 @@ export default function Payments() {
             {
                 messages.length > 0
                     ?
-                    messages.map((message) => (
-                        <Payment message={message} submitConfirm={submitConfirm} key={message.id} />
-                    ))
+                    <>
+                        {
+                            messages.map((message) => (
+                                <Payment message={message} submitConfirm={submitConfirm} key={message.id} />
+                            ))
+                        }
+                        <Paginator first={first} rows={rows} totalRecords={totalRecords} rowsPerPageOptions={[5, 10, 15]} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />
+                    </>
                     :
                     <h5>Không có đơn nào</h5>
             }

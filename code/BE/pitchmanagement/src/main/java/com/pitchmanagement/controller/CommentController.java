@@ -35,8 +35,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    
-
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @PostMapping
     public ResponseEntity<?> insert(@Valid @RequestBody CommentRequest commentRequest) {

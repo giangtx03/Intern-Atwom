@@ -19,7 +19,7 @@ export default function MessageBooks() {
         const fetchData = async () => {
             try {
                 const result = await getMessageAll(STATUS_PITCH_BOOKING_WAIT);
-                setMessages(result);
+                setMessages(result.items);
                 setIsLoading(false);
 
             } catch (error: any) {

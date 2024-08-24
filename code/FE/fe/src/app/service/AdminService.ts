@@ -14,17 +14,23 @@ import { ImagePitch } from "../model/ImagePitch";
 
 
 // List các thông báo
-export const getMessageAll = async (status: string) => {
+export const getMessageAll = async (status: string, offset?: number, limit?: number) => {
     try {
+        let url = `/booking/admin/confirm?status=${status}`;
 
-        const url = `/booking/admin/confirm?status=${status}`
-        const response: AxiosResponse<{ data: MessageModel[] }> = await axiosCustom.get(url);
+        // Thêm offset và limit nếu chúng được cung cấp
+        if (offset !== undefined && limit !== undefined) {
+            url += `&offset=${offset}&limit=${limit}`;
+        }
+
+        const response = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
         throw error;
     }
 };
+
 
 // Cập nhật trạng thái đặt sân
 export const updateStatus = async (statusObj: {}) => {

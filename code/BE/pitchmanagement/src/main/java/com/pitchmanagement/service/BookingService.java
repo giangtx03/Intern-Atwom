@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
+import com.pitchmanagement.model.response.PageResponse;
 import org.springframework.stereotype.Service;
 
 import com.pitchmanagement.dto.PitchBookingDTO;
@@ -19,7 +20,7 @@ public interface BookingService {
     void update(BookingRequest bookingRequest);
 
     //------------------------------------------------------------------
-    List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(String status);
+    PageResponse getConfirmPitchBookingByStatus(String status, Integer offset, Integer limit);
 
     ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> params) throws Exception;
 }

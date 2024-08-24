@@ -10,6 +10,7 @@ import com.pitchmanagement.dto.admin.BookingDto;
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.model.request.PitchTimeRequest;
 import com.pitchmanagement.constant.*;
+import com.pitchmanagement.model.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.ibatis.javassist.NotFoundException;
@@ -78,13 +79,33 @@ public class BookingServiceImpl implements BookingService {
 
     // ------------------------------------------------------------------
     @Override
-    public List<ConfirmPitchBookingDto> getConfirmPitchBookingByStatus(String status) {
-        System.out.println("Status: " + status);
+    public PageResponse getConfirmPitchBookingByStatus(String status, Integer offset, Integer limit) {
 
-        List<ConfirmPitchBookingDto> confirmPitchBookings = bookingDAO.selectConfirmPitchBookingByStatus(status);
+        // Kiểm tra nếu offset và limit là null hoặc không hợp lệ, thì lấy toàn bộ bản ghi
+        List<ConfirmPitchBookingDto> pitchBookingDtos;
+        if (offset == null || limit == null || offset < 0 || limit <= 0) {
+            // Không phân trang, lấy tất cả bản ghi
+            pitchBookingDtos = bookingDAO.selectConfirmPitchBookingByStatus(status);
+        } else {
+            // Sử dụng phân trang với PageHelper nếu có offset và limit
+            PageHelper.offsetPage(offset, limit);
+            pitchBookingDtos = bookingDAO.selectConfirmPitchBookingByStatus(status);
+        }
 
-        return bookingDAO.selectConfirmPitchBookingByStatus(status);
+        // Lấy tổng số bản ghi từ cơ sở dữ liệu
+        long totalRecords = (limit != null && limit > 0) ? ((com.github.pagehelper.Page<?>) pitchBookingDtos).getTotal() : pitchBookingDtos.size();
+
+        // Tính tổng số trang (nếu không phân trang thì tổng số trang là 1)
+        int totalPages = (limit != null && limit > 0) ? (int) Math.ceil((double) totalRecords / limit) : 1;
+
+        // Xây dựng và trả về đối tượng PageResponse
+        return PageResponse.builder()
+                .items(pitchBookingDtos)
+                .totalItems(totalRecords)
+                .totalPages(totalPages)
+                .build();
     }
+
 
     @Override
     public ConfirmPitchBookingDto updateStatusPitchBooking(Map<String, Object> statusMap) throws Exception {
@@ -116,7 +137,6 @@ public class BookingServiceImpl implements BookingService {
         rejectPitch.put("createAt", pitchBooking.getCreateAt().toLocalDate());
 
         bookingDAO.updatePitchBookingToReject(rejectPitch);
-//        System.out.println(pitchBooking.getCreateAt().toLocalDate());
         bookingDAO.updateStatusPitchBooking(statusMap);
 
 

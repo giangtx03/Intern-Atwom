@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
+import com.pitchmanagement.model.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -125,12 +126,16 @@ public class BookingController {
     //------------------------------------------------------------------
     @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin/confirm")
-    ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(@RequestParam String status) {
-        List<ConfirmPitchBookingDto> confirmPitchBookings = bookingService.getConfirmPitchBookingByStatus(status);
-        BaseResponse response = BaseResponse
-                .builder()
+    public ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(
+            @RequestParam String status,
+            @RequestParam(required = false) Integer offset,
+            @RequestParam(required = false) Integer limit) {
+
+        PageResponse pageResponse = bookingService.getConfirmPitchBookingByStatus(status, offset, limit);
+
+        BaseResponse response = BaseResponse.builder()
                 .status(HttpStatus.OK.value())
-                .data(confirmPitchBookings)
+                .data(pageResponse)
                 .message("success")
                 .build();
 
