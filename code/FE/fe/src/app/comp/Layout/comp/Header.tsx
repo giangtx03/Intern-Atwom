@@ -142,6 +142,7 @@ export default function Header() {
             model={userMenuItems}
             style={{ width: "14rem" }}
             popup
+            baseZIndex={1000}
             ref={menu}
           />
         </div>
