@@ -34,6 +34,7 @@ export default function Header() {
     (state: any) => state.user.isAuthenticated
   );
   const [user, setUser] = useState<UserDetails | null>(null);
+  const userDetail = useSelector((state: any) => state.user.userDetail);
 
   useEffect(() => {
     const decode = decodeToken<DecodedToken>(
@@ -44,7 +45,6 @@ export default function Header() {
         .getUserDetails(decode.user_id)
         .then((response) => {
           if (response.data.status === 200) {
-            setUser(response.data.data);
             dispatch(login(response.data.data));
           }
         })
@@ -55,6 +55,10 @@ export default function Header() {
         });
     }
   }, [TokenService.getInstance().getToken()]);
+
+  useEffect(() => {
+    setUser(userDetail);
+  }, [userDetail]) 
 
   const menu = useRef<Menu>(null);
 
