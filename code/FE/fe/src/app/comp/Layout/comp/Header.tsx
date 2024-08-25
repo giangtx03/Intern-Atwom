@@ -125,7 +125,7 @@ export default function Header() {
   );
   const end = (
     <div className="flex align-items-center gap-2">
-      {user ? (
+      {isAuthenticated && user ? (
         <div className="d-flex align-items-center">
           <Avatar
             image={
