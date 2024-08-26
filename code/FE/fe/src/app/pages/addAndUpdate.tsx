@@ -63,7 +63,7 @@ export default function AddAndUpdate(props: any) {
         page: 1,
       });
     } else {
-      swal("Bạn muốn cập nhật tượng này chứ?", {
+      swal("Bạn muốn cập nhật đánh giá này chứ?", {
         buttons: ["Quay lại", "Đồng ý"],
         icon: "warning",
         dangerMode: true,
@@ -108,10 +108,11 @@ export default function AddAndUpdate(props: any) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             style={{ width: "95%", margin: "1%" }}
+            placeholder="Ghi chú"
           />
           <Button
             label="Xác nhận"
-            style={{ left: "85%", margin: "1%" }}
+            style={{ left: "80%", margin: "1%" }}
             onClick={addComment}
           />
         </div>

@@ -43,7 +43,7 @@
     </select>
 
     <select id="total" parameterType="map" resultType="int">
-        Select COUNT(id) from comment where pitch_id = #{pitch_id} group by pitch_id
+        Select COUNT(id) from comment where pitch_id = #{pitch_id} and (#{user_id} is null or user_id = #{user_id}) group by pitch_id
     </select>
 
     <insert id= "insert" parameterType="com.pitchmanagement.model.request.CommentRequest">

@@ -22,7 +22,15 @@ import { Column } from "primereact/column";
 import { Paginator } from "primereact/paginator";
 import { Tag } from "primereact/tag";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_CANCEL, STATUS_PITCH_BOOKING_REJECT, STATUS_PITCH_BOOKING_SUCCESS, STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
+import {
+  STATUS_PITCH_BOOKING_ACCESS,
+  STATUS_PITCH_BOOKING_CANCEL,
+  STATUS_PITCH_BOOKING_REJECT,
+  STATUS_PITCH_BOOKING_SUCCESS,
+  STATUS_PITCH_BOOKING_WAIT,
+} from "../constant/constant";
+import { access } from "fs/promises";
+import { ToastContainer, toast, ToastPosition } from "react-toastify";
 
 interface StatusSearch {
   name: string;
@@ -40,9 +48,15 @@ export default function History() {
   const [rows, setRows] = useState(search.limit);
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number | undefined>(undefined);
-  const [statusBooking,setStatusBooking] = useState<StatusSearch>({name:"Tất cả", code:""})
+  const [statusBooking, setStatusBooking] = useState<StatusSearch>({
+    name: "Tất cả",
+    code: "",
+  });
   const navigate = useNavigate();
-  const [selectOrder, setSelectOrder] = useState<Order>({ name: "mới nhất", type: "DESC" });
+  const [selectOrder, setSelectOrder] = useState<Order>({
+    name: "mới nhất",
+    type: "DESC",
+  });
 
   const handleRedirect = (path: string) => {
     navigate(path);
@@ -55,13 +69,12 @@ export default function History() {
 
   const statusSearch: StatusSearch[] = [
     { name: "Tất cả", code: "" },
-    { name: "Thành công", code: STATUS_PITCH_BOOKING_ACCESS },
+    { name: "Chưa thanh toán", code: STATUS_PITCH_BOOKING_ACCESS },
     { name: "chờ", code: STATUS_PITCH_BOOKING_WAIT },
-    { name: "Đã thanh toán", code: "finished" },
+    { name: "Đã thanh toán", code: STATUS_PITCH_BOOKING_SUCCESS },
     { name: "Hủy", code: STATUS_PITCH_BOOKING_CANCEL },
     { name: "Từ chối", code: STATUS_PITCH_BOOKING_REJECT },
   ];
-  const toast = useRef<Toast>(null);
   const token = localStorage.getItem("access_token");
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
@@ -69,20 +82,15 @@ export default function History() {
 
   const dispatch = useAppDispatch();
 
-  const showSuccess = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
+  const showToastSuccess = () => {
+    toast.success("Success Notification !", {
+      position: "top-right",
     });
   };
-  const showError = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error",
-      detail: message,
-      life: 3000,
+
+  const showToastError = () => {
+    toast.error("Error Notification !", {
+      position: "top-right",
     });
   };
 
@@ -111,14 +119,21 @@ export default function History() {
         <Button
           label="Hủy"
           className={`p-button-danger ${
-            item.status == STATUS_PITCH_BOOKING_SUCCESS || item.status == STATUS_PITCH_BOOKING_WAIT ? "" : "hide"
+            item.status == STATUS_PITCH_BOOKING_ACCESS ||
+            item.status == STATUS_PITCH_BOOKING_WAIT
+              ? ""
+              : "hide"
           }`}
           onClick={() => ChoseCancelBooking(item)}
         />
         <Button
           label="Đặt lại"
           className={`p-button-success ${
-            item.status == STATUS_PITCH_BOOKING_CANCEL || item.status == STATUS_PITCH_BOOKING_REJECT || item.status == STATUS_PITCH_BOOKING_ACCESS ? "" : "hide"
+            item.status == STATUS_PITCH_BOOKING_CANCEL ||
+            item.status == STATUS_PITCH_BOOKING_REJECT ||
+            item.status == STATUS_PITCH_BOOKING_SUCCESS
+              ? ""
+              : "hide"
           }`}
           onClick={() => {
             handleRedirect(`/pitch/${item.pitchId}`);
@@ -131,7 +146,7 @@ export default function History() {
   const statusBodyTemplate = (item: any) => {
     return (
       <Tag
-        value={item.status}
+        value={statusDisplay[item.status]}
         severity={item.status ? status[item.status] : "danger"}
       ></Tag>
     );
@@ -150,8 +165,7 @@ export default function History() {
         })
         .catch((response) => {
           dispatch(showOrHindSpinner(false));
-          showError(response.data);
-          
+          showToastError();
         });
       await BookingService.getInstance()
         .total(search, user_id)
@@ -162,11 +176,11 @@ export default function History() {
         })
         .catch((response) => {
           dispatch(showOrHindSpinner(false));
-          showError(response.message);
+          showToastError();
         });
     } catch (error: any) {
-      showError(error.message);
-      console.log(error)
+      showToastError();
+      console.log(error);
       dispatch(showOrHindSpinner(false));
     }
   };
@@ -176,7 +190,7 @@ export default function History() {
   }, [search.timer]);
 
   const ChoseCancelBooking = (bookChose: Booking) => {
-    swal("Bạn muốn cập nhật tượng này chứ?", {
+    swal("Bạn muốn hủy đơn này chứ?", {
       buttons: ["Quay lại", "Đồng ý"],
       icon: "warning",
       dangerMode: true,
@@ -191,10 +205,10 @@ export default function History() {
               timer: new Date().getTime(),
               page: 1,
             });
-            showSuccess(response.data.message);
+            showToastSuccess();
           })
           .catch((response) => {
-            showSuccess(response.data.message);
+            showToastSuccess()
           });
       } else {
         setSearch({
@@ -210,16 +224,36 @@ export default function History() {
   };
 
   const status: { [key: string]: "info" | "danger" | "warning" | "success" } = {
-    finished: "info",
+    access: "info",
     cancel: "danger",
     wait: "warning",
     success: "success",
+    reject: "danger",
   };
+
+  const statusDisplay: { [key: string]: string } = {
+    access: "Chưa thanh toán",
+    cancel: "Đã hủy",
+    wait: "chờ",
+    success: "Đã thanh toán",
+    reject: "Từ chối",
+  };
+
   return (
     <>
-      {token && (
+      {booking.length == 0 && search.keySearch == "" ? (
+        <div className="center" style={{ margin: "15%" }}>
+          <h3>Bạn chưa đặt sân nào</h3>
+          <Button
+            onClick={(e) => {
+              handleRedirect("/pitch");
+            }}
+            label="Đặt sân ngay"
+          />
+        </div>
+      ) : (
         <div className="list-group">
-          <Toast ref={toast} />
+          <ToastContainer />
           <h2 className="h4" style={{ margin: "1.5%" }}>
             History
           </h2>
@@ -283,7 +317,7 @@ export default function History() {
             ></Column>
             <Column header="Lựa chọn" body={actionBodyTemplate}></Column>
           </DataTable>
-          
+
           <Paginator
             first={first}
             rows={search.limit}

@@ -51,9 +51,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<PitchBookingDTO> insert(BookingRequest bookingRequest) {
         List<PitchBookingDTO> check = bookingDAO.selectByUserAndPitchAndTime(bookingRequest.getUserId(),bookingRequest.getPitchId(),bookingRequest.getTimeSlotId());
-        System.out.println(check);
         if (check.isEmpty()) {
             bookingDAO.insert(bookingRequest);
+            if(bookingRequest.getStatus().equals(PitchBookingConstant.STATUS_PITCH_BOOKING_ACCESS)){
+                pitchTimeDAO.ChangeStatus(PitchTimeConstant.STATUS_PITCH_TIME_NONACTIVE, bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());
+            }
         }
         return check;
     }

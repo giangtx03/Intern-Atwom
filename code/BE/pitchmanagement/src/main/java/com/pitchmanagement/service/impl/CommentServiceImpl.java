@@ -31,8 +31,8 @@ public class CommentServiceImpl implements CommentService {
         return lst;
     }
 
-    public Integer total(Integer picth_id){
-        return commentDAO.total(picth_id);
+    public Integer total(Integer picth_id,Integer user_id){
+        return commentDAO.total(picth_id,user_id);
     }
 
     @Override

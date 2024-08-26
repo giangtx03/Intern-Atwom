@@ -12,9 +12,9 @@ import com.pitchmanagement.model.request.CommentRequest;
 public interface CommentDAO {
     List<CommentDTO> GetCommentByPitch(@Param("pitch_id") Integer pitch_id, @Param("user_id") Integer user_id,@Param("order") String order);
 
-    CommentDTO selectById(@Param("pitch_id") Integer id);
+    CommentDTO selectById(@Param("id") Integer id);
 
-    Integer total(@Param("pitch_id") Integer pitch_id);
+    Integer total(@Param("pitch_id") Integer pitch_id,@Param("user_id") Integer user_id);
 
     void insert(CommentRequest comment);
 

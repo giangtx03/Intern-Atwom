@@ -29,9 +29,11 @@ export default class CommentService {
     });
   }
 
-  public getTotal(pitch_id?: number) {
-    const url = ApiUrlUtil.buildQueryString(
-      `http://localhost:8080/public/api/v1/comment/total/${pitch_id}`
+  public getTotal(modelSearch: Search,pitch_id?: number) {
+    const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
+     const url = ApiUrlUtil.buildQueryString(
+      `http://localhost:8080/public/api/v1/comment/total/${pitch_id}`,
+      params
     );
     return axios.get(url, {
       headers: HeadersUtil.getHeaders(),

@@ -10,7 +10,7 @@ import com.pitchmanagement.model.request.CommentRequest;
 public interface CommentService {
     List<CommentDTO> GetCommentByPitch(Integer pitch_id, Integer user_id, Integer offset, Integer limit, String order);
 
-    Integer total(Integer picth_id);
+    Integer total(Integer picth_id, Integer user_id);
 
     void insert(CommentRequest commentRequest);
 
