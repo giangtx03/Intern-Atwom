@@ -19,11 +19,7 @@ import { TokenService } from "../service/TokenService";
 import { STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
 
 export default function BookingDialog(props: any) {
-  let {
-    visible,
-    setVisible,
-    pitch_id
-  } = props;
+  let { visible, setVisible, pitch_id } = props;
   const [listPitchTime, setListPitchTime] = useState<[]>();
   const [selectTime, setSelectTime] = useState(Object);
   const [message, setMessage] = useState<boolean>(false);
@@ -32,7 +28,7 @@ export default function BookingDialog(props: any) {
     TokenService.getInstance().getToken()
   )?.user_id;
   const navigate = useNavigate();
-  
+
   const handleRedirect = (path: string) => {
     navigate(path);
   };
@@ -48,16 +44,21 @@ export default function BookingDialog(props: any) {
       }).then(async (value) => {
         await BookingService.getInstance()
           .addBooking(
-            new Booking(STATUS_PITCH_BOOKING_WAIT, note, user_id, pitch_id.id, selectTime.timeSlotId)
+            new Booking(
+              STATUS_PITCH_BOOKING_WAIT,
+              note,
+              user_id,
+              pitch_id.id,
+              selectTime.timeSlotId
+            )
           )
           .then((response) => {
-            
-            if ((response.data.status == 204)) {
+            if (response.data.status == 204) {
               swal("add success", {
                 icon: "success",
                 text: response.data.message,
               });
-            }else if( response.data.status ==  302){
+            } else if (response.data.status == 302) {
               swal("add success", {
                 icon: "warning",
                 text: response.data.message,
@@ -90,7 +91,7 @@ export default function BookingDialog(props: any) {
               setSelectTime(new Object());
               setNote("");
               setMessage(false);
-            }else{
+            } else {
             }
           });
       }
@@ -121,36 +122,55 @@ export default function BookingDialog(props: any) {
         setVisible(false);
       }}
     >
-      <p className="w-full md:w-14rem">
-        {" "}
-        price: {selectTime !== undefined ? selectTime.price : ""}
-      </p>
-      <div style={{ display: "flex", margin: "0 0 1% 0" }}>
-        <Dropdown
-          value={selectTime}
-          onChange={(e: DropdownChangeEvent) => {
-            setSelectTime(e.value);
-            setMessage(false);
-          }}
-          options={listPitchTime}
-          optionLabel="startTime"
-          placeholder="Select a time"
-          className="w-full md:w-14rem"
-        />
-        <p className="w-full md:w-14rem" style={{ margin: "auto 0 auto 1%" }}>
-          {" "}
-          - {selectTime !== undefined ? selectTime.endTime : ""}
-        </p>
+      <div className="row">
+        <div className="col-4">
+          <label htmlFor="price">Giá khung giờ: </label>
+        </div>
+        <div className="col-8">
+          <b className="w-full md:w-14rem">
+            {selectTime !== undefined ? selectTime.price : ""} VND
+          </b>
+        </div>
+      </div>
+
+      <div className="row mt-3 flex align-items-center">
+        <div className="col-4">
+          <label htmlFor="slot_time"> Chọn khung giờ: </label>
+        </div>
+        <div className="col-8 d-flex">
+          <Dropdown
+            value={selectTime}
+            onChange={(e: DropdownChangeEvent) => {
+              setSelectTime(e.value);
+              setMessage(false);
+            }}
+            options={listPitchTime}
+            optionLabel="startTime"
+            placeholder="Chọn thời gian"
+            className="w-full md:w-14rem"
+          />
+          <p className="w-full md:w-14rem" style={{ margin: "auto 0 auto 1%" }}>
+            {" "}
+            - {selectTime !== undefined ? selectTime.endTime : ""}
+          </p>
+        </div>
       </div>
       <Message
         severity="error"
         text="Error Message"
         className={message == false ? "hide" : ""}
       />
-      <div>
-        <InputText value={note} onChange={(e) => setNote(e.target.value)} />
+      <div className="row mt-3 flex align-items-center">
+        <div className="col-4">
+          <label htmlFor="note">Ghi chú: </label>
+        </div>
+        <div className="col-8">
+          <InputText value={note} onChange={(e) => setNote(e.target.value)} />
+        </div>
       </div>
-      <Button label="Submit" onClick={add} />
+      <div className="row mt-3">
+        <Button label="Đặt sân" onClick={add} />
+      </div>
     </Dialog>
   );
 }

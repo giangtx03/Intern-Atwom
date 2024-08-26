@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import defaultAvatar from "../../../../assets/image/defaultAvatar.jpg";
 import { FiUpload } from "react-icons/fi";
 import { Image } from "primereact/image";
+import { login } from "../../../reduces/UserSlice";
 
 export default function UpdateProfile(props: any) {
   const { user, handleUpdate } = props;
@@ -45,7 +46,7 @@ export default function UpdateProfile(props: any) {
   };
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    // console.log(data);
     Swal.fire({
       title: "Bạn có chắc chắn ?",
       text: "Bạn sẽ không thể hoàn tác hành động này!",
@@ -69,13 +70,14 @@ export default function UpdateProfile(props: any) {
           UserService.getInstance()
             .updateUserDetails(formData)
             .then((response) => {
-              console.log(response.data);
+              // console.log(response.data);
               if (response.data.status === 200) {
                 toast.success(response.data.message, {
                   position: "top-right",
                 });
                 handleUpdate();
-                window.location.reload();
+                // window.location.reload();
+                dispatch(login(response.data.data));
                 dispatch(showOrHindSpinner(false));
               }
             })

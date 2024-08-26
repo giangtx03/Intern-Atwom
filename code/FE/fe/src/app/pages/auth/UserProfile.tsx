@@ -30,7 +30,7 @@ export default function UserProfile() {
       setUser(userDetail);
       dispatch(showOrHindSpinner(false));
     }, 300);
-  }, [navigate]);
+  }, [navigate, userDetail]);
 
   return user ? (
     <section style={{ backgroundColor: "#eee" }}>

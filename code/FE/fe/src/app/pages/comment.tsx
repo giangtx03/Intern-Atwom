@@ -186,7 +186,7 @@ export default function CommentDisplay(props: any) {
               </div>
               {lstComment.map((item: any) => {
                 return (
-                  <>
+                  <div key={item.id}>
                     <div className="card-body p-4">
                       <div className="d-flex flex-start">
                         <Image
@@ -243,7 +243,7 @@ export default function CommentDisplay(props: any) {
                       </div>
                     )}
                     <hr className="my-0" />
-                  </>
+                  </div>
                 );
               })}
               <Dialog

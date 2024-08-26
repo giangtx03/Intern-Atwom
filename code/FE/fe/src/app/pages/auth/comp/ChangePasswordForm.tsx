@@ -98,7 +98,7 @@ export default function ChangePasswordForm(props: any) {
         </label>
         <input
           type="password"
-          id="registerPassword"
+          id="oldPassword"
           {...register("oldPassword", {
             required: "Mật khẩu hiện tại không được để trống",
           })}
