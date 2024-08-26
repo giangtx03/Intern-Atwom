@@ -113,6 +113,9 @@ export default function Payment(props: Props) {
                                 <Button label="Thanh toán" icon="pi pi-credit-card" className='rounded-2' onClick={() => { setVisible(true); currentDateTime.current = new Date(); }} />
                         }
                     </div>
+                    <br />
+                    <div className=""><b><u>Ghi chú đặt sân:</u></b> {props.message.note}</div>
+                    {props.message.createBill !== null && <div className=""><b><u>Ghi chú thanh toán:</u></b> {props.message.noteBill}</div>}
                 </div>
             </Card >
 

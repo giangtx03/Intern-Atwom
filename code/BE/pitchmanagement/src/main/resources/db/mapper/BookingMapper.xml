@@ -121,7 +121,7 @@
     </select>
 
     <select id="selectConfirmPitchBookingByStatus" parameterType="string" resultMap="adminResult">
-        SELECT pb.id, pb.create_at, pb.`status` AS status_book,
+        SELECT pb.id, pb.create_at, pb.`status` AS status_book, pb.note,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
         ts.start_time, ts.end_time,
@@ -141,7 +141,7 @@
     </select>
 
     <select id="selectConfirmPitchBookingById" parameterType="int" resultMap="adminResult">
-        SELECT pb.id, pb.create_at, pb.`status` AS status_book,
+        SELECT pb.id, pb.create_at, pb.`status` AS status_book, pb.note,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
         ts.start_time, ts.end_time,
@@ -169,6 +169,7 @@
         <result property="id" column="id"/>
         <result property="create_at" column="createAt"/>
         <result property="status_book" column="statusBook"/>
+        <result property="note" column="note"/>
         <result property="name_pitch" column="namePitch"/>
         <result property="address" column="address"/>
         <result property="email" column="email"/>

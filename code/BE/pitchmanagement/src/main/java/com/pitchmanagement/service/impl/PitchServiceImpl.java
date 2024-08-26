@@ -59,8 +59,18 @@ public class PitchServiceImpl implements PitchService {
     }
 
     @Override
-    public List<PitchDto> getPitchAll() {
-        return pitchDao.selectPitchAll();
+    public PageResponse getPitchAll(Integer offset, Integer limit) {
+        PageHelper.offsetPage(offset, limit);
+        List<PitchDto> pitchDtos = pitchDao.selectPitchAll();
+
+        long totalRecords = ((com.github.pagehelper.Page<?>) pitchDtos).getTotal();
+
+        int totalPages = (int) Math.ceil((double) totalRecords / limit);
+        return PageResponse.builder()
+                .items(pitchDtos)
+                .totalItems(totalRecords)
+                .totalPages(totalPages)
+                .build();
     }
 
     @Override

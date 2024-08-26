@@ -2,6 +2,7 @@ export class MessageModel {
     id?: number;
     createAt?: String;
     statusBook?: String;
+    note?: String;
     namePitch?: String;
     address?: String;
     email?: String;

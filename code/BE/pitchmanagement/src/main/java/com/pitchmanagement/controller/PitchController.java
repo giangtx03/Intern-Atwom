@@ -4,6 +4,7 @@ import com.pitchmanagement.dto.admin.ConfirmPitchBookingDto;
 import com.pitchmanagement.dto.admin.PitchDto;
 import com.pitchmanagement.model.request.PitchRequest;
 import com.pitchmanagement.model.response.BaseResponse;
+import com.pitchmanagement.model.response.PageResponse;
 import com.pitchmanagement.service.PitchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +65,8 @@ public class PitchController {
 
     @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin")
-    ResponseEntity<BaseResponse> getPitchAll() {
-        List<PitchDto> pitchDtos = pitchService.getPitchAll();
+    ResponseEntity<BaseResponse> getPitchAll(@RequestParam Integer offset, @RequestParam Integer limit) {
+        PageResponse pitchDtos = pitchService.getPitchAll(offset, limit);
         BaseResponse response = BaseResponse
                 .builder()
                 .status(HttpStatus.OK.value())

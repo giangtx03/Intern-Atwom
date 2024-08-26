@@ -19,6 +19,7 @@ import { PitchTypeModel } from '../../model/PitchTypeModel';
 import PitchTimeTable from './components/PitchTimeTable';
 import PitchImage from './components/PitchImage';
 import Spinner from '../../comp/Spinner';
+import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 
 interface Pitch {
     id: string | null;
@@ -54,6 +55,9 @@ export default function EditPitches() {
     const [pitchTypes, setPitchTypes] = useState<PitchTypeModel[]>([]);
     const [pitchType, setPitchType] = useState<PitchTypeModel>();
     const [pitchId, setPitchId] = useState<number>();
+    const [first, setFirst] = useState(0);
+    const [rows, setRows] = useState(3);
+    const [totalRecords, setTotalRecords] = useState<number>();
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
     const toast = useRef<Toast>(null);
@@ -63,8 +67,9 @@ export default function EditPitches() {
 
         const fetchData = async () => {
             try {
-                const result = await getEditPitch();
-                setPitches(result);
+                const result = await getEditPitch(first, rows);
+                setPitches(result.items);
+                setTotalRecords(result.total_items);
                 setIsLoading(false);
             } catch (error: any) {
                 setIsLoading(false)
@@ -73,7 +78,6 @@ export default function EditPitches() {
         };
 
         fetchData();
-        window.scrollTo(0, 0);
     }, [btnSubmit, visibleTime, visibleImg]);
 
     useEffect(() => {
@@ -291,6 +295,11 @@ export default function EditPitches() {
         );
     };
 
+    const onPageChange = (event: PaginatorPageChangeEvent) => {
+        setFirst(event.first);
+        setRows(event.rows);
+    };
+
     if (isLoading) {
         return <Spinner />;
     };
@@ -310,21 +319,20 @@ export default function EditPitches() {
                 <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
 
                 <DataTable ref={dt} value={pitches}
-                    dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Từ {first} đến {last} của {totalRecords} sân" globalFilter={globalFilter} header={header}
+                    dataKey="id" globalFilter={globalFilter} header={header}
                     selectionMode="single"
                 >
                     <Column field="id" header="Id" sortable style={{ minWidth: '' }}></Column>
                     <Column field="name" header="Tên" style={{ minWidth: '7rem' }}></Column>
                     <Column field="address" header="Địa chỉ" style={{ minWidth: '12rem' }}></Column>
                     <Column field="createAt" header="Ngày tạo" sortable style={{ minWidth: '10rem' }} body={createAt}></Column>
-                    <Column field="updateAt" header="Ngày sửa" style={{ minWidth: '10rem' }} body={updateAt}></Column>
+                    <Column field="updateAt" header="Ngày sửa" sortable style={{ minWidth: '10rem' }} body={updateAt}></Column>
                     <Column field="type" header="Loại sân" style={{ minWidth: '8rem' }}></Column>
                     <Column field="sumTime" header="Tổng giờ" style={{ minWidth: '5rem' }} body={sumTime}></Column>
                     <Column field="sumImg" header="Tổng ảnh" style={{ minWidth: '5rem' }} body={sumImg}></Column>
                     <Column body={actionBodyTemplate} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
+                <Paginator first={first} rows={rows} totalRecords={totalRecords} rowsPerPageOptions={[3, 6, 9]} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />
             </div>
 
             <Dialog visible={pitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Thông tin sân" modal className="p-fluid" footer={pitchDialogFooter} onHide={hideDialog}>

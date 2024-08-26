@@ -14,6 +14,7 @@ public class ConfirmPitchBookingDto {
     private int id;
     private LocalDateTime createAt;
     private String statusBook;
+    private String note;
     private String namePitch;
     private String address;
     private String email;

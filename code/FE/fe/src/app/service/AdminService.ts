@@ -85,12 +85,12 @@ export const getBillPitch = async (month: number, year: number) => {
 };
 
 // Lấy danh sách pitch
-export const getEditPitch = async () => {
+export const getEditPitch = async (offset: number, limit: number) => {
     try {
 
-        const url = `/pitch/admin`
+        const url = `/pitch/admin?offset=${offset}&limit=${limit}`
 
-        const response: AxiosResponse<{ data: EditPitchModel[] }> = await axiosCustom.get(url);
+        const response = await axiosCustom.get(url);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data', error);
