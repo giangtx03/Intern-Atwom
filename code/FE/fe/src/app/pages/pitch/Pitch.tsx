@@ -193,7 +193,7 @@ export default function Pitch() {
                           <h5 className="text-dark mb-0">{item.name}</h5>
                         </Link>
                         <div className="d-flex justify-content-between">
-                          <p>Address : {item.address}</p>
+                          <p>Địa chỉ : {item.address}</p>
                         </div>
                         <div className="d-flex justify-content-between mb-2"></div>
                       </div>
