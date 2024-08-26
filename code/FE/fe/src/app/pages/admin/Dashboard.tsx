@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import RevenueBar from './components/RevenueBar'
-import RevenuePie from './components/RevenuePie'
+import React, { useEffect, useState } from 'react';
+import RevenueBar from './components/RevenueBar';
+import RevenuePie from './components/RevenuePie';
 import { getBillDay, getBillPitch } from '../../service/AdminService';
 import Spinner from '../../comp/Spinner';
 import { RevenueDayModel } from '../../model/RevenueDayModel';
 import { RevenuePitchModel } from '../../model/RevenuePitchModel';
+import { Calendar } from 'primereact/calendar';
+import { Nullable } from "primereact/ts-helpers";
 
 export default function Revenue() {
     const [billDays, setBillDays] = useState<RevenueDayModel[]>([]);
     const [billPitches, setBillPitches] = useState<RevenuePitchModel[]>([]);
-
     const [isLoading, setIsLoading] = useState(true);
-    const [httpError, setHttpError] = useState(null);
+    const [httpError, setHttpError] = useState<string | null>(null);
     const [month, setMonth] = useState<number>();
     const [year, setYear] = useState<number>();
+    const [date, setDate] = useState<Nullable<Date>>(null);
+
+
+    const currentDate = new Date();
 
     useEffect(() => {
-        const currentDate = new Date();
+        setDate(currentDate);
         setMonth(currentDate.getMonth() + 1);
         setYear(currentDate.getFullYear());
     }, []);
@@ -25,12 +30,17 @@ export default function Revenue() {
         const fetchData = async () => {
             if (month && year) {
                 try {
-                    const result = await getBillDay(month, year);
-                    setBillDays(result);
-                    setIsLoading(false);
+                    setIsLoading(true);
+                    const [billDaysData, billPitchesData] = await Promise.all([
+                        getBillDay(month, year),
+                        getBillPitch(month, year)
+                    ]);
+                    setBillDays(billDaysData);
+                    setBillPitches(billPitchesData);
                 } catch (error: any) {
-                    setIsLoading(false);
                     setHttpError(error.message);
+                } finally {
+                    setIsLoading(false);
                 }
             }
         };
@@ -39,28 +49,27 @@ export default function Revenue() {
         window.scrollTo(0, 0);
     }, [month, year]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (month && year) {
-                try {
-                    const result = await getBillPitch(month, year);
-                    setBillPitches(result);
-                    setIsLoading(false);
-                } catch (error: any) {
-                    setIsLoading(false);
-                    setHttpError(error.message);
-                }
-            }
-        };
-
-        fetchData();
-        window.scrollTo(0, 0);
-    }, [month, year]);
+    const maxDate = new Date();
+    maxDate.setMonth(currentDate.getMonth());
+    maxDate.setFullYear(currentDate.getFullYear());
 
     const sumPrice = billDays.reduce((acc, data) => acc + data.totalPrice!, 0);
 
+    const formattedMaxDate = maxDate.toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' });
+
+    const handleChange = (e: any) => {
+        const selectedDate = e.value as Date;
+        setMonth(selectedDate.getMonth() + 1);
+        setYear(selectedDate.getFullYear());
+        setDate(selectedDate);
+    }
+
     if (isLoading) {
-        return <Spinner />;
+        return (
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
+        );
     };
 
     if (httpError) {
@@ -72,19 +81,38 @@ export default function Revenue() {
     }
 
     return (
-        <div className="d-flex justify-content-between align-items-center h-100">
+        <div className="d-flex justify-content-between align-items-start h-100">
             <div className='container'>
-                <h3>Tổng doanh thu: {sumPrice.toLocaleString()} VND</h3>
+                <div className="d-flex justify-content-between align-items-center my-2">
+                    <h3>
+                        <span>Tổng doanh thu: </span>
+                        <span style={{ backgroundColor: 'var(--primary-color)', color: 'var(--primary-color-text)', borderRadius: 'var(--border-radius)', padding: '0 10px' }}>
+                            {sumPrice.toLocaleString()}
+                        </span>
+                        <span> VND</span>
+                    </h3>
+                    <h3>
+                        <span>Tháng: </span>
+                        <Calendar
+                            value={date}
+                            onChange={handleChange}
+                            view="month"
+                            dateFormat="mm/yy"
+                            maxDate={maxDate}
+                            placeholder={formattedMaxDate}
+                        />
+                    </h3>
+                </div>
                 <div className="row">
                     <div className="col-8">
-                        <RevenueBar billDays={billDays} month={month!} year={year!} />
+                        <RevenueBar billDays={billDays} month={month! - 1} year={year!} />
                     </div>
                     <div className="col-4">
-                        <RevenuePie billPitches={billPitches} month={month!} year={year!} />
+                        <RevenuePie billPitches={billPitches} month={month! - 1} year={year!} />
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 

@@ -9,6 +9,7 @@ import { STATUS_PITCH_BOOKING_WAIT } from '../../constant/constant';
 export default function MessageBooks() {
 
     const [messages, setMessages] = useState<MessageModel[]>([]);
+    const [totalRecords, setTotalRecords] = useState<number>();
 
     const [btnSubmit, setBtnSubmit] = useState(false);
 
@@ -20,6 +21,7 @@ export default function MessageBooks() {
             try {
                 const result = await getMessageAll(STATUS_PITCH_BOOKING_WAIT);
                 setMessages(result.items);
+                setTotalRecords(result.total_items);
                 setIsLoading(false);
 
             } catch (error: any) {
@@ -48,7 +50,9 @@ export default function MessageBooks() {
 
     if (isLoading) {
         return (
-            <Spinner />
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
         )
     };
 
@@ -63,17 +67,14 @@ export default function MessageBooks() {
 
     return (
         <div className="">
-            <div>
-                {
-                    messages.length > 0
-                        ?
-                        messages.map((message) => (
-                            <MessageBook message={message} submitConfirm={submitConfirm} key={message.id} />
-                        ))
-                        :
-                        <h3 className='text-center'>Không có đơn nào</h3>
-                }
+            <div style={{ backgroundColor: 'var(--primary-color)', color: 'var(--primary-color-text)', borderRadius: 'var(--border-radius)', padding: '1rem' }}>
+                <h3>Số sân cần duyệt: {totalRecords}</h3>
             </div>
+            {messages.length > 0
+                &&
+                messages.map((message) => (
+                    <MessageBook message={message} submitConfirm={submitConfirm} key={message.id} />
+                ))}
         </div>
     )
 }

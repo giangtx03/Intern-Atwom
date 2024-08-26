@@ -90,6 +90,8 @@ export default function MessageBook(props: Props) {
                         </div>
                     </div>
                 </div>
+                <br />
+                <div className=""><b><u>Ghi chú:</u></b> {props.message.note}</div>
             </Card>
 
             <Dialog header="Xác nhận" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)} footer={footerContent}>

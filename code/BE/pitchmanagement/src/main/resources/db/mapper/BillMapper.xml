@@ -33,7 +33,7 @@
         INNER JOIN time_slot ts ON pb.pitch_time_time_slot_id = ts.id
         INNER JOIN user u ON pb.user_id = u.id
         INNER JOIN pitch_time pt ON p.id = pt.pitch_id AND ts.id = pt.time_slot_id
-        WHERE MONTH(b.create_at) = 8 AND YEAR(b.create_at) = 2024
+        WHERE MONTH(b.create_at) = #{month} AND YEAR(b.create_at) = #{year}
         GROUP BY p.id,p.name
         ORDER BY p.id, p.name;
     </select>

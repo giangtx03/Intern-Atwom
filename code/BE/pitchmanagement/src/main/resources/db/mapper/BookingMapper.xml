@@ -128,8 +128,8 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectConfirmPitchBookingByStatus" parameterType="string" resultMap="adminResult">
-        SELECT pb.id, pb.create_at, pb.`status` AS status_book,
+    <select id="selectConfirmPitchBookingByStatus" parameterType="map" resultMap="adminResult">
+        SELECT pb.id, pb.create_at, pb.`status` AS status_book, pb.note,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
         ts.start_time, ts.end_time,
@@ -145,11 +145,12 @@
         <foreach item="status" collection="statuses" open="(" separator="," close=")">
             #{status}
         </foreach>
+        AND (#{namePitch} IS NULL OR p.name LIKE CONCAT('%', #{namePitch}, '%'))
         ORDER BY pb.status ASC , b.create_at DESC
     </select>
 
     <select id="selectConfirmPitchBookingById" parameterType="int" resultMap="adminResult">
-        SELECT pb.id, pb.create_at, pb.`status` AS status_book,
+        SELECT pb.id, pb.create_at, pb.`status` AS status_book, pb.note,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
         ts.start_time, ts.end_time,
@@ -177,6 +178,7 @@
         <result property="id" column="id"/>
         <result property="create_at" column="createAt"/>
         <result property="status_book" column="statusBook"/>
+        <result property="note" column="note"/>
         <result property="name_pitch" column="namePitch"/>
         <result property="address" column="address"/>
         <result property="email" column="email"/>

@@ -19,6 +19,7 @@ import { PitchTypeModel } from '../../model/PitchTypeModel';
 import PitchTimeTable from './components/PitchTimeTable';
 import PitchImage from './components/PitchImage';
 import Spinner from '../../comp/Spinner';
+import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 
 interface Pitch {
     id: string | null;
@@ -54,6 +55,10 @@ export default function EditPitches() {
     const [pitchTypes, setPitchTypes] = useState<PitchTypeModel[]>([]);
     const [pitchType, setPitchType] = useState<PitchTypeModel>();
     const [pitchId, setPitchId] = useState<number>();
+    const [first, setFirst] = useState(0);
+    const [rows, setRows] = useState(5);
+    const [totalRecords, setTotalRecords] = useState<number>();
+    const [totalPages, setTotalPages] = useState<number>();
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
     const toast = useRef<Toast>(null);
@@ -63,8 +68,10 @@ export default function EditPitches() {
 
         const fetchData = async () => {
             try {
-                const result = await getEditPitch();
-                setPitches(result);
+                const result = await getEditPitch(first, rows);
+                setPitches(result.items);
+                setTotalRecords(result.total_items);
+                setTotalPages(result.total_pages);
                 setIsLoading(false);
             } catch (error: any) {
                 setIsLoading(false)
@@ -73,7 +80,6 @@ export default function EditPitches() {
         };
 
         fetchData();
-        window.scrollTo(0, 0);
     }, [btnSubmit, visibleTime, visibleImg]);
 
     useEffect(() => {
@@ -172,6 +178,7 @@ export default function EditPitches() {
 
         try {
             await delEditPitch(_pitch.id!);
+            setFirst(0);
             toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Sân đã được xóa', life: 3000 });
         } catch (error: any) {
             console.error('Error fetching data', error);
@@ -202,14 +209,6 @@ export default function EditPitches() {
         setPitch(_pitch);
     };
 
-    const leftToolbarTemplate = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="Thêm" icon="pi pi-plus" severity="success" onClick={openNew} />
-            </div>
-        );
-    };
-
     const actionBodyTemplate = (rowData: EditPitchModel) => {
         return (
             <React.Fragment>
@@ -221,11 +220,8 @@ export default function EditPitches() {
 
     const header = (
         <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0">Quản lý sân</h4>
-            <IconField iconPosition="left">
-                <InputIcon className="pi pi-search" />
-                <InputText type="search" placeholder="Search..." onInput={(e) => { const target = e.target as HTMLInputElement; setGlobalFilter(target.value); }} />
-            </IconField>
+            <h3 className="m-0">Quản lý sân</h3>
+            <Button label="Thêm" icon="pi pi-plus" severity="success" onClick={openNew} />
         </div>
     );
     const pitchDialogFooter = (
@@ -291,8 +287,17 @@ export default function EditPitches() {
         );
     };
 
+    const onPageChange = (event: PaginatorPageChangeEvent) => {
+        setFirst(event.first);
+        setRows(event.rows);
+    };
+
     if (isLoading) {
-        return <Spinner />;
+        return (
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
+        );
     };
 
     if (httpError) {
@@ -307,24 +312,21 @@ export default function EditPitches() {
         <div>
             <Toast ref={toast} />
             <div className="card">
-                <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-
                 <DataTable ref={dt} value={pitches}
-                    dataKey="id" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                    currentPageReportTemplate="Từ {first} đến {last} của {totalRecords} sân" globalFilter={globalFilter} header={header}
+                    dataKey="id" header={header}
                     selectionMode="single"
                 >
                     <Column field="id" header="Id" sortable style={{ minWidth: '' }}></Column>
                     <Column field="name" header="Tên" style={{ minWidth: '7rem' }}></Column>
                     <Column field="address" header="Địa chỉ" style={{ minWidth: '12rem' }}></Column>
                     <Column field="createAt" header="Ngày tạo" sortable style={{ minWidth: '10rem' }} body={createAt}></Column>
-                    <Column field="updateAt" header="Ngày sửa" style={{ minWidth: '10rem' }} body={updateAt}></Column>
+                    <Column field="updateAt" header="Ngày sửa" sortable style={{ minWidth: '10rem' }} body={updateAt}></Column>
                     <Column field="type" header="Loại sân" style={{ minWidth: '8rem' }}></Column>
                     <Column field="sumTime" header="Tổng giờ" style={{ minWidth: '5rem' }} body={sumTime}></Column>
                     <Column field="sumImg" header="Tổng ảnh" style={{ minWidth: '5rem' }} body={sumImg}></Column>
                     <Column body={actionBodyTemplate} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
+                {totalPages! > 1 && < Paginator first={first} rows={rows} totalRecords={totalRecords} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />}
             </div>
 
             <Dialog visible={pitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Thông tin sân" modal className="p-fluid" footer={pitchDialogFooter} onHide={hideDialog}>

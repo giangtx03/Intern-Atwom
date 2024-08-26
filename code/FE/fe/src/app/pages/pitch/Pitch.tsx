@@ -201,15 +201,9 @@ export default function Pitch() {
                         </div>
                         <div className="col-12 d-flex align-items-center">
                           <p className="me-1 mb-0">Đánh giá: </p>
-                          <p className="text-warning mb-0 me-3">
-                            {item.avg_star} sao
-                          </p>
-                          <Rating
-                            value={item.avg_star}
-                            readOnly
-                            cancel={false}
-                            stars={5}
-                          />
+                          <b className="mb-0 me-3" style={{color: "#FFCC00"}}>
+                            {item.avg_star.toFixed(2)} sao
+                          </b>
                         </div>
                       </div>
                     </div>

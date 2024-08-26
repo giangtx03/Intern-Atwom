@@ -114,6 +114,9 @@ export default function Payment(props: Props) {
                         }
                     </div>
                 </div>
+                <br />
+                <div className=""><b><u>Ghi chú đặt sân:</u></b> {props.message.note}</div>
+                {props.message.createBill !== null && <div className=""><b><u>Ghi chú thanh toán:</u></b> {props.message.noteBill}</div>}
             </Card >
 
             <Dialog header={headerDialog} visible={visible} style={{}} onHide={() => setVisible(false)} footer={footerDialog}>

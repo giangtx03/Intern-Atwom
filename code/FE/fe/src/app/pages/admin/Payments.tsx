@@ -7,15 +7,19 @@ import Spinner from '../../comp/Spinner';
 import Payment from './components/Payment';
 import { STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_SUCCESS } from '../../constant/constant';
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
+import { InputText } from "primereact/inputtext";
+import { Button } from 'primereact/button';
 
 export default function Payments() {
 
     const [messages, setMessages] = useState<MessageModel[]>([]);
 
     const [btnSubmit, setBtnSubmit] = useState(false);
+    const [search, setSearch] = useState<string>()
     const [first, setFirst] = useState(0);
     const [rows, setRows] = useState(5);
     const [totalRecords, setTotalRecords] = useState<number>();
+    const [totalPages, setTotalPages] = useState<number>();
 
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
@@ -23,9 +27,10 @@ export default function Payments() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_SUCCESS, first, rows);
+                const result = await getMessageAll(STATUS_PITCH_BOOKING_ACCESS, STATUS_PITCH_BOOKING_SUCCESS, search, first, rows);
                 setMessages(result.items);
                 setTotalRecords(result.total_items);
+                setTotalPages(result.total_pages);
                 setIsLoading(false);
             } catch (error: any) {
                 setIsLoading(false);
@@ -53,9 +58,25 @@ export default function Payments() {
         setRows(event.rows);
     };
 
+    const handleSearch = () => {
+        const trimmedSearch = search?.trim();
+        setFirst(0)
+        setSearch(trimmedSearch);
+        setBtnSubmit(!btnSubmit);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+
     if (isLoading) {
         return (
-            <Spinner />
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
         )
     };
 
@@ -69,20 +90,41 @@ export default function Payments() {
 
     return (
         <div>
-            {
-                messages.length > 0
-                    ?
-                    <>
-                        {
-                            messages.map((message) => (
-                                <Payment message={message} submitConfirm={submitConfirm} key={message.id} />
-                            ))
-                        }
-                        <Paginator first={first} rows={rows} totalRecords={totalRecords} rowsPerPageOptions={[5, 10, 15]} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />
-                    </>
-                    :
-                    <h5>Không có đơn nào</h5>
-            }
+            <div className="card">
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    <h3 className="">Số hóa đơn: {(first + rows) > totalRecords! ? totalRecords : (first + rows)}/{totalRecords}</h3>
+                    <div className="d-flex justify-content-start align-items-center gap-2">
+                        <h3>Tìm kiếm theo sân: </h3>
+                        <InputText
+                            value={search}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                        />
+                        <Button
+                            icon="pi pi-search"
+                            rounded
+                            aria-label="Search"
+                            onClick={handleSearch}
+                        />
+                    </div>
+                </div>
+                <div className="card-body" style={{ minHeight: '70vh' }}>
+                    {
+                        messages.length > 0
+                            ?
+                            <>
+                                {
+                                    messages.map((message) => (
+                                        <Payment message={message} submitConfirm={submitConfirm} key={message.id} />
+                                    ))
+                                }
+                                <Paginator first={first} rows={rows} totalRecords={totalRecords} rowsPerPageOptions={[5, 10, 15]} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />
+                            </>
+                            :
+                            <h5 className='text-center'>Không có đơn nào</h5>
+                    }
+                </div>
+            </div>
         </div>
     )
 }

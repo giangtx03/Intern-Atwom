@@ -8,15 +8,18 @@ import { UserService } from "../../../service/UserService";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { Button } from "primereact/button";
+import { logout } from "../../../reduces/UserSlice";
 
 export default function ChangePasswordForm(props: any) {
   const { userId, handleUpdate } = props;
   const dispatch = useAppDispatch();
+  const navagate = useNavigate();
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     setError,
     clearErrors,
     formState: { errors, touchedFields },
@@ -42,12 +45,13 @@ export default function ChangePasswordForm(props: any) {
               new_password: data.newPassword,
             })
             .then((response) => {
-              console.log(response.data);
+              // console.log(response.data);
               if (response.data.status === 200) {
                 toast.success(response.data.message, {
                   position: "top-right",
                 });
                 handleUpdate();
+                dispatch(logout());
                 dispatch(showOrHindSpinner(false));
               }
             })
@@ -102,6 +106,7 @@ export default function ChangePasswordForm(props: any) {
           {...register("oldPassword", {
             required: "Mật khẩu hiện tại không được để trống",
           })}
+          placeholder="Nhập mật khẩu hiện tại"
           className="form-control"
         />
       </div>
@@ -123,6 +128,11 @@ export default function ChangePasswordForm(props: any) {
               message: "Mật khẩu mới tối thiểu 8 ký tự",
             },
           })}
+          onChange={(e) => {
+            const trimmedValue = e.target.value.trim();
+            setValue("newPassword", trimmedValue);
+          }}
+          placeholder="Nhập mật khẩu mới"
           className="form-control"
         />
       </div>
@@ -143,6 +153,7 @@ export default function ChangePasswordForm(props: any) {
             validate: (value) =>
               value === watch("newPassword") || "Mật khẩu không khớp",
           })}
+          placeholder="Xác nhận mật khẩu"
         />
       </div>
       {touchedFields.retypePassword && errors.retypePassword && (

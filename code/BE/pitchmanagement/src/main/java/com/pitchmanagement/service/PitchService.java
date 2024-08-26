@@ -15,7 +15,7 @@ public interface PitchService {
 
     void delPitch(int id);
 
-    List<PitchDto> getPitchAll();
+    PageResponse getPitchAll(Integer offset, Integer limit);
 
 //    <!-- ...................Giang...................................... -->
     PitchResponse getPitchById(Long id) throws Exception;

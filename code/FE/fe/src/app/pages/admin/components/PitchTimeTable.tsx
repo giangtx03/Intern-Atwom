@@ -68,11 +68,20 @@ export default function PitchTimeTable(props: Props) {
         fetchData();
     }, []);
 
+    const handleDate = (date: any) => {
+        if (typeof date === 'string') {
+            date = date.substring(0, date.length - 3).replace("T", " ");
+        } else {
+            console.error('Date is not a string:', date);
+        }
+        return date;
+    }
+
     const timeSlotResponses: TimeSlotResponse[] = timeSlots
         .filter(ts => !pitchTimes.some(data => data.startTime === ts.startTime))
         .map(ts => ({
             id: ts.id!,
-            time: `${ts.startTime} - ${ts.endTime}`
+            time: `${handleDate(ts.startTime)} - ${handleDate(ts.endTime)}`
         }));
 
     const openNew = () => {
@@ -153,12 +162,16 @@ export default function PitchTimeTable(props: Props) {
 
     const confirmDeletePitchTime = (temp: PitchTimeModel) => {
         setPitchTime({ ...pitchTime, timeSlotId: temp.idTime, price: temp.price });
-        setTimeSlotResponse({ ...timeSlotResponse, id: temp.idTime!, time: `${temp.startTime} - ${temp.endTime}` });
+        setTimeSlotResponse({ ...timeSlotResponse, id: temp.idTime!, time: `${handleDate(temp.startTime)} - ${handleDate(temp.endTime)}` });
         setDeletePitchTimeDialog(true);
     };
 
     if (isLoading) {
-        return <Spinner />;
+        return (
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
+        );
     }
 
     if (httpError) {
@@ -172,7 +185,6 @@ export default function PitchTimeTable(props: Props) {
     const deleteBtn = (rowData: PitchTimeModel) => {
         return (
             <React.Fragment>
-                {/* <Button icon="pi pi-times-circle" rounded outlined severity="danger" /> */}
                 <i className="pi pi-times-circle" onClick={() => confirmDeletePitchTime(rowData)}></i>
             </React.Fragment>
         );
@@ -193,6 +205,22 @@ export default function PitchTimeTable(props: Props) {
         );
     };
 
+    const startTime = (rowData: any) => {
+        return (
+            <div>
+                {handleDate(rowData.startTime)}
+            </div>
+        );
+    };
+
+    const endTime = (rowData: any) => {
+        return (
+            <div>
+                {handleDate(rowData.endTime)}
+            </div>
+        );
+    };
+
     return (
         <div className="">
             <div className="my-1">
@@ -207,8 +235,8 @@ export default function PitchTimeTable(props: Props) {
                     :
                     <>
                         <DataTable value={pitchTimes} selectionMode="single" editMode="row" onRowEditComplete={onRowEditComplete}>
-                            <Column field="startTime" header="Giờ bắt đầu" style={{ width: '8rem' }}></Column>
-                            <Column field="endTime" header="Giờ kết thúc" style={{ width: '8rem' }}></Column>
+                            <Column field="startTime" header="Giờ bắt đầu" style={{ width: '8rem' }} body={startTime}></Column>
+                            <Column field="endTime" header="Giờ kết thúc" style={{ width: '8rem' }} body={endTime}></Column>
                             <Column field="price" header="Giá" editor={(options) => priceEditor(options)} body={price}></Column>
                             <Column rowEditor={allowEdit} headerStyle={{ width: '6rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
                             <Column style={{ width: '1rem', padding: 0, paddingRight: '1rem' }} body={deleteBtn}></Column>
