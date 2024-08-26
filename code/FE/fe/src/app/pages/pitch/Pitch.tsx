@@ -202,7 +202,7 @@ export default function Pitch() {
                         <div className="col-12 d-flex align-items-center">
                           <p className="me-1 mb-0">Đánh giá: </p>
                           <p className="text-warning mb-0 me-3">
-                            {item.avg_star} sao
+                            {item.avg_star.toFixed(2)} sao
                           </p>
                           <Rating
                             value={item.avg_star}

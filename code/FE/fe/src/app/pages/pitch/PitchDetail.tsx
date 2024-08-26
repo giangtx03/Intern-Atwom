@@ -221,7 +221,7 @@ export default function PitchDetail() {
                         <div className="row mt-3 ">
                           <div className="col-12 d-flex align-items-center">
                             <h5 className="me-1 mb-0">Đánh giá: </h5>
-                            <p className="text-warning mb-0 me-3">{pitch.avg_star} sao</p>
+                            <p className="text-warning mb-0 me-3">{pitch.avg_star.toFixed(2)} sao</p>
                             <Rating
                               value={pitch.avg_star}
                               readOnly
