@@ -17,6 +17,7 @@ export default function ChangePasswordForm(props: any) {
     register,
     handleSubmit,
     watch,
+    setValue,
     setError,
     clearErrors,
     formState: { errors, touchedFields },
@@ -102,6 +103,7 @@ export default function ChangePasswordForm(props: any) {
           {...register("oldPassword", {
             required: "Mật khẩu hiện tại không được để trống",
           })}
+          placeholder="Nhập mật khẩu hiện tại"
           className="form-control"
         />
       </div>
@@ -123,6 +125,11 @@ export default function ChangePasswordForm(props: any) {
               message: "Mật khẩu mới tối thiểu 8 ký tự",
             },
           })}
+          onChange={(e) => {
+            const trimmedValue = e.target.value.trim();
+            setValue("newPassword", trimmedValue);
+          }}
+          placeholder="Nhập mật khẩu mới"
           className="form-control"
         />
       </div>
@@ -143,6 +150,7 @@ export default function ChangePasswordForm(props: any) {
             validate: (value) =>
               value === watch("newPassword") || "Mật khẩu không khớp",
           })}
+          placeholder="Xác nhận mật khẩu"
         />
       </div>
       {touchedFields.retypePassword && errors.retypePassword && (

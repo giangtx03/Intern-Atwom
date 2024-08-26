@@ -16,6 +16,7 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     watch,
+    setValue,
     setError,
     clearErrors,
     formState: { errors, touchedFields },
@@ -64,7 +65,7 @@ export default function RegisterPage() {
     } else {
       clearErrors("retypePassword");
     }
-  }, [ watch("password"), watch, setError, clearErrors]);
+  }, [watch("password"), watch, setError, clearErrors]);
 
   return (
     <form
@@ -138,6 +139,10 @@ export default function RegisterPage() {
               message: "Mật khẩu tối thiểu 8 ký tự",
             },
           })}
+          onChange={(e) => {
+            const trimmedValue = e.target.value.trim();
+            setValue("password", trimmedValue);
+          }}
           className="form-control"
           placeholder="Nhập mật khẩu"
         />
