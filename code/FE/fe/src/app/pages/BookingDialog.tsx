@@ -16,7 +16,18 @@ import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 import { DecodedToken } from "../model/User";
 import { TokenService } from "../service/TokenService";
-import { STATUS_PITCH_BOOKING_WAIT } from "../constant/constant";
+import {
+  STATUS_PITCH_BOOKING_ACCESS,
+  STATUS_PITCH_BOOKING_WAIT,
+} from "../constant/constant";
+import { useSelector } from "react-redux";
+
+const formatTimeOption = (option: { startTime: string; endTime: string } | null) => {
+  if (!option) {
+    return 'Chọn khung thời gian';
+  }
+  return `${option.startTime} - ${option.endTime}`;
+};
 
 export default function BookingDialog(props: any) {
   let { visible, setVisible, pitch_id } = props;
@@ -27,11 +38,8 @@ export default function BookingDialog(props: any) {
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
-  const navigate = useNavigate();
 
-  const handleRedirect = (path: string) => {
-    navigate(path);
-  };
+  const userDetail = useSelector((state: any) => state.user.userDetail);
 
   const add = () => {
     if (selectTime.timeSlotId == undefined) {
@@ -45,7 +53,9 @@ export default function BookingDialog(props: any) {
         await BookingService.getInstance()
           .addBooking(
             new Booking(
-              STATUS_PITCH_BOOKING_WAIT,
+              userDetail.role == "ADMIN"
+                ? STATUS_PITCH_BOOKING_ACCESS
+                : STATUS_PITCH_BOOKING_WAIT,
               note,
               user_id,
               pitch_id.id,
@@ -145,14 +155,15 @@ export default function BookingDialog(props: any) {
               setMessage(false);
             }}
             options={listPitchTime}
-            optionLabel="startTime"
-            placeholder="Chọn thời gian"
-            className="w-full md:w-14rem"
+            optionLabel="startTime" 
+            itemTemplate={(option) => formatTimeOption(option)} 
+            placeholder={
+              listPitchTime?.length === 0
+                ? "Không còn khung giờ trống"
+                : "Chọn khung giờ"
+            }
+            valueTemplate={(option) => formatTimeOption(option)}
           />
-          <p className="w-full md:w-14rem" style={{ margin: "auto 0 auto 1%" }}>
-            {" "}
-            - {selectTime !== undefined ? selectTime.endTime : ""}
-          </p>
         </div>
       </div>
       <Message

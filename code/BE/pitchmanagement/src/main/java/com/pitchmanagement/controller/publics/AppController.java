@@ -51,7 +51,7 @@ public class AppController {
     @GetMapping("/comment/{id}")
     public ResponseEntity<?> getCommentByPitch(
             @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id,
-            @RequestParam(name = "keySearch", required = false) Integer user_id,
+            @RequestParam(name = "keySearch", defaultValue = "", required = false) Integer user_id,
             @RequestParam(name = "page", defaultValue = "1", required = false) Integer offset,
             @RequestParam(name = "limit", defaultValue = "5", required = false) Integer limit,
             @RequestParam(name = "order", defaultValue = "DESC", required = false) String order) {
@@ -62,7 +62,6 @@ public class AppController {
                     .message("success")
                     .data(lst)
                     .build();
-                    System.out.println(lst.get(0).getCreateAt());
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             BaseResponse response = BaseResponse.builder()
@@ -75,9 +74,10 @@ public class AppController {
 
     @GetMapping("/comment/total/{id}")
     public ResponseEntity<?> total(
-            @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id) {
+        @Min(value = 1, message = "pitch id must be greater than 0") @PathVariable("id") Integer pitch_id,
+        @RequestParam(name = "keySearch", defaultValue = "", required = false) Integer user_id) {
         try {
-            Integer lst = commentService.total(pitch_id);
+            Integer lst = commentService.total(pitch_id,user_id);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.OK.value())
                     .message("success")
@@ -92,7 +92,4 @@ public class AppController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
-
-    
 }

@@ -43,7 +43,10 @@ export default function CommentDisplay(props: any) {
   const [rows, setRows] = useState(search.limit);
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number>(0);
-  const [selectOption, setSelectOption] = useState<Options | null>(null);
+  const [selectOption, setSelectOption] = useState<Options>({
+    select: "Tất cả comment",
+    values: "",
+  });
   const [selectOrder, setSelectOrder] = useState<Order | null>(null);
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
@@ -67,7 +70,10 @@ export default function CommentDisplay(props: any) {
           pitch_id.id,
           selectOrder?.type
         );
-        const responseTotal = await CommentService.getInstance().getTotal(1);
+        const responseTotal = await CommentService.getInstance().getTotal(
+          search,
+          pitch_id.id
+        );
         if (response.data.status == 200) {
           setLstComment(response.data.data);
           console.log(response.data);
@@ -106,7 +112,7 @@ export default function CommentDisplay(props: any) {
   };
 
   const deleteComment = (e: any, commentId: number) => {
-    swal("Bạn muốn cập nhật tượng này chứ?", {
+    swal("Bạn muốn xóa đánh giá này chứ?", {
       buttons: ["Quay lại", "Đồng ý"],
       icon: "warning",
       dangerMode: true,
@@ -146,140 +152,159 @@ export default function CommentDisplay(props: any) {
               )}
             </div>
             <br />
-            <div>
-              <h3 style={{ margin: "1%" }}> Các đánh giá khác</h3>
-              {user_id && (
-                <Dropdown
-                  value={selectOption}
-                  onChange={(e: DropdownChangeEvent) => {
-                    setSelectOption(e.value);
-                    setSearch({
-                      ...search,
-                      timer: new Date().getTime(),
-                      keySearch: e.value.values,
-                    });
-                  }}
-                  options={options}
-                  optionLabel="select"
-                  placeholder="Tất cả comment"
-                  style={{ width: "18%", margin: "2%" }}
-                ></Dropdown>
-              )}
-              <Dropdown
-                value={selectOrder}
-                onChange={(e: DropdownChangeEvent) => {
-                  setSelectOrder(e.value);
-                  setSearch({
-                    ...search,
-                    timer: new Date().getTime(),
-                  });
-                }}
-                options={order}
-                optionLabel="name"
-                placeholder="Sắp xếp theo"
-                style={{ width: "15%", margin: "2%" }}
-              ></Dropdown>
-            </div>
-            <div className="card text-body">
-              <div className={lstComment.length == 0 ?"" : "hide"}>
-                <h4 className="center">Chưa có đánh giá nào</h4>
-              </div>
-              {lstComment.map((item: any) => {
-                return (
-                  <div key={item.id}>
-                    <div className="card-body p-4">
-                      <div className="d-flex flex-start">
-                        <Image
-                          className="rounded-circle shadow-1-strong me-3"
-                          src={`http://localhost:8080/public/api/v1/image/${item?.avatar}`}
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = defaultAvatar;
-                          }}
-                          alt="avatar"
-                          width="60"
-                          height="60"
-                        />
-                        <div>
-                          <h6 className="fw-bold mb-1">{item.fullname}</h6>
-                          <div className="d-flex align-items-center mb-3">
-                            <p className="mb-0">
-                              {dayjs(item.createAt).format("DD/MM/YYYY")}
-                            </p>
-                          </div>
-                          <div>
-                            <Rating value={item.star} cancel={false} />
-                          </div>
-                          <p className="mb-0">{item.content}</p>
-                        </div>
-                      </div>
-                    </div>
-                    {item.userId == user_id && (
-                      <div>
-                        <Button
-                          label="Delete"
-                          severity="danger"
-                          style={{ left: "70%", margin: "1%" }}
-                          onClick={(e) => {
-                            deleteComment(e, item.id);
-                          }}
-                        />
-                        <Button
-                          label="Update"
-                          severity="success"
-                          style={{ left: "70%", margin: "1%" }}
-                          onClick={(e) => {
-                            setEditOn(true);
-                            setEditComment(
-                              new Comment(
-                                item.id,
-                                item.star,
-                                item.content,
-                                item.userId,
-                                item.pitchId
-                              )
-                            );
-                          }}
-                        />
-                      </div>
-                    )}
-                    <hr className="my-0" />
+            {lstComment.length == 0 &&
+            selectOption.select == "Tất cả comment" ? (
+              <h4 className="center">Chưa có đánh giá nào</h4>
+            ) : (
+              <>
+                <div>
+                  <h3 style={{ margin: "1%" }}> Các đánh giá khác</h3>
+                  {user_id && (
+                    <Dropdown
+                      value={selectOption}
+                      onChange={(e: DropdownChangeEvent) => {
+                        setSelectOption(e.value);
+                        setSearch({
+                          ...search,
+                          timer: new Date().getTime(),
+                          keySearch: e.value.values,
+                        });
+                      }}
+                      options={options}
+                      optionLabel="select"
+                      placeholder="Tất cả comment"
+                      style={{ width: "18%", margin: "2%" }}
+                    ></Dropdown>
+                  )}
+                  <Dropdown
+                    value={selectOrder}
+                    onChange={(e: DropdownChangeEvent) => {
+                      setSelectOrder(e.value);
+                      setSearch({
+                        ...search,
+                        timer: new Date().getTime(),
+                      });
+                    }}
+                    options={order}
+                    optionLabel="name"
+                    placeholder="Sắp xếp theo"
+                    style={{ width: "15%", margin: "2%" }}
+                  ></Dropdown>
+                </div>
+                {lstComment.length == 0 &&
+                selectOption.select == "Comment của bạn" ? (
+                  <div className="center">
+                    <h5>Bạn chưa có comment nào</h5>
                   </div>
-                );
-              })}
-              <Dialog
-                header="Update"
-                visible={editOn}
-                style={{ width: "50vw" }}
-                onHide={() => {
-                  if (!editOn) return;
-                  setEditOn(false);
-                }}
-              >
-                <AddAndUpdate
-                  search={search}
-                  setSearch={setSearch}
-                  editComment={editComment}
-                  setEditOn={setEditOn}
-                  pitch_id={pitch_id}
-                />
-              </Dialog>
-            </div>
+                ) : (
+                  <>
+                    <div className="card text-body">
+                      {lstComment.map((item: any) => {
+                        return (
+                          <div key={item.id}>
+                            <div className="card-body p-4">
+                              <div className="d-flex flex-start">
+                                <Image
+                                  className="rounded-circle shadow-1-strong me-3"
+                                  src={`http://localhost:8080/public/api/v1/image/${item?.avatar}`}
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      defaultAvatar;
+                                  }}
+                                  alt="avatar"
+                                  width="60"
+                                  height="60"
+                                />
+                                <div>
+                                  <h6 className="fw-bold mb-1">
+                                    {item.fullname}
+                                  </h6>
+                                  <div className="d-flex align-items-center mb-3">
+                                    <p className="mb-0">
+                                      {dayjs(item.createAt).format(
+                                        "DD/MM/YYYY"
+                                      )}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <Rating value={item.star} cancel={false} />
+                                  </div>
+                                  <p className="mb-0">{item.content}</p>
+                                </div>
+                              </div>
+                            </div>
+                            {item.userId == user_id && (
+                              <div>
+                                <Button
+                                  label="Xóa"
+                                  severity="danger"
+                                  style={{ left: "70%", margin: "1%" }}
+                                  onClick={(e) => {
+                                    deleteComment(e, item.id);
+                                  }}
+                                />
+                                <Button
+                                  label="Cập nhật"
+                                  severity="success"
+                                  style={{ left: "70%", margin: "1%" }}
+                                  onClick={(e) => {
+                                    setEditOn(true);
+                                    setEditComment(
+                                      new Comment(
+                                        item.id,
+                                        item.star,
+                                        item.content,
+                                        item.userId,
+                                        item.pitchId
+                                      )
+                                    );
+                                  }}
+                                />
+                              </div>
+                            )}
+                            <hr className="my-0" />
+                          </div>
+                        );
+                      })}
+                      <Dialog
+                        header="Cập nhật"
+                        visible={editOn}
+                        style={{ width: "50vw" }}
+                        onHide={() => {
+                          if (!editOn) return;
+                          setEditOn(false);
+                        }}
+                      >
+                        <AddAndUpdate
+                          search={search}
+                          setSearch={setSearch}
+                          editComment={editComment}
+                          setEditOn={setEditOn}
+                          pitch_id={pitch_id}
+                        />
+                      </Dialog>
+                    </div>
+                    <div
+                      className={`center ${total < search.limit ? "hide" : ""}`}
+                    >
+                      <Button
+                        icon="pi pi-plus"
+                        label="Xem thêm"
+                        onClick={(e) => {
+                          setSearch({
+                            ...search,
+                            limit: search.limit + 3,
+                            timer: new Date().getTime(),
+                          });
+                        }}
+                        style={{ margin: "1%" }}
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
-        </div>
-        <div className="center">
-          <Button
-            icon="pi pi-plus"
-            label="Xem thêm"
-            onClick={(e)=>{
-              setSearch({
-                ...search,
-                limit: search.limit +3,
-                timer: new Date().getTime()
-              })
-            }}
-            style={{margin: '1%'}}
-          />
-          
         </div>
       </div>
     </>
