@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 
 
@@ -82,6 +83,10 @@ public class UserServiceImpl implements UserService {
 
         if(userDao.existingByEmail(request.getEmail())){
             throw new UsernameNotFoundException("Email đã tồn tại!!!");
+        }
+
+        if(!request.getPassword().trim().equals(request.getPassword())){
+            throw new InvalidPropertiesFormatException("Mật khẩu chứa dấu cách ở đầu và cuối!!!");
         }
 
         UserDto userDto = UserDto.builder()
@@ -165,6 +170,10 @@ public class UserServiceImpl implements UserService {
 
         if(src == null || src.isEmpty()){
             throw new UsernameNotFoundException("Người dùng không tồn tại!!!");
+        }
+
+        if(!request.getNewPassword().trim().equals(request.getNewPassword())){
+            throw new InvalidPropertiesFormatException("Mật khẩu chứa dấu cách ở đầu và cuối!!!");
         }
 
         User user = User.toUser(src);
