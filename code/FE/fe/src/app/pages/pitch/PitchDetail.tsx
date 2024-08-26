@@ -184,8 +184,8 @@ export default function PitchDetail() {
                                           (time) =>
                                             time.status ===
                                             STATUS_PITCH_TIME_ACTIVE
-                                        )?.price
-                                      : price}{" "}
+                                        )?.price.toLocaleString()
+                                      : price.toLocaleString()}{" "}
                                     VND
                                   </h5>
                                 </div>
