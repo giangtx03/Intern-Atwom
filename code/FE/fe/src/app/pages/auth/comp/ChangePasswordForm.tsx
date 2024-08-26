@@ -8,10 +8,12 @@ import { UserService } from "../../../service/UserService";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { Button } from "primereact/button";
+import { logout } from "../../../reduces/UserSlice";
 
 export default function ChangePasswordForm(props: any) {
   const { userId, handleUpdate } = props;
   const dispatch = useAppDispatch();
+  const navagate = useNavigate();
 
   const {
     register,
@@ -43,12 +45,13 @@ export default function ChangePasswordForm(props: any) {
               new_password: data.newPassword,
             })
             .then((response) => {
-              console.log(response.data);
+              // console.log(response.data);
               if (response.data.status === 200) {
                 toast.success(response.data.message, {
                   position: "top-right",
                 });
                 handleUpdate();
+                dispatch(logout());
                 dispatch(showOrHindSpinner(false));
               }
             })
