@@ -56,8 +56,9 @@ export default function EditPitches() {
     const [pitchType, setPitchType] = useState<PitchTypeModel>();
     const [pitchId, setPitchId] = useState<number>();
     const [first, setFirst] = useState(0);
-    const [rows, setRows] = useState(3);
+    const [rows, setRows] = useState(5);
     const [totalRecords, setTotalRecords] = useState<number>();
+    const [totalPages, setTotalPages] = useState<number>();
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
     const toast = useRef<Toast>(null);
@@ -70,6 +71,7 @@ export default function EditPitches() {
                 const result = await getEditPitch(first, rows);
                 setPitches(result.items);
                 setTotalRecords(result.total_items);
+                setTotalPages(result.total_pages);
                 setIsLoading(false);
             } catch (error: any) {
                 setIsLoading(false)
@@ -176,6 +178,7 @@ export default function EditPitches() {
 
         try {
             await delEditPitch(_pitch.id!);
+            setFirst(0);
             toast.current?.show({ severity: 'success', summary: 'Thành công', detail: 'Sân đã được xóa', life: 3000 });
         } catch (error: any) {
             console.error('Error fetching data', error);
@@ -206,14 +209,6 @@ export default function EditPitches() {
         setPitch(_pitch);
     };
 
-    const leftToolbarTemplate = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="Thêm" icon="pi pi-plus" severity="success" onClick={openNew} />
-            </div>
-        );
-    };
-
     const actionBodyTemplate = (rowData: EditPitchModel) => {
         return (
             <React.Fragment>
@@ -225,11 +220,8 @@ export default function EditPitches() {
 
     const header = (
         <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0">Quản lý sân</h4>
-            <IconField iconPosition="left">
-                <InputIcon className="pi pi-search" />
-                <InputText type="search" placeholder="Search..." onInput={(e) => { const target = e.target as HTMLInputElement; setGlobalFilter(target.value); }} />
-            </IconField>
+            <h3 className="m-0">Quản lý sân</h3>
+            <Button label="Thêm" icon="pi pi-plus" severity="success" onClick={openNew} />
         </div>
     );
     const pitchDialogFooter = (
@@ -316,10 +308,8 @@ export default function EditPitches() {
         <div>
             <Toast ref={toast} />
             <div className="card">
-                <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-
                 <DataTable ref={dt} value={pitches}
-                    dataKey="id" globalFilter={globalFilter} header={header}
+                    dataKey="id" header={header}
                     selectionMode="single"
                 >
                     <Column field="id" header="Id" sortable style={{ minWidth: '' }}></Column>
@@ -332,7 +322,7 @@ export default function EditPitches() {
                     <Column field="sumImg" header="Tổng ảnh" style={{ minWidth: '5rem' }} body={sumImg}></Column>
                     <Column body={actionBodyTemplate} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
-                <Paginator first={first} rows={rows} totalRecords={totalRecords} rowsPerPageOptions={[3, 6, 9]} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />
+                {totalPages! > 1 && < Paginator first={first} rows={rows} totalRecords={totalRecords} onPageChange={onPageChange} onClick={() => setBtnSubmit(!btnSubmit)} />}
             </div>
 
             <Dialog visible={pitchDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Thông tin sân" modal className="p-fluid" footer={pitchDialogFooter} onHide={hideDialog}>

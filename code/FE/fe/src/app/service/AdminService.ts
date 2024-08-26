@@ -14,13 +14,18 @@ import { ImagePitch } from "../model/ImagePitch";
 
 
 // List các thông báo
-export const getMessageAll = async (status1: string, status2?: string, offset?: number, limit?: number) => {
+export const getMessageAll = async (status1: string, status2?: string, search?: string, offset?: number, limit?: number) => {
     try {
-        let url = `/booking/admin/confirm?status=${status1}`;
+        let url = `/booking/admin/confirm?statuses=${status1}`;
 
         if (status2 !== undefined) {
             url += `,${status2}`;
         }
+
+        if (search !== undefined && search !== '') {
+            url += `&search=${search}`;
+        }
+
 
         // Thêm offset và limit nếu chúng được cung cấp
         if (offset !== undefined && limit !== undefined) {

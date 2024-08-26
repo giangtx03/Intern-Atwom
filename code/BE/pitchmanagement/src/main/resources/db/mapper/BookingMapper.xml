@@ -120,7 +120,7 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectConfirmPitchBookingByStatus" parameterType="string" resultMap="adminResult">
+    <select id="selectConfirmPitchBookingByStatus" parameterType="map" resultMap="adminResult">
         SELECT pb.id, pb.create_at, pb.`status` AS status_book, pb.note,
         p.name AS name_pitch, p.address,
         u.email, u.fullname, u.phone_number,
@@ -137,6 +137,7 @@
         <foreach item="status" collection="statuses" open="(" separator="," close=")">
             #{status}
         </foreach>
+        AND (#{namePitch} IS NULL OR p.name LIKE CONCAT('%', #{namePitch}, '%'))
         ORDER BY pb.status ASC , b.create_at DESC
     </select>
 

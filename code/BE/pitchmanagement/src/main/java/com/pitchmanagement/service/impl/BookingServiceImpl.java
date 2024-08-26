@@ -81,17 +81,21 @@ public class BookingServiceImpl implements BookingService {
 
     // ------------------------------------------------------------------
     @Override
-    public PageResponse getConfirmPitchBookingByStatus(List<String> status, Integer offset, Integer limit) {
+    public PageResponse getConfirmPitchBookingByStatus(List<String> statuses , String namePitch, Integer offset, Integer limit) {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("statuses", statuses);
+        params.put("namePitch", namePitch);
 
         // Kiểm tra nếu offset và limit là null hoặc không hợp lệ, thì lấy toàn bộ bản ghi
         List<ConfirmPitchBookingDto> pitchBookingDtos;
         if (offset == null || limit == null || offset < 0 || limit <= 0) {
             // Không phân trang, lấy tất cả bản ghi
-            pitchBookingDtos = bookingDAO.selectConfirmPitchBookingByStatus(status);
+            pitchBookingDtos = bookingDAO.selectConfirmPitchBookingByStatus(params);
         } else {
             // Sử dụng phân trang với PageHelper nếu có offset và limit
             PageHelper.offsetPage(offset, limit);
-            pitchBookingDtos = bookingDAO.selectConfirmPitchBookingByStatus(status);
+            pitchBookingDtos = bookingDAO.selectConfirmPitchBookingByStatus(params);
         }
 
         // Lấy tổng số bản ghi từ cơ sở dữ liệu

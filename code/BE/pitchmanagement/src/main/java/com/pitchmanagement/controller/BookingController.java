@@ -127,11 +127,12 @@ public class BookingController {
     @PreAuthorize("ROLE_ADMIN")
     @GetMapping("/admin/confirm")
     public ResponseEntity<BaseResponse> getConfirmPitchBookingByStatus(
-            @RequestParam List<String> status,
+            @RequestParam List<String> statuses,
+            @RequestParam(required = false) String search,
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) Integer limit) {
 
-        PageResponse pageResponse = bookingService.getConfirmPitchBookingByStatus(status, offset, limit);
+        PageResponse pageResponse = bookingService.getConfirmPitchBookingByStatus(statuses, search, offset, limit);
 
         BaseResponse response = BaseResponse.builder()
                 .status(HttpStatus.OK.value())

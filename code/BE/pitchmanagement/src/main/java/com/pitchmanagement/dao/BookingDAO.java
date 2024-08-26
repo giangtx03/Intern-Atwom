@@ -31,7 +31,7 @@ public interface BookingDAO {
     void update(BookingRequest pitchBooking);
 
     // ------------------------------------------------------------------
-    List<ConfirmPitchBookingDto> selectConfirmPitchBookingByStatus(@Param("statuses") List<String> statuses);
+    List<ConfirmPitchBookingDto> selectConfirmPitchBookingByStatus(Map<String, Object> params);
 
     BookingDto selectPitchBookingById(int id);
 
