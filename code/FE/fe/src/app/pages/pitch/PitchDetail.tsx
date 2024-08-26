@@ -14,6 +14,7 @@ import { Button } from "primereact/button";
 import { SelectButton } from "primereact/selectbutton";
 import { FaExclamationCircle } from "react-icons/fa";
 import defaultSanBong from "../../../assets/image/defaultSanBong.jpeg";
+import { Rating } from "primereact/rating";
 
 export default function PitchDetail() {
   const dispatch = useAppDispatch();
@@ -76,7 +77,9 @@ export default function PitchDetail() {
   useEffect(() => {
     if (pitch) {
       const newOptions = pitch.times.map((time, index) => ({
-        label: `${formatTime(time.startTime.toString())} - ${formatTime(time.endTime.toString())}`,
+        label: `${formatTime(time.startTime.toString())} - ${formatTime(
+          time.endTime.toString()
+        )}`,
         value: index,
         isReservation: time.status !== STATUS_PITCH_TIME_ACTIVE,
       }));
@@ -165,32 +168,22 @@ export default function PitchDetail() {
                             pitch_id={pitch}
                           ></BookingDialog>
                         </div>
-                        <div className="row mt-4">
-                          <div className="col-lg-3 col-sm-6">
-                            <div className="p-2 border border-dashed rounded">
-                              <div className="d-flex align-items-center">
-                                <div className="avatar-sm me-2">
-                                  <div className="avatar-title rounded bg-transparent text-success fs-24">
-                                    <i className="ri-money-dollar-circle-fill" />
-                                  </div>
-                                </div>
-                                <div className="flex-grow-1">
-                                  <p className="text-muted mb-1">
-                                    Giá theo khung giờ:
-                                  </p>
-                                  <h5 className="mb-0">
-                                    {price === 0
-                                      ? pitch.times.find(
-                                          (time) =>
-                                            time.status ===
-                                            STATUS_PITCH_TIME_ACTIVE
-                                        )?.price
-                                      : price}{" "}
-                                    VND
-                                  </h5>
-                                </div>
-                              </div>
-                            </div>
+                        <div className="row mt-2 ">
+                          <div className="col-12 d-flex align-items-center">
+                            <h5 className="text-muted mb-0 me-3">
+                              Giá theo khung giờ:
+                            </h5>
+                            <h5 className="mb-0 text-bg-light text-success">
+                              {price === 0
+                                ? pitch.times
+                                    .find(
+                                      (time) =>
+                                        time.status === STATUS_PITCH_TIME_ACTIVE
+                                    )
+                                    ?.price.toLocaleString()
+                                : price.toLocaleString()}{" "}
+                              VND
+                            </h5>
                           </div>
                           {/* end col */}
                         </div>
@@ -221,32 +214,23 @@ export default function PitchDetail() {
                                   </div>
                                 )}
                               />
-                              {/* <select
-                                className="form-select"
-                                onChange={(e) => {
-                                  const selectedIndex = e.target.selectedIndex;
-                                  const selectedTime =
-                                    pitch.times[selectedIndex];
-                                  setPrice(selectedTime.price);
-                                }}
-                              >
-                                {pitch.times.map((time, index) => (
-                                  <option
-                                    key={index}
-                                    value={index}
-                                    disabled={
-                                      time.status !== STATUS_PITCH_TIME_ACTIVE
-                                    }
-                                  >
-                                    {time.startTime} - {time.endTime}
-                                  </option>
-                                ))}
-                              </select> */}
                             </div>
                           </div>
                         </div>
                         {/* end row */}
-                        <div className="product-content mt-5">
+                        <div className="row mt-3 ">
+                          <div className="col-12 d-flex align-items-center">
+                            <h5 className="me-1 mb-0">Đánh giá: </h5>
+                            <p className="text-warning mb-0 me-3">{pitch.avg_star} sao</p>
+                            <Rating
+                              value={pitch.avg_star}
+                              readOnly
+                              cancel={false}
+                              stars={5}
+                            />
+                          </div>
+                        </div>
+                        <div className="row product-content mt-5">
                           <h5 className="fs-14 mb-3">Mô tả sân bóng:</h5>
                           <div
                             className="tab-content border border-top-0 p-4"

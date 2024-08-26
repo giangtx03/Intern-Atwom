@@ -26,4 +26,5 @@ export type PitchResponse ={
     pitch_type_name: string;
     images : ImageResponse[];
     times : TimeReponse[];
+    avg_star: number;
 }

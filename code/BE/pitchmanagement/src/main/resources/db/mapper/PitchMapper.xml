@@ -49,10 +49,13 @@
             p.address,
             p.create_at AS createAt,
             p.update_at AS updateAt,
-            pt.name AS pitchTypeName
+            pt.name AS pitchTypeName,
+            AVG(c.star) AS avgStar
         FROM pitch p
         LEFT JOIN pitch_type pt ON pt.id = p.pitch_type_id
+        LEFT JOIN comment c ON c.pitch_id = p.id
         WHERE p.id = #{id}
+        GROUP BY p.id, p.name, p.address, p.create_at, p.update_at, pt.name
     </select>
 
     <select id="getAllPitch" parameterType="map" resultType="map">
@@ -62,13 +65,16 @@
             p.address,
             p.create_at AS createAt,
             p.update_at AS updateAt,
-            pt.name AS pitchTypeName
+            pt.name AS pitchTypeName,
+            AVG(c.star) AS avgStar
         FROM pitch p
         LEFT JOIN pitch_time pt_time ON p.id = pt_time.pitch_id
         LEFT JOIN pitch_type pt ON pt.id = p.pitch_type_id
+        LEFT JOIN comment c ON c.pitch_id = p.id
         WHERE
             (#{pitchTypeId} IS NULL OR #{pitchTypeId} = 0 OR p.pitch_type_id = #{pitchTypeId})
             AND (#{keyword} IS NULL OR CONCAT(IFNULL(p.name, ''), IFNULL(p.address, '')) LIKE CONCAT('%', #{keyword}, '%'))
             AND (#{timeSlotId} IS NULL OR pt_time.time_slot_id = #{timeSlotId} OR #{timeSlotId} = 0 )
+        GROUP BY p.id, p.name, p.address, p.create_at, p.update_at, pt.name
     </select>
 </mapper>

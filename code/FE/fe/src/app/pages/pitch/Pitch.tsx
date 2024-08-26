@@ -11,6 +11,7 @@ import { Dialog } from "primereact/dialog";
 import { PitchTypeService } from "../../service/PitchTypeService";
 import { Button } from "primereact/button";
 import { Paginator } from "primereact/paginator";
+import { Rating } from "primereact/rating";
 
 type SearchModel = {
   keyword: string;
@@ -161,6 +162,9 @@ export default function Pitch() {
         <div className="row">
           {list && list.length > 0 ? (
             <>
+              <div className="row m-0">
+                <p className="m-0 text-black">Tổng số sân: {totalRecords}</p>
+              </div>
               {list.map((item: PitchResponse) => {
                 return (
                   <div
@@ -195,7 +199,18 @@ export default function Pitch() {
                         <div className="d-flex justify-content-between">
                           <p>Địa chỉ : {item.address}</p>
                         </div>
-                        <div className="d-flex justify-content-between mb-2"></div>
+                        <div className="col-12 d-flex align-items-center">
+                          <p className="me-1 mb-0">Đánh giá: </p>
+                          <p className="text-warning mb-0 me-3">
+                            {item.avg_star} sao
+                          </p>
+                          <Rating
+                            value={item.avg_star}
+                            readOnly
+                            cancel={false}
+                            stars={5}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
