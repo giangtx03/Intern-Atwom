@@ -55,6 +55,7 @@ public class BookingServiceImpl implements BookingService {
             bookingDAO.insert(bookingRequest);
             if(bookingRequest.getStatus().equals(PitchBookingConstant.STATUS_PITCH_BOOKING_ACCESS)){
                 pitchTimeDAO.ChangeStatus(PitchTimeConstant.STATUS_PITCH_TIME_NONACTIVE, bookingRequest.getPitchId(), bookingRequest.getTimeSlotId());
+                 bookingDAO.RejectAllPitch(bookingRequest.getPitchId(),bookingRequest.getTimeSlotId());
             }
         }
         return check;
@@ -73,7 +74,6 @@ public class BookingServiceImpl implements BookingService {
         bookingDAO.update(bookingRequest);
         System.out.println(booking.getStatus());
         if (booking.getStatus().equals(PitchBookingConstant.STATUS_PITCH_BOOKING_ACCESS)) {
-            System.out.println(123);
             pitchTimeDAO.ChangeStatus(PitchTimeConstant.STATUS_PITCH_TIME_ACTIVE, bookingRequest.getPitchId(),
                     bookingRequest.getTimeSlotId());
         }

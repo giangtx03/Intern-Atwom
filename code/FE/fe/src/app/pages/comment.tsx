@@ -21,6 +21,7 @@ import { Rating, RatingChangeEvent } from "primereact/rating";
 import { Paginator } from "primereact/paginator";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import defaultAvatar from "../../assets/image/defaultAvatar.jpg";
+import { ToastContainer, toast, ToastPosition } from "react-toastify";
 
 interface Options {
   select: string;
@@ -44,7 +45,7 @@ export default function CommentDisplay(props: any) {
   const [first, setFirst] = useState(0);
   const [total, setTotal] = useState<number>(0);
   const [selectOption, setSelectOption] = useState<Options>({
-    select: "Tất cả comment",
+    select: "Tất cả đánh giá",
     values: "",
   });
   const [selectOrder, setSelectOrder] = useState<Order | null>(null);
@@ -52,10 +53,9 @@ export default function CommentDisplay(props: any) {
     TokenService.getInstance().getToken()
   )?.user_id;
 
-  const toast = useRef<Toast>(null);
   const options: Options[] = [
-    { select: "Tất cả comment", values: "" },
-    { select: "Comment của bạn", values: `${user_id}` },
+    { select: "Tất cả đánh giá", values: "" },
+    { select: "Đánh giá của bạn", values: `${user_id}` },
   ];
   const order: Order[] = [
     { name: "Tốt nhất", type: "DESC" },
@@ -95,19 +95,13 @@ export default function CommentDisplay(props: any) {
   }, [search.timer, search.page]);
 
   const showSuccess = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
+    toast.success("Thành công !", {
+      position: "top-right",
     });
   };
   const showError = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error",
-      detail: message,
-      life: 3000,
+    toast.error("Thất bại !", {
+      position: "top-right",
     });
   };
 
@@ -139,7 +133,8 @@ export default function CommentDisplay(props: any) {
   return (
     <>
       <div className="container my-5 py-5">
-        <Toast ref={toast} />
+      <ToastContainer />
+
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
@@ -153,7 +148,7 @@ export default function CommentDisplay(props: any) {
             </div>
             <br />
             {lstComment.length == 0 &&
-            selectOption.select == "Tất cả comment" ? (
+            selectOption.select == "Tất cả đánh giá" ? (
               <h4 className="center">Chưa có đánh giá nào</h4>
             ) : (
               <>
@@ -172,7 +167,7 @@ export default function CommentDisplay(props: any) {
                       }}
                       options={options}
                       optionLabel="select"
-                      placeholder="Tất cả comment"
+                      placeholder="Tất cả đánh giá"
                       style={{ width: "18%", margin: "2%" }}
                     ></Dropdown>
                   )}
@@ -192,7 +187,7 @@ export default function CommentDisplay(props: any) {
                   ></Dropdown>
                 </div>
                 {lstComment.length == 0 &&
-                selectOption.select == "Comment của bạn" ? (
+                selectOption.select == "Đánh giá của bạn" ? (
                   <div className="center">
                     <h5>Bạn chưa có comment nào</h5>
                   </div>

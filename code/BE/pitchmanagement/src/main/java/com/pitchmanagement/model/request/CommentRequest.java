@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 public class CommentRequest {
     private Integer id;
     @NotNull
-    @Min(value = 1, message = "Star request must be greater than 0")
+    @Min(value = 1, message = "vui lòng nhập số sao")
     private Integer star;
     private String content;
     @NotNull

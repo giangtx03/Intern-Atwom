@@ -107,6 +107,14 @@
             WHERE id = #{id}
     </update>
 
+    <update id="RejectAllPitch" parameterType="map">
+        UPDATE pitch_booking
+            SET
+            update_at = now(),
+            status = "reject"
+            WHERE pitch_time_pitch_id = #{pitch_id} and pitch_time_time_slot_id = #{time_slot_id} and status = "wait"
+    </update>
+
     <!-- ........................................................... -->
     <update id="updateStatusPitchBooking" parameterType="map">
         UPDATE pitch_booking

@@ -11,6 +11,7 @@ import { Rating, RatingChangeEvent } from "primereact/rating";
 import { TokenService } from "../service/TokenService";
 import { decodeToken } from "react-jwt";
 import { DecodedToken } from "../model/User";
+import { ToastContainer, toast, ToastPosition } from "react-toastify";
 
 export default function AddAndUpdate(props: any) {
   const { search, setSearch, editComment, setEditOn, pitch_id } = props;
@@ -26,22 +27,14 @@ export default function AddAndUpdate(props: any) {
     TokenService.getInstance().getToken()
   )?.user_id;
 
-  const toast = useRef<Toast>(null);
-
   const showSuccess = (message: any) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: "Success",
-      life: 3000,
+    toast.success("Thành công !", {
+      position: "top-right",
     });
   };
   const showError = (message: any) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error",
-      detail: `${message}`,
-      life: 3000,
+    toast.error("Thất bại !", {
+      position: "top-right",
     });
   };
 
@@ -70,7 +63,9 @@ export default function AddAndUpdate(props: any) {
       }).then(async (vl) => {
         if (vl) {
           await CommentService.getInstance()
-            .Update(new Comment(editComment.id, rating, value, user_id, pitch_id.id))
+            .Update(
+              new Comment(editComment.id, rating, value, user_id, pitch_id.id)
+            )
             .then(showSuccess)
             .catch(showError);
           setRating(0);
@@ -95,7 +90,7 @@ export default function AddAndUpdate(props: any) {
   return (
     <>
       <div>
-        <Toast ref={toast} />
+        <ToastContainer />
         <h3 style={{ margin: "1%" }}>Đánh Giá</h3>
         <Rating
           value={rating}

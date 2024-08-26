@@ -30,6 +30,8 @@ public interface BookingDAO {
 
     void update(BookingRequest pitchBooking);
 
+    void RejectAllPitch(@Param("pitch_id") Integer pitchId,@Param("time_slot_id")Integer timeSlotId);
+
     // ------------------------------------------------------------------
     List<ConfirmPitchBookingDto> selectConfirmPitchBookingByStatus(@Param("statuses") List<String> statuses);
 

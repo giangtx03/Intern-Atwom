@@ -22,11 +22,25 @@ import {
 } from "../constant/constant";
 import { useSelector } from "react-redux";
 
-const formatTimeOption = (option: { startTime: string; endTime: string } | null) => {
+const formatTimeOption = (
+  option: { startTime: string; endTime: string } | null
+) => {
   if (!option) {
-    return 'Chọn khung thời gian';
+    return "Chọn khung thời gian";
   }
-  return `${option.startTime} - ${option.endTime}`;
+  return `${option.startTime.slice(0, 5)} - ${option.endTime.slice(0, 5)}`;
+};
+const formatCurrency = (value: number) => {
+  if (value) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    })
+      .format(value)
+      .replace("₫", "")
+      .trim();
+  }
+  return 0;
 };
 
 export default function BookingDialog(props: any) {
@@ -38,6 +52,10 @@ export default function BookingDialog(props: any) {
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
+  const navigate = useNavigate();
+  const handleRedirect = (path: string) => {
+    navigate(path);
+  };
 
   const userDetail = useSelector((state: any) => state.user.userDetail);
 
@@ -45,47 +63,50 @@ export default function BookingDialog(props: any) {
     if (selectTime.timeSlotId == undefined) {
       setMessage(true);
     } else {
-      swal("Bạn muốn cập nhật tượng này chứ?", {
+      swal("Bạn muốn đặt sân này ?", {
         buttons: ["Quay lại", "Đồng ý"],
         icon: "warning",
         dangerMode: true,
       }).then(async (value) => {
-        await BookingService.getInstance()
-          .addBooking(
-            new Booking(
-              userDetail.role == "ADMIN"
-                ? STATUS_PITCH_BOOKING_ACCESS
-                : STATUS_PITCH_BOOKING_WAIT,
-              note,
-              user_id,
-              pitch_id.id,
-              selectTime.timeSlotId
+        if (value == true) {
+          await BookingService.getInstance()
+            .addBooking(
+              new Booking(
+                userDetail.role == "ADMIN"
+                  ? STATUS_PITCH_BOOKING_ACCESS
+                  : STATUS_PITCH_BOOKING_WAIT,
+                note,
+                user_id,
+                pitch_id.id,
+                selectTime.timeSlotId
+              )
             )
-          )
-          .then((response) => {
-            if (response.data.status == 204) {
-              swal("add success", {
-                icon: "success",
-                text: response.data.message,
-              });
-            } else if (response.data.status == 302) {
-              swal("add success", {
+            .then((response) => {
+              if (response.data.status == 204) {
+                swal("Đặt thành công", {
+                  icon: "success",
+                  text: response.data.message,
+                });
+                handleRedirect("/history");
+              } else if (response.data.status == 302) {
+                swal("đặt thất bại", {
+                  icon: "warning",
+                  text: response.data.message,
+                });
+              } else {
+                swal("đặt thất bại", {
+                  icon: "warning",
+                });
+              }
+              setVisible(false);
+            })
+            .catch((response) => {
+              swal("Cancel false", {
                 icon: "warning",
-                text: response.data.message,
               });
-            } else {
-              swal("An error occurred", {
-                icon: "warning",
-              });
-            }
-            setVisible(false);
-          })
-          .catch((response) => {
-            swal("Cancel false", {
-              icon: "warning",
+              setVisible(false);
             });
-            setVisible(false);
-          });
+        }
       });
     }
   };
@@ -138,7 +159,7 @@ export default function BookingDialog(props: any) {
         </div>
         <div className="col-8">
           <b className="w-full md:w-14rem">
-            {selectTime !== undefined ? selectTime.price : ""} VND
+            {selectTime != null ? formatCurrency(selectTime.price) : ""} VND
           </b>
         </div>
       </div>
@@ -155,14 +176,16 @@ export default function BookingDialog(props: any) {
               setMessage(false);
             }}
             options={listPitchTime}
-            optionLabel="startTime" 
-            itemTemplate={(option) => formatTimeOption(option)} 
+            optionLabel="startTime"
+            itemTemplate={(option) => formatTimeOption(option)}
             placeholder={
               listPitchTime?.length === 0
                 ? "Không còn khung giờ trống"
                 : "Chọn khung giờ"
             }
-            valueTemplate={(option) => formatTimeOption(option)}
+            valueTemplate={(option) => {
+             return  listPitchTime?.length === 0 ? "Không còn khung giờ trống" : formatTimeOption(option);
+            }}
           />
         </div>
       </div>

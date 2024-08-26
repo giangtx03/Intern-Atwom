@@ -53,14 +53,14 @@ export default function History() {
     code: "",
   });
   const navigate = useNavigate();
+  const handleRedirect = (path: string) => {
+    navigate(path);
+  };
   const [selectOrder, setSelectOrder] = useState<Order>({
     name: "mới nhất",
     type: "DESC",
   });
 
-  const handleRedirect = (path: string) => {
-    navigate(path);
-  };
 
   const order: Order[] = [
     { name: "mới nhất", type: "DESC" },
@@ -75,7 +75,6 @@ export default function History() {
     { name: "Hủy", code: STATUS_PITCH_BOOKING_CANCEL },
     { name: "Từ chối", code: STATUS_PITCH_BOOKING_REJECT },
   ];
-  const token = localStorage.getItem("access_token");
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
@@ -83,13 +82,13 @@ export default function History() {
   const dispatch = useAppDispatch();
 
   const showToastSuccess = () => {
-    toast.success("Success Notification !", {
+    toast.success("Thành công !", {
       position: "top-right",
     });
   };
 
   const showToastError = () => {
-    toast.error("Error Notification !", {
+    toast.error("Thất bại !", {
       position: "top-right",
     });
   };
@@ -106,7 +105,7 @@ export default function History() {
   };
 
   const timeFrameBodyTemplate = (item: any) => {
-    return `${item.startTime} - ${item.endTime}`;
+    return `${item.startTime.slice(0, 5)} - ${item.endTime.slice(0, 5)}`;
   };
 
   const dateBodyTemplate = (item: any) => {
@@ -200,6 +199,7 @@ export default function History() {
         await BookingService.getInstance()
           .CancelBooking(bookChose)
           .then((response) => {
+            console.log(response)
             setSearch({
               ...search,
               timer: new Date().getTime(),
@@ -208,6 +208,7 @@ export default function History() {
             showToastSuccess();
           })
           .catch((response) => {
+            console.log(response)
             showToastSuccess()
           });
       } else {
@@ -253,7 +254,6 @@ export default function History() {
         </div>
       ) : (
         <div className="list-group">
-          <ToastContainer />
           <h2 className="h4" style={{ margin: "1.5%" }}>
             History
           </h2>
