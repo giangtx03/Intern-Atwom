@@ -35,6 +35,8 @@ public class PitchResponse {
     private List<ImageDto> images;
     @JsonProperty("times")
     private List<PitchTimeChildrenDto> times;
+    @JsonProperty("avg_star")
+    private double avgStar;
 
     public static PitchResponse fromSrc(Map<String, Object> src, List<ImageDto> images, List<PitchTimeChildrenDto> times){
         return PitchResponse.builder()
@@ -46,6 +48,7 @@ public class PitchResponse {
                 .pitchTypeName(src.get("pitchTypeName").toString())
                 .images(images)
                 .times(times)
+                .avgStar(src.get("avgStar") != null ? Double.parseDouble(src.get("avgStar").toString()) : 0)
                 .build();
     }
 }
