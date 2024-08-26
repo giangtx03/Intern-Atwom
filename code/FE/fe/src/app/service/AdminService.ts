@@ -22,10 +22,9 @@ export const getMessageAll = async (status1: string, status2?: string, search?: 
             url += `,${status2}`;
         }
 
-        if (search !== undefined && search !== '') {
+        if (search !== undefined) {
             url += `&search=${search}`;
         }
-
 
         // Thêm offset và limit nếu chúng được cung cấp
         if (offset !== undefined && limit !== undefined) {

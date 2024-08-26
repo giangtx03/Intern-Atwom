@@ -167,7 +167,11 @@ export default function PitchTimeTable(props: Props) {
     };
 
     if (isLoading) {
-        return <Spinner />;
+        return (
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
+        );
     }
 
     if (httpError) {

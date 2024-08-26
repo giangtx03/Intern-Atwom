@@ -74,7 +74,9 @@ export default function Payments() {
 
     if (isLoading) {
         return (
-            <Spinner />
+            <div className="progress-spinner text-center">
+                <div className="swm-loader"></div>
+            </div>
         )
     };
 

@@ -37,7 +37,7 @@ export default function RevenueBar(props: Props) {
             labels: days,
             datasets: [
                 {
-                    label: 'Doanh thu tháng 8',
+                    label: `Doanh thu tháng ${props.month}`,
                     data: values,
                     fill: false,
                     borderColor: documentStyle.getPropertyValue('--blue-500'),
