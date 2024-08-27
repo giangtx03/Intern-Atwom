@@ -216,7 +216,7 @@ export default function CommentDisplay(props: any) {
                                   </h6>
                                   <div className="d-flex align-items-center mb-3">
                                     <p className="mb-0">
-                                      {dayjs(item.createAt).format(
+                                      {dayjs(item.updateAt).format(
                                         "DD/MM/YYYY"
                                       )}
                                     </p>
