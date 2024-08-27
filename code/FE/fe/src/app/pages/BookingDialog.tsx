@@ -184,7 +184,7 @@ export default function BookingDialog(props: any) {
                 : "Chọn khung giờ"
             }
             valueTemplate={(option) => {
-             return  listPitchTime?.length === 0 ? "Không còn khung giờ trống" : formatTimeOption(option);
+              return listPitchTime?.length === 0 ? "Không còn khung giờ trống" : formatTimeOption(option);
             }}
           />
         </div>
