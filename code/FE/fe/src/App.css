@@ -136,7 +136,7 @@ a {
 }
 
 .swal2-popup {
-  z-index: 10500;
+  z-index: 1050 !important;
   /* Giá trị z-index tùy chỉnh */
 }
 
