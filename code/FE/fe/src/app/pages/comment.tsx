@@ -222,7 +222,7 @@ export default function CommentDisplay(props: any) {
                                     </p>
                                   </div>
                                   <div>
-                                    <Rating value={item.star} cancel={false} />
+                                    <Rating value={item.star} cancel={false}  className="custom-rating"/>
                                   </div>
                                   <p className="mb-0">{item.content}</p>
                                 </div>

@@ -126,3 +126,11 @@ a {
 .swal2-popup {
   z-index: 1050; /* Giá trị z-index tùy chỉnh */
 }
+
+.custom-rating .p-rating-star {
+  color: #ffbf00; 
+}
+
+.custom-rating .p-rating-icon {
+  color: #ffbf00; 
+}

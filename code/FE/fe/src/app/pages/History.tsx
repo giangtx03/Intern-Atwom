@@ -255,7 +255,7 @@ export default function History() {
       ) : (
         <div className="list-group">
           <h2 className="h4" style={{ margin: "1.5%" }}>
-            History
+            Lịch sử
           </h2>
           <div>
             <Dropdown
