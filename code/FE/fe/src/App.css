@@ -136,7 +136,7 @@ a {
 }
 
 .swal2-popup {
-  z-index: 1050; /* Giá trị z-index tùy chỉnh */
+  z-index: 1050 !important; /* Giá trị z-index tùy chỉnh */
 }
 
 .custom-rating .p-rating-star {
