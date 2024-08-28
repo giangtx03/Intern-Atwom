@@ -33,7 +33,7 @@ export default function AddAndUpdate(props: any) {
     });
   };
   const showError = (message: any) => {
-    toast.error("Thất bại !", {
+    toast.error(message, {
       position: "top-right",
     });
   };

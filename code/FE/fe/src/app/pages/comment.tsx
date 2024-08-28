@@ -22,6 +22,9 @@ import { Paginator } from "primereact/paginator";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import defaultAvatar from "../../assets/image/defaultAvatar.jpg";
 import { ToastContainer, toast, ToastPosition } from "react-toastify";
+import { Menu } from "primereact/menu";
+import { PrimeIcons } from "primereact/api";
+import { Avatar } from "primereact/avatar";
 
 interface Options {
   select: string;
@@ -41,8 +44,7 @@ export default function CommentDisplay(props: any) {
   const [editComment, setEditComment] = useState<Comment | undefined>(
     undefined
   );
-  const [rows, setRows] = useState(search.limit);
-  const [first, setFirst] = useState(0);
+  const [selectComment, setSelectComment] = useState(Object);
   const [total, setTotal] = useState<number>(0);
   const [selectOption, setSelectOption] = useState<Options>({
     select: "Tất cả đánh giá",
@@ -61,6 +63,7 @@ export default function CommentDisplay(props: any) {
     { name: "Tốt nhất", type: "DESC" },
     { name: "Tệ nhất", type: "ASC" },
   ];
+  const menu = useRef<Menu>(null);
 
   useEffect(() => {
     const fetchComment = async () => {
@@ -100,12 +103,12 @@ export default function CommentDisplay(props: any) {
     });
   };
   const showError = (message: string) => {
-    toast.error("Thất bại !", {
+    toast.error(message, {
       position: "top-right",
     });
   };
 
-  const deleteComment = (e: any, commentId: number) => {
+  const deleteComment = (commentId: number) => {
     swal("Bạn muốn xóa đánh giá này chứ?", {
       buttons: ["Quay lại", "Đồng ý"],
       icon: "warning",
@@ -130,10 +133,49 @@ export default function CommentDisplay(props: any) {
       .catch();
   };
 
+  const OnMenu = (e: any, item: any) => {
+    menu.current?.toggle(e);
+    setSelectComment(item);
+    return;
+  };
+
+  const items = [
+    {
+      label: "tùy chọn",
+      icon: "pi-ellipsis-v",
+      items: [
+        {
+          label: "Sửa đánh giá",
+          icon: "pi pi-sync",
+          command: () => {
+            console.log(selectComment);
+            setEditOn(true);
+            setEditComment(
+              new Comment(
+                selectComment?.id,
+                selectComment?.star,
+                selectComment?.content,
+                selectComment?.userId,
+                selectComment?.pitchId
+              )
+            );
+          },
+        },
+        {
+          label: "Xóa đánh giá",
+          icon: "pi pi-trash",
+          command: () => {
+            deleteComment(selectComment?.id);
+          },
+        },
+      ],
+    },
+  ];
+
   return (
     <>
       <div className="container my-5 py-5">
-      <ToastContainer />
+        <ToastContainer />
 
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
@@ -210,6 +252,7 @@ export default function CommentDisplay(props: any) {
                                   width="60"
                                   height="60"
                                 />
+                                
                                 <div>
                                   <h6 className="fw-bold mb-1">
                                     {item.fullname}
@@ -222,45 +265,40 @@ export default function CommentDisplay(props: any) {
                                     </p>
                                   </div>
                                   <div>
-                                    <Rating value={item.star} cancel={false}  className="custom-rating"/>
+                                    <Rating
+                                      value={item.star}
+                                      cancel={false}
+                                      className="custom-rating"
+                                    />
                                   </div>
                                   <p className="mb-0">{item.content}</p>
                                 </div>
-                              </div>
-                            </div>
-                            {item.userId == user_id && (
-                              <div>
-                                <Button
-                                  label="Xóa"
-                                  severity="danger"
-                                  style={{ left: "70%", margin: "1%" }}
-                                  onClick={(e) => {
-                                    deleteComment(e, item.id);
-                                  }}
+                                {item.userId == user_id && (
+                              <div className="mr-3">
+                                <Avatar
+                                  icon="pi pi-ellipsis-v"
+                                  shape="circle"
+                                  onClick={(e) => OnMenu(e, item)}
+                                  style={{backgroundColor: "white"}}
                                 />
-                                <Button
-                                  label="Cập nhật"
-                                  severity="success"
-                                  style={{ left: "70%", margin: "1%" }}
-                                  onClick={(e) => {
-                                    setEditOn(true);
-                                    setEditComment(
-                                      new Comment(
-                                        item.id,
-                                        item.star,
-                                        item.content,
-                                        item.userId,
-                                        item.pitchId
-                                      )
-                                    );
-                                  }}
-                                />
+                                <i></i>
+                                <Menu
+                                  model={items}
+                                  style={{ width: "14rem" }}
+                                  popup
+                                  baseZIndex={1000}
+                                  ref={menu}
+                                ></Menu>
                               </div>
                             )}
+                              </div>
+                            </div>
+                            
                             <hr className="my-0" />
                           </div>
                         );
                       })}
+
                       <Dialog
                         header="Cập nhật"
                         visible={editOn}
