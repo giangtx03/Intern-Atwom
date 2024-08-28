@@ -128,7 +128,6 @@ public class BookingServiceImpl implements BookingService {
 
         tempConfirmPitchBookingDto.setStatusBook(status);
 
-
         // Truy vấn bảng pitch_time
         BookingDto pitchBooking = bookingDAO.selectPitchBookingById(id);
 
@@ -153,6 +152,9 @@ public class BookingServiceImpl implements BookingService {
 
         PitchTimeRequest pitchTime = pitchTimeDAO.selectPitchTimeByIds(pitchTimeMap);
 
+        pitchTime.setPitchId(pitchBooking.getPitchTimePitchId());
+        pitchTime.setTimeSlotId(pitchBooking.getPitchTimeTimeSlotId());
+        
         if (pitchTime == null) {
             throw new RuntimeException("PitchTime not found for pitchId: " + pitchBooking.getPitchTimePitchId()
                     + " and timeSlotId: " + pitchBooking.getPitchTimeTimeSlotId()
