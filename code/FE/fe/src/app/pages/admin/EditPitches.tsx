@@ -100,6 +100,9 @@ export default function EditPitches() {
         setCountIndex(prevCount => prevCount - 1);
         const newPitchTimes = pitch2.editPitchTimeRequestDtos.filter((_, i) => i !== index);
         setPitch2({ ...pitch2, editPitchTimeRequestDtos: newPitchTimes });
+
+        const newTimeSlotResponses = timeSlotResponses.filter((_, i) => i !== index);
+        setTimeSlotResponses(newTimeSlotResponses);
     };
 
     const addPitchTime = () => {
@@ -516,7 +519,6 @@ export default function EditPitches() {
                             <div className="d-flex gap-2">
                                 <Dropdown
                                     id="type"
-                                    value={timeSlotResponses[index]}
                                     onChange={(e: DropdownChangeEvent) => handleTimeSlot(index, e.target.value)}
                                     options={_timeSlotResponses}
                                     optionLabel="time"
@@ -529,12 +531,14 @@ export default function EditPitches() {
                                     placeholder="Khung giờ"
                                     value={timeSlotResponses[index]?.time}
                                     required
+                                    readOnly
                                 />
                                 <InputNumber
                                     placeholder="Giá"
                                     value={pitchTime.price}
                                     onValueChange={(e: InputNumberValueChangeEvent) => handlePitchTimeChange(index, 'price', e.target.value)}
                                     required
+                                    className={submitted && !pitchTime[index]?.price ? 'p-invalid' : ''}
                                 />
                                 <InputText
                                     type="text"
@@ -564,7 +568,7 @@ export default function EditPitches() {
                         ref={fileInputRef}
                         style={{ display: 'none' }}
                         onChange={onSelect}
-                        multiple // Cho phép chọn nhiều file
+                        multiple
                     />
                     <div className="my-2">
                         {previewUrls.map((url, index) => (

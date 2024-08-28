@@ -62,9 +62,11 @@ public class BillServiceImpl implements BillService {
                     + " and timeSlotId: " + pitchBooking.getPitchTimeTimeSlotId()
                     + " Pitch Booking: " + pitchBooking);
         }
-
+        System.out.println(pitchTimeDAO.selectPitchTimeByIds(pitchTimeMap));
         // Chuyển status thành "rảnh"
         pitchTime.setStatus(PitchTimeConstant.STATUS_PITCH_TIME_ACTIVE);
+        pitchTime.setPitchId(pitchBooking.getPitchTimePitchId());
+        pitchTime.setTimeSlotId(pitchBooking.getPitchTimeTimeSlotId());
         pitchTimeDAO.updateStatusPitchTimeByIds(pitchTime);
 
         billDao.insertBill(bill);
