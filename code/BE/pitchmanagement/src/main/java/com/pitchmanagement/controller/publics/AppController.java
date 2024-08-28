@@ -8,9 +8,12 @@ import com.pitchmanagement.model.response.BaseResponse;
 import com.pitchmanagement.service.CommentService;
 import com.pitchmanagement.service.ImageService;
 
+import com.pitchmanagement.util.JwtUtil;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +32,8 @@ public class AppController {
 
     private final ImageService imageService;
     private final CommentService commentService;
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     @GetMapping("/image/{image_name}")
     public ResponseEntity<?> getImage(
@@ -57,6 +62,7 @@ public class AppController {
             @RequestParam(name = "order", defaultValue = "DESC", required = false) String order) {
         try {
             List<CommentDTO> lst = commentService.GetCommentByPitch(pitch_id, user_id, offset, limit,order);
+            logger.info("Search comment for pitch: userId: {}, order: {} in Controller", user_id, order);
             BaseResponse response = BaseResponse.builder()
                     .status(HttpStatus.OK.value())
                     .message("success")
