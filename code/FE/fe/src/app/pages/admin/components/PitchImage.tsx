@@ -170,7 +170,7 @@ export default function PitchImage(props: Props) {
                         imgPitches.map(img => (
                             <div key={img.id} className="m-2" style={{ position: 'relative', display: 'inline-block', width: 200 }}>
                                 <img
-                                    src={`http://localhost:8080/public/api/v1/image/${img.name}`}
+                                    src={process.env.REACT_APP_API_URL + `/image/${img.name}`}
                                     alt="Pitch"
                                     width={200}
                                     height={200}

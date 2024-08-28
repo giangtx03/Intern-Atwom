@@ -243,7 +243,7 @@ export default function CommentDisplay(props: any) {
                               <div className="d-flex flex-start">
                                 <Image
                                   className="rounded-circle shadow-1-strong me-3"
-                                  src={`http://localhost:8080/public/api/v1/image/${item?.avatar}`}
+                                  src={process.env.REACT_APP_API_URL+ `/image/${item?.avatar}`}
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       defaultAvatar;
