@@ -28,7 +28,6 @@ export default class CommentService {
         process.env.REACT_APP_API_URL + `/comment/${pitch_id}`,
         params
       ) + `&order=${order ?? ""}`;
-    console.log(url);
     return axios.get(url, {
       headers: HeadersUtil.getHeaders(),
     });

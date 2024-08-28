@@ -27,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDTO> GetCommentByPitch(Integer pitch_id,Integer user_id, Integer offset, Integer limit, String order) {
         PageHelper.startPage(offset, limit);
+        PageHelper.orderBy("cm.star " + order +", cm.update_at DESC");
         List<CommentDTO> lst = commentDAO.GetCommentByPitch(pitch_id,user_id,order);
         return lst;
     }

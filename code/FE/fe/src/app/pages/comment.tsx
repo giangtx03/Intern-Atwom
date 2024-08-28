@@ -176,7 +176,6 @@ export default function CommentDisplay(props: any) {
     <>
       <div className="container my-5 py-5">
         <ToastContainer />
-
         <div className="row d-flex justify-content-center">
           <div className="col-md-12 col-lg-10">
             <div className="card text-body">
