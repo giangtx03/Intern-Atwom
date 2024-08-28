@@ -17,22 +17,27 @@ export default class CommentService {
     return CommentService._commentService;
   }
 
-  public getLstPitchTime(modelSearch: Search, pitch_id?: number,order? : string) {
+  public getLstPitchTime(
+    modelSearch: Search,
+    pitch_id?: number,
+    order?: string
+  ) {
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
-    const url = ApiUrlUtil.buildQueryString(
-      `http://localhost:8080/public/api/v1/comment/${pitch_id}`,
-      params
-    ) + `&order=${order??""}`;
+    const url =
+      ApiUrlUtil.buildQueryString(
+        process.env.REACT_APP_API_URL + `/comment/${pitch_id}`,
+        params
+      ) + `&order=${order ?? ""}`;
     console.log(url);
     return axios.get(url, {
       headers: HeadersUtil.getHeaders(),
     });
   }
 
-  public getTotal(modelSearch: Search,pitch_id?: number) {
+  public getTotal(modelSearch: Search, pitch_id?: number) {
     const params: RequestParam[] = ParamUtil.toRequestParams(modelSearch);
-     const url = ApiUrlUtil.buildQueryString(
-      `http://localhost:8080/public/api/v1/comment/total/${pitch_id}`,
+    const url = ApiUrlUtil.buildQueryString(
+      process.env.REACT_APP_API_URL + `/comment/total/${pitch_id}`,
       params
     );
     return axios.get(url, {

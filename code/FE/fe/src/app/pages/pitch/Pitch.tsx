@@ -173,7 +173,7 @@ export default function Pitch() {
                   >
                     <div className="card">
                       <img
-                        src={`http://localhost:8080/public/api/v1/image/${item.images[0]?.name}`}
+                        src={process.env.REACT_APP_API_URL + `/image/${item.images[0]?.name}`}
                         className="card-img-top"
                         alt="Laptop"
                         onError={(e) => {

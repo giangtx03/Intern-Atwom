@@ -130,7 +130,7 @@ export default function Header() {
           <Avatar
             image={
               user.avatar
-                ? `http://localhost:8080/public/api/v1/image/${user.avatar}`
+                ? process.env.REACT_APP_API_URL + `/image/${user.avatar}`
                 : undefined
             }
             icon={!user.avatar || user.avatar.length === 0 ? "pi pi-user" : undefined}

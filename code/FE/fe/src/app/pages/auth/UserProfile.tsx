@@ -47,7 +47,7 @@ export default function UserProfile() {
             <div className="card mb-4">
               <div className="card-body text-center">
                 <Image
-                  src={`http://localhost:8080/public/api/v1/image/${user?.avatar}`}
+                  src={ process.env.REACT_APP_API_URL + `/image/${user?.avatar}`}
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = defaultAvatar;
                   }}

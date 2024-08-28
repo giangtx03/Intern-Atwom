@@ -63,7 +63,7 @@ export default function PitchDetail() {
       <div className="carousel-item active">
         <img
           className="d-block w-100"
-          src={`http://localhost:8080/public/api/v1/image/${image.name}`}
+          src={ process.env.REACT_APP_API_URL + `/image/${image.name}`}
           alt="Ảnh sân bóng"
           onError={(e) => {
             e.currentTarget.src = defaultSanBong;
