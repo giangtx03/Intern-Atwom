@@ -275,6 +275,7 @@ export default function Pitch() {
               options={[
                 { name: "Số thứ tự", value: "p.id" },
                 { name: "Ngày tạo", value: "p.create_at" },
+                { name: "Đánh giá", value: "avg(c.star)" },
               ]}
               className="w-full md:w-14rem"
             />
