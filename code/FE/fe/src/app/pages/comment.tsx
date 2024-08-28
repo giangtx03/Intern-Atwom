@@ -240,7 +240,7 @@ export default function CommentDisplay(props: any) {
                         return (
                           <div key={item.id}>
                             <div className="card-body p-4">
-                              <div className="d-flex flex-start">
+                              <div className="d-flex">
                                 <Image
                                   className="rounded-circle shadow-1-strong me-3"
                                   src={process.env.REACT_APP_API_URL+ `/image/${item?.avatar}`}
@@ -274,7 +274,7 @@ export default function CommentDisplay(props: any) {
                                   <p className="mb-0">{item.content}</p>
                                 </div>
                                 {item.userId == user_id && (
-                              <div className="mr-3">
+                              <div className="ms-auto">
                                 <Avatar
                                   icon="pi pi-ellipsis-v"
                                   shape="circle"
@@ -293,7 +293,6 @@ export default function CommentDisplay(props: any) {
                             )}
                               </div>
                             </div>
-                            
                             <hr className="my-0" />
                           </div>
                         );
