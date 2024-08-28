@@ -34,6 +34,8 @@ public class BillServiceImpl implements BillService {
     @Override
     public BillRequest addBill(BillRequest bill) {
 
+        bill.setCreateAt(LocalDateTime.now());
+
         Map<String, Object> updateStatusMap = new HashMap<>();
         updateStatusMap.put("id", bill.getPitchBookingId());
         updateStatusMap.put("status", PitchBookingConstant.STATUS_PITCH_BOOKING_SUCCESS);

@@ -3,3 +3,7 @@ export class ImagePitch {
     name?: File;
     pitchId?: number;
 }
+
+export class ImagePitchDto {
+    id?: number;
+}
