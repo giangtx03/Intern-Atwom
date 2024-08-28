@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { getMessageAll, updateStatus } from '../../service/AdminService';
 import { MessageModel } from '../../model/MessageModel';
 import MessageBook from './components/MessageBook';
-import Spinner from '../../comp/Spinner';
 import { STATUS_PITCH_BOOKING_WAIT } from '../../constant/constant';
 
 export default function MessageBooks() {
@@ -37,6 +36,7 @@ export default function MessageBooks() {
     const submitConfirm = async (id: number, status: string) => {
         const statusObj = { id: id, status: status }
         try {
+            setIsLoading(true);
             await updateStatus(statusObj);
             toast.success("Thông báo đã được gửi đi")
         } catch (error: any) {

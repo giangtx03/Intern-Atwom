@@ -1,6 +1,7 @@
 package com.pitchmanagement.dao;
 
 import com.pitchmanagement.dto.admin.PitchDto;
+import com.pitchmanagement.model.request.EditPitchRequest;
 import com.pitchmanagement.model.request.PitchRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -11,7 +12,11 @@ import java.util.Map;
 @Mapper
 public interface PitchDao {
 
+    void insertEditPitch(EditPitchRequest editPitchRequest);
+
     void insertPitch(PitchRequest pitchRequest);
+
+    void updateEditPitch(EditPitchRequest editPitchRequest);
 
     void updatePitch(PitchRequest pitchRequest);
 

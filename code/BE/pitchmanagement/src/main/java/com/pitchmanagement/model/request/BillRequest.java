@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class BillRequest {
 
     private Integer id;
-    private String createAt;
+    private LocalDateTime createAt;
     private String note;
     private Integer pitchBookingId;
 }

@@ -102,6 +102,36 @@ export const getEditPitch = async (offset: number, limit: number) => {
     }
 };
 
+// Thêm pitch new version
+export const postEditPitchNewVersion = async (formData: FormData) => {
+    try {
+        const url = `/pitch/admin/editpitch`;
+        await axiosCustom.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
+// Cập nhật pitch new version
+export const putEditPitchNewVersion = async (formData: FormData) => {
+    try {
+        const url = `/pitch/admin/editpitch`;
+        await axiosCustom.put(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching data', error);
+        throw error;
+    }
+};
+
 // Thêm pitch
 export const postEditPitch = async (pitch: PitchModel) => {
     try {

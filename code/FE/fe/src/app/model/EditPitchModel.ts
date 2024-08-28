@@ -7,4 +7,15 @@ export class EditPitchModel {
     type?: string
     sumTime?: number
     sumImg?: number
+    pitchTimeChildrenDtos?: [{
+        startTime?: string,
+        endTime?: string,
+        price?: number,
+        status?: string,
+        idTime?: number
+    }]
+    imageDtos?: [{
+        id?: number,
+        name?: File,
+    }]
 }

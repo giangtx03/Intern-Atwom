@@ -176,11 +176,11 @@ export default function PitchDetail() {
                             <h5 className="mb-0 text-bg-light text-success">
                               {price === 0
                                 ? pitch.times
-                                    .find(
-                                      (time) =>
-                                        time.status === STATUS_PITCH_TIME_ACTIVE
-                                    )
-                                    ?.price.toLocaleString()
+                                  .find(
+                                    (time) =>
+                                      time.status === STATUS_PITCH_TIME_ACTIVE
+                                  )
+                                  ?.price.toLocaleString()
                                 : price.toLocaleString()}{" "}
                               VND
                             </h5>
@@ -221,7 +221,7 @@ export default function PitchDetail() {
                         <div className="row mt-3 ">
                           <div className="col-12 d-flex align-items-center">
                             <h5 className="me-1 mb-0">Đánh giá: </h5>
-                            <b className="mb-0 me-3" style={{color: "#FFCC00"}}>{pitch.avg_star.toFixed(2)} sao</b>
+                            <b className="mb-0 me-3" style={{ color: "#FFCC00" }}>{pitch.avg_star.toFixed(2)}/5</b>
                           </div>
                         </div>
                         <div className="row product-content mt-5">

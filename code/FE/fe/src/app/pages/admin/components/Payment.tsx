@@ -36,8 +36,7 @@ export default function Payment(props: Props) {
     const submitBtn = () => {
         const newBill: BillModel = {
             ...bill,
-            pitchBookingId: props.message.id,
-            createAt: handleDateTime
+            pitchBookingId: props.message.id
         };
         console.log(newBill)
         setBill(newBill);
