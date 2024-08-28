@@ -21,6 +21,7 @@ import {
   STATUS_PITCH_BOOKING_WAIT,
 } from "../constant/constant";
 import { useSelector } from "react-redux";
+import { InputTextarea } from "primereact/inputtextarea";
 
 const formatTimeOption = (
   option: { startTime: string; endTime: string } | null
@@ -184,22 +185,27 @@ export default function BookingDialog(props: any) {
                 : "Chọn khung giờ"
             }
             valueTemplate={(option) => {
-              return listPitchTime?.length === 0 ? "Không còn khung giờ trống" : formatTimeOption(option);
+              return listPitchTime?.length === 0
+                ? "Không còn khung giờ trống"
+                : formatTimeOption(option);
             }}
           />
         </div>
+        <div className="center">
+          <Message
+            severity="error"
+            text="Hãy chọn thời gian"
+            className={message == false ? "hide " : ""}
+            style={{ width: "25%" , margin:"1%"}}
+          />
+        </div>
       </div>
-      <Message
-        severity="error"
-        text="Error Message"
-        className={message == false ? "hide" : ""}
-      />
       <div className="row mt-3 flex align-items-center">
         <div className="col-4">
           <label htmlFor="note">Ghi chú: </label>
         </div>
         <div className="col-8">
-          <InputText value={note} onChange={(e) => setNote(e.target.value)} />
+          <InputTextarea  value={note} cols={30} onChange={(e) => setNote(e.target.value)} />
         </div>
       </div>
       <div className="row mt-3">

@@ -33,7 +33,7 @@ export default function AddAndUpdate(props: any) {
     });
   };
   const showError = (message: any) => {
-    toast.error("Thất bại !", {
+    toast.error(message, {
       position: "top-right",
     });
   };
@@ -90,13 +90,13 @@ export default function AddAndUpdate(props: any) {
   return (
     <>
       <div>
-        <ToastContainer />
         <h3 style={{ margin: "1%" }}>Đánh Giá</h3>
         <Rating
           value={rating}
           onChange={(e: RatingChangeEvent) => setRating(e.value ?? 0)}
           cancel={false}
-          style={{ margin: "1%" }}
+          style={{ margin: "1%"}}
+          className="custom-rating"
         />
         <div>
           <InputText

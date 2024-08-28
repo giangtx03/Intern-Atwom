@@ -17,10 +17,10 @@
         join user u on u.id = cm.user_id
         where cm.pitch_id = #{pitch_id} and (#{user_id} is null or user_id = #{user_id}) <choose>
             <when test="order == 'ASC'">
-                ORDER BY  cm.star ASC, cm.update_at DESC
+                ORDER BY cm.star ASC, cm.update_at DESC
             </when>
             <otherwise>
-                ORDER BY  cm.star DESC, cm.update_at DESC
+                ORDER BY cm.star DESC, cm.update_at DESC
             </otherwise>
         </choose>
         

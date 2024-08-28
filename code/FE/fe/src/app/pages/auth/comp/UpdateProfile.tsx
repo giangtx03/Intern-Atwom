@@ -104,7 +104,7 @@ export default function UpdateProfile(props: any) {
             <Image
               src={
                 preview ||
-                `http://localhost:8080/public/api/v1/image/${user?.avatar}`
+                process.env.REACT_APP_API_URL + `/image/${user?.avatar}`
               }
               alt="User Avatar"
               width="280"
