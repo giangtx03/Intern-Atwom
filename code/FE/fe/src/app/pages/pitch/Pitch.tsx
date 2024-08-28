@@ -202,7 +202,7 @@ export default function Pitch() {
                         <div className="col-12 d-flex align-items-center">
                           <p className="me-1 mb-0">Đánh giá: </p>
                           <b className="mb-0 me-3" style={{color: "#FFCC00"}}>
-                            {item.avg_star.toFixed(2)} sao
+                            {item.avg_star.toFixed(2)}/5
                           </b>
                         </div>
                       </div>

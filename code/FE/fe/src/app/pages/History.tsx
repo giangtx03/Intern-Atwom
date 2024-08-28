@@ -31,6 +31,7 @@ import {
 } from "../constant/constant";
 import { access } from "fs/promises";
 import { ToastContainer, toast, ToastPosition } from "react-toastify";
+import { useSelector } from "react-redux";
 
 interface StatusSearch {
   name: string;
@@ -56,18 +57,20 @@ export default function History() {
   const handleRedirect = (path: string) => {
     navigate(path);
   };
+
+  const userDetail = useSelector((state: any) => state.user.userDetail);
+  
   const [selectOrder, setSelectOrder] = useState<Order>({
     name: "mới nhất",
     type: "DESC",
   });
-
 
   const order: Order[] = [
     { name: "mới nhất", type: "DESC" },
     { name: "lâu nhất", type: "ASC" },
   ];
 
-  const statusSearch: StatusSearch[] = [
+  const statusSearchUser: StatusSearch[] = [
     { name: "Tất cả", code: "" },
     { name: "Chưa thanh toán", code: STATUS_PITCH_BOOKING_ACCESS },
     { name: "chờ", code: STATUS_PITCH_BOOKING_WAIT },
@@ -75,6 +78,14 @@ export default function History() {
     { name: "Hủy", code: STATUS_PITCH_BOOKING_CANCEL },
     { name: "Từ chối", code: STATUS_PITCH_BOOKING_REJECT },
   ];
+
+  const statusSearchAdmin: StatusSearch[] = [
+    { name: "Tất cả", code: "" },
+    { name: "Chưa thanh toán", code: STATUS_PITCH_BOOKING_ACCESS },
+    { name: "Đã thanh toán", code: STATUS_PITCH_BOOKING_SUCCESS },
+    { name: "Hủy", code: STATUS_PITCH_BOOKING_CANCEL }
+  ];
+  
   const user_id = decodeToken<DecodedToken>(
     TokenService.getInstance().getToken()
   )?.user_id;
@@ -199,7 +210,7 @@ export default function History() {
         await BookingService.getInstance()
           .CancelBooking(bookChose)
           .then((response) => {
-            console.log(response)
+            console.log(response);
             setSearch({
               ...search,
               timer: new Date().getTime(),
@@ -208,8 +219,8 @@ export default function History() {
             showToastSuccess();
           })
           .catch((response) => {
-            console.log(response)
-            showToastSuccess()
+            console.log(response);
+            showToastSuccess();
           });
       } else {
         setSearch({
@@ -242,6 +253,7 @@ export default function History() {
 
   return (
     <>
+      <ToastContainer />
       {booking.length == 0 && search.keySearch == "" ? (
         <div className="center" style={{ margin: "15%" }}>
           <h3>Bạn chưa đặt sân nào</h3>
@@ -260,7 +272,7 @@ export default function History() {
           <div>
             <Dropdown
               value={statusBooking}
-              options={statusSearch}
+              options={userDetail.role == "ADMIN" ? statusSearchAdmin : statusSearchUser}
               optionLabel="name"
               style={{ width: "15%", margin: "2%" }}
               onChange={(e: DropdownChangeEvent) => {
