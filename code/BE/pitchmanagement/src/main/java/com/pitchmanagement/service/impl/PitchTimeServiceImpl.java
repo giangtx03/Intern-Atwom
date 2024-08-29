@@ -1,5 +1,6 @@
 package com.pitchmanagement.service.impl;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class PitchTimeServiceImpl implements PitchTimeService {
 
     @Override
     public List<PitchTimeDTO> FilterPitchByPitchId(Integer pitch_id) {
-        List<PitchTimeDTO> pitchTime = pitchTimeDAO.FilterPitchByPitchId(pitch_id);
+        List<PitchTimeDTO> pitchTime = pitchTimeDAO.FilterPitchByPitchId(pitch_id, LocalTime.now());
         return pitchTime;
     }
 

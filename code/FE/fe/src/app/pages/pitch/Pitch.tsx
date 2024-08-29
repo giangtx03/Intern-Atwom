@@ -197,7 +197,7 @@ export default function Pitch() {
                           <h5 className="text-dark mb-0">{item.name}</h5>
                         </Link>
                         <div className="d-flex justify-content-between">
-                          <p>Địa chỉ : {item.address}</p>
+                          <p style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow:"ellipsis"}}>Địa chỉ : {item.address}</p>
                         </div>
                         <div className="col-12 d-flex align-items-center">
                           <p className="me-1 mb-0">Đánh giá: </p>

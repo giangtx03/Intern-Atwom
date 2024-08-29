@@ -37,7 +37,7 @@ interface Order {
 }
 
 export default function CommentDisplay(props: any) {
-  const { pitch_id } = props;
+  const { pitch_id, handleChange } = props;
   const [lstComment, setLstComment] = useState([]);
   const [search, setSearch] = useState(new Search("", 3, 1, 1, 100));
   const [editOn, setEditOn] = useState<boolean>(false);
@@ -120,6 +120,7 @@ export default function CommentDisplay(props: any) {
             .DeleteComment(commentId)
             .then((response) => {
               showSuccess(response.data.message);
+              handleChange();
             })
             .catch((response) => {
               showError(response.data.message);
@@ -181,6 +182,7 @@ export default function CommentDisplay(props: any) {
             <div className="card text-body">
               {user_id && (
                 <AddAndUpdate
+                  handleChange={() => handleChange()}
                   search={search}
                   setSearch={setSearch}
                   pitch_id={pitch_id}
@@ -242,7 +244,10 @@ export default function CommentDisplay(props: any) {
                               <div className="d-flex">
                                 <Image
                                   className="rounded-circle shadow-1-strong me-3"
-                                  src={process.env.REACT_APP_API_URL+ `/image/${item?.avatar}`}
+                                  src={
+                                    process.env.REACT_APP_API_URL +
+                                    `/image/${item?.avatar}`
+                                  }
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       defaultAvatar;
@@ -251,7 +256,7 @@ export default function CommentDisplay(props: any) {
                                   width="60"
                                   height="60"
                                 />
-                                
+
                                 <div>
                                   <h6 className="fw-bold mb-1">
                                     {item.fullname}
@@ -273,23 +278,23 @@ export default function CommentDisplay(props: any) {
                                   <p className="mb-0">{item.content}</p>
                                 </div>
                                 {item.userId == user_id && (
-                              <div className="ms-auto">
-                                <Avatar
-                                  icon="pi pi-ellipsis-v"
-                                  shape="circle"
-                                  onClick={(e) => OnMenu(e, item)}
-                                  style={{backgroundColor: "white"}}
-                                />
-                                <i></i>
-                                <Menu
-                                  model={items}
-                                  style={{ width: "14rem" }}
-                                  popup
-                                  baseZIndex={1000}
-                                  ref={menu}
-                                ></Menu>
-                              </div>
-                            )}
+                                  <div className="ms-auto">
+                                    <Avatar
+                                      icon="pi pi-ellipsis-v"
+                                      shape="circle"
+                                      onClick={(e) => OnMenu(e, item)}
+                                      style={{ backgroundColor: "white" }}
+                                    />
+                                    <i></i>
+                                    <Menu
+                                      model={items}
+                                      style={{ width: "14rem" }}
+                                      popup
+                                      baseZIndex={1000}
+                                      ref={menu}
+                                    ></Menu>
+                                  </div>
+                                )}
                               </div>
                             </div>
                             <hr className="my-0" />
@@ -307,6 +312,7 @@ export default function CommentDisplay(props: any) {
                         }}
                       >
                         <AddAndUpdate
+                          handleChange={() => handleChange()}
                           search={search}
                           setSearch={setSearch}
                           editComment={editComment}

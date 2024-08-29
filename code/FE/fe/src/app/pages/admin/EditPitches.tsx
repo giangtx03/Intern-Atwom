@@ -554,7 +554,15 @@ export default function EditPitches() {
     <div>
       <div className="card">
         {pitches.length <= 0 ? (
-          <h3 className="text-center">Không có sân nào</h3>
+          <div className="d-flex m-5 justify-content-between">
+            <h3 className="text-center">Không có sân nào</h3>
+            <Button
+              label="Thêm"
+              icon="pi pi-plus"
+              severity="success"
+              onClick={openNew}
+            />
+          </div>
         ) : (
           <>
             <DataTable
@@ -809,7 +817,9 @@ export default function EditPitches() {
                 }}
               >
                 <img
-                  src={`http://localhost:8080/public/api/v1/image/${pitchImg.name}`}
+                  src={
+                    process.env.REACT_APP_API_URL + `/image/${pitchImg.name}`
+                  }
                   alt="Pitch"
                   width={200}
                   height={200}

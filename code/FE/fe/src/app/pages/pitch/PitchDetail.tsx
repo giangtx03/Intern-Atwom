@@ -32,6 +32,7 @@ export default function PitchDetail() {
   const [options, setOptions] = useState<
     { label: string; value: number; isReservation: boolean }[]
   >([]);
+  const [reload, setReload] = useState<number>();
 
   const handleRedirect = (path: string) => {
     navigate(path);
@@ -56,14 +57,14 @@ export default function PitchDetail() {
           });
       }, 300);
     }
-  }, [id]);
+  }, [id, reload]);
 
   const imageTemplate = (image: any) => {
     return (
       <div className="carousel-item active">
         <img
           className="d-block w-100"
-          src={ process.env.REACT_APP_API_URL + `/image/${image.name}`}
+          src={process.env.REACT_APP_API_URL + `/image/${image.name}`}
           alt="Ảnh sân bóng"
           onError={(e) => {
             e.currentTarget.src = defaultSanBong;
@@ -176,11 +177,11 @@ export default function PitchDetail() {
                             <h5 className="mb-0 text-bg-light text-success">
                               {price === 0
                                 ? pitch.times
-                                  .find(
-                                    (time) =>
-                                      time.status === STATUS_PITCH_TIME_ACTIVE
-                                  )
-                                  ?.price.toLocaleString()
+                                    .find(
+                                      (time) =>
+                                        time.status === STATUS_PITCH_TIME_ACTIVE
+                                    )
+                                    ?.price.toLocaleString()
                                 : price.toLocaleString()}{" "}
                               VND
                             </h5>
@@ -221,7 +222,12 @@ export default function PitchDetail() {
                         <div className="row mt-3 ">
                           <div className="col-12 d-flex align-items-center">
                             <h5 className="me-1 mb-0">Đánh giá: </h5>
-                            <b className="mb-0 me-3" style={{ color: "#FFCC00" }}>{pitch.avg_star.toFixed(2)}/5</b>
+                            <b
+                              className="mb-0 me-3"
+                              style={{ color: "#FFCC00" }}
+                            >
+                              {pitch.avg_star.toFixed(2)}/5
+                            </b>
                           </div>
                         </div>
                         <div className="row product-content mt-5">
@@ -273,7 +279,12 @@ export default function PitchDetail() {
                 {/* end card body */}
               </div>
               {/* end card */}
-              <CommentDisplay pitch_id={pitch}></CommentDisplay>
+              <CommentDisplay
+                handleChange={() => {
+                  setReload(Date.now());
+                }}
+                pitch_id={pitch}
+              ></CommentDisplay>
             </div>
             {/* end col */}
           </div>

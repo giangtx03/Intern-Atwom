@@ -14,7 +14,7 @@ import { DecodedToken } from "../model/User";
 import { ToastContainer, toast, ToastPosition } from "react-toastify";
 
 export default function AddAndUpdate(props: any) {
-  const { search, setSearch, editComment, setEditOn, pitch_id } = props;
+  const { search, setSearch, editComment, setEditOn, pitch_id, handleChange } = props;
 
   const [value, setValue] = useState(
     editComment != null ? editComment.content : ""
@@ -44,6 +44,7 @@ export default function AddAndUpdate(props: any) {
         .AddComment(new Comment(undefined, rating, value, user_id, pitch_id.id))
         .then((response) => {
           showSuccess(response.status);
+          handleChange();
         })
         .catch((response) => {
           showError(response.response.data.message);
@@ -76,6 +77,7 @@ export default function AddAndUpdate(props: any) {
             page: 1,
           });
           setEditOn(false);
+          handleChange();
         } else {
           setSearch({
             ...search,

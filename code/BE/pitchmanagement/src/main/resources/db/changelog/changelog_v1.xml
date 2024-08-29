@@ -266,6 +266,7 @@
     </changeSet>
 
     <changeSet id="5" author="Minh Quân">
+        <dropForeignKeyConstraint baseTableName="pitch_time" constraintName="fk_pitch_time_slot_pitch"/>
         <addForeignKeyConstraint baseTableName="pitch_time"
                                  baseColumnNames="pitch_id"
                                  constraintName="fk_pitch_time_slot_pitch"

@@ -1,5 +1,6 @@
 package com.pitchmanagement.dao;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface PitchTimeDAO {
-    List<PitchTimeDTO> FilterPitchByPitchId(@Param("pitch_id") Integer pitch_id);
+    List<PitchTimeDTO> FilterPitchByPitchId(@Param("pitch_id") Integer pitch_id, @Param("startTime")LocalTime startTime);
 
     PitchTimeDTO selectbyPitchAndTime(@Param("pitch_id") Integer pitch_id, @Param("time_id") Integer time_slot_id);
 
